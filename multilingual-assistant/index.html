@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic STT Demo</title>
+    <style>
+        body { font-family: system-ui, Arial, sans-serif; margin: 32px; }
+        .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        button { padding: 10px 16px; font-size: 16px; cursor: pointer; }
+        select { padding: 8px; font-size: 14px; }
+        #status { margin-left: 8px; color: #555; font-size: 14px; }
+        textarea { width: 100%; height: 200px; margin-top: 16px; padding: 12px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h2>Mic to Text (Browser)</h2>
+    <p style="color:#555; margin-top:-8px">This page uses browser speech APIs only (no Python needed). The Python assistant uses <code>stt.py</code>/<code>tts.py</code> separately.</p>
+    <div class="row">
+        <button id="micBtn">🎤 Start</button>
+        <label for="lang">Language:</label>
+        <select id="lang">
+            <option value="auto">Auto (Python Whisper)</option>
+            <option value="en-IN">English (India)</option>
+            <option value="en-US">English (US)</option>
+            <option value="hi-IN" selected>Hindi (India)</option>
+            <option value="mr-IN">Marathi (India)</option>
+            <option value="ta-IN">Tamil (India)</option>
+            <option value="te-IN">Telugu (India)</option>
+            <option value="bn-IN">Bengali (India)</option>
+            <option value="gu-IN">Gujarati (India)</option>
+            <option value="kn-IN">Kannada (India)</option>
+            <option value="ml-IN">Malayalam (India)</option>
+            <option value="pa-IN">Punjabi (India)</option>
+        </select>
+        <span id="status"></span>
+    </div>
+    <div id="autoHint" style="display:none; margin-top:8px; color:#a15; font-size:14px;">
+        Note: “Auto (Python Whisper)” runs only in the Python app. Set STT_LANGUAGE="auto" in config.py and run the Python listener. Browser STT requires a specific language.
+    </div>
+
+    <textarea id="output" placeholder="Transcribed text will appear here..."></textarea>
+
+    <h2 style="margin-top:28px">Text to Speech (Browser)</h2>
+    <div class="row">
+        <input id="ttsText" type="text" placeholder="Enter text to speak" style="flex:1; min-width:280px; padding:10px; font-size:16px;" />
+        <button id="speakBtn">🔊 Speak</button>
+    </div>
+
+    <script>
+        // Use webkitSpeechRecognition where available (Chrome/Edge). Not supported in all browsers.
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const micBtn = document.getElementById('micBtn');
+        const output = document.getElementById('output');
+        const lang = document.getElementById('lang');
+        const status = document.getElementById('status');
+        const speakBtn = document.getElementById('speakBtn');
+        const ttsText = document.getElementById('ttsText');
+
+        if (!SpeechRecognition) {
+            micBtn.disabled = true;
+            status.textContent = 'Speech Recognition not supported in this browser.';
+        } else {
+            let recognizing = false;
+            const recognizer = new SpeechRecognition();
+            recognizer.continuous = true;   // keep listening until stopped
+            recognizer.interimResults = true; // show interim results
+            recognizer.lang = lang.value;
+
+            lang.addEventListener('change', () => {
+                const value = lang.value;
+                // Toggle auto-detect hint when "auto" is selected
+                document.getElementById('autoHint').style.display = (value === 'auto') ? 'block' : 'none';
+                // Browser STT cannot do auto; keep last non-auto value for recognition
+                if (value !== 'auto') {
+                    recognizer.lang = value;
+                }
+            });
+
+            recognizer.onstart = () => {
+                recognizing = true;
+                micBtn.textContent = '⏹ Stop';
+                status.textContent = 'Listening...';
+            };
+
+            recognizer.onend = () => {
+                recognizing = false;
+                micBtn.textContent = '🎤 Start';
+                status.textContent = '';
+            };
+
+            recognizer.onerror = (e) => {
+                status.textContent = 'Error: ' + (e.error || 'unknown');
+            };
+
+            recognizer.onresult = (event) => {
+                let finalText = '';
+                let interimText = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalText += transcript + ' ';
+                    } else {
+                        interimText += transcript;
+                    }
+                }
+                output.value = (output.value + ' ' + finalText).trim();
+                if (interimText) {
+                    // Show interim text (not persisted)
+                    status.textContent = 'Listening... ' + interimText;
+                }
+            };
+
+            micBtn.addEventListener('click', async () => {
+                if (lang.value === 'auto') {
+                    // Route to Python backend using MediaRecorder
+                    status.textContent = 'Recording...';
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        const chunks = [];
+                        const mr = new MediaRecorder(stream);
+                        mr.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+                        mr.onstop = async () => {
+                            const blob = new Blob(chunks, { type: 'audio/webm' });
+                            const form = new FormData();
+                            form.append('audio', blob, 'audio.webm');
+                            form.append('language', 'auto');
+                            status.textContent = 'Transcribing...';
+                            try {
+                                const res = await fetch('http://127.0.0.1:5000/transcribe', { method: 'POST', body: form });
+                                const data = await res.json();
+                                if (data.error) {
+                                    status.textContent = 'Error: ' + data.error;
+                                } else {
+                                    status.textContent = 'Detected: ' + (data.language || 'auto');
+                                    output.value = (output.value + ' ' + (data.text || '')).trim();
+                                }
+                            } catch (err) {
+                                status.textContent = 'Backend error: ' + (err?.message || err);
+                            }
+                            stream.getTracks().forEach(t => t.stop());
+                        };
+                        mr.start();
+                        // Record for ~5 seconds similar to Python path
+                        setTimeout(() => mr.stop(), 5000);
+                    } catch (e) {
+                        status.textContent = 'Mic error: ' + (e?.message || e);
+                    }
+                    return;
+                }
+
+                if (recognizing) {
+                    recognizer.stop();
+                } else {
+                    output.focus();
+                    try { recognizer.start(); } catch (e) { /* often throws if already started */ }
+                }
+            });
+        }
+
+        // Text -> Speech using Web Speech Synthesis API
+        function speak(text, languageCode) {
+            if (!('speechSynthesis' in window)) {
+                alert('Speech Synthesis not supported in this browser.');
+                return;
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            // Try to honor selected language (e.g., hi-IN, en-IN, etc.)
+            utterance.lang = languageCode || 'en-IN';
+            // Choose a matching voice if available
+            const voices = window.speechSynthesis.getVoices();
+            const preferred = voices.find(v => v.lang === utterance.lang)
+                || voices.find(v => v.lang.startsWith(utterance.lang.split('-')[0]))
+                || voices[0];
+            if (preferred) utterance.voice = preferred;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Populate voices once ready (some browsers load them async)
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                // trigger cache of voices
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        speakBtn.addEventListener('click', () => {
+            const text = (ttsText.value || '').trim();
+            if (!text) {
+                ttsText.focus();
+                return;
+            }
+            speak(text, lang.value);
+        });
+    </script>
+</body>
+</html>
+
+

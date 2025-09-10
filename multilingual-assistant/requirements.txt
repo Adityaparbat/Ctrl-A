@@ -1,0 +1,9 @@
+openai-whisper
+torch
+transformers
+sounddevice
+pydub
+SpeechRecognition
+gTTS
+playsound
+numpy
