@@ -7,3 +7,8 @@ SpeechRecognition
 gTTS
 playsound
 numpy
+youtube_dl
+pafy
+yt-dlp
+sentencepiece
+protobuf==3.20.*
