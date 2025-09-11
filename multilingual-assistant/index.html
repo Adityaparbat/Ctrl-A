@@ -57,6 +57,12 @@
         const speakBtn = document.getElementById('speakBtn');
         const ttsText = document.getElementById('ttsText');
 
+        // --- Play Music button ---
+        const playBtn = document.createElement('button');
+        playBtn.textContent = '🎵 Play Music';
+        playBtn.style.marginLeft = '8px';
+        document.querySelector('.row').appendChild(playBtn);
+
         if (!SpeechRecognition) {
             micBtn.disabled = true;
             status.textContent = 'Speech Recognition not supported in this browser.';
@@ -113,7 +119,7 @@
 
             micBtn.addEventListener('click', async () => {
                 if (lang.value === 'auto') {
-                    // Route to Python backend using MediaRecorder
+                    // Route to Python backend using MediaRecorder for Whisper transcription
                     status.textContent = 'Recording...';
                     try {
                         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -125,15 +131,22 @@
                             const form = new FormData();
                             form.append('audio', blob, 'audio.webm');
                             form.append('language', 'auto');
-                            status.textContent = 'Transcribing...';
+                            status.textContent = 'Transcribing with Whisper...';
                             try {
                                 const res = await fetch('http://127.0.0.1:5000/transcribe', { method: 'POST', body: form });
                                 const data = await res.json();
                                 if (data.error) {
-                                    status.textContent = 'Error: ' + data.error;
+                                    status.textContent = 'Transcription error: ' + data.error;
                                 } else {
-                                    status.textContent = 'Detected: ' + (data.language || 'auto');
-                                    output.value = (output.value + ' ' + (data.text || '')).trim();
+                                    let text = (data.text || '').trim();
+                                    if (text) {
+                                        // Autocorrect the transcribed text
+                                        text = autocorrectText(text);
+                                        output.value = (output.value + ' ' + text).trim();
+                                        status.textContent = '🗣 You said: ' + text + ' - Ready to play music!';
+                                    } else {
+                                        status.textContent = 'No speech detected';
+                                    }
                                 }
                             } catch (err) {
                                 status.textContent = 'Backend error: ' + (err?.message || err);
@@ -141,7 +154,7 @@
                             stream.getTracks().forEach(t => t.stop());
                         };
                         mr.start();
-                        // Record for ~5 seconds similar to Python path
+                        // Record for ~5 seconds
                         setTimeout(() => mr.stop(), 5000);
                     } catch (e) {
                         status.textContent = 'Mic error: ' + (e?.message || e);
@@ -149,11 +162,41 @@
                     return;
                 }
 
+                // Browser speech recognition for specific languages
                 if (recognizing) {
                     recognizer.stop();
                 } else {
                     output.focus();
                     try { recognizer.start(); } catch (e) { /* often throws if already started */ }
+                }
+            });
+
+            // Play Music button - processes the transcribed text from output area
+            playBtn.addEventListener('click', async () => {
+                const text = output.value.trim();
+                if (!text) {
+                    status.textContent = 'No text to process. Please use Start button to record speech first.';
+                    return;
+                }
+                
+                status.textContent = 'Processing: "' + text + '"...';
+                
+                try {
+                    // Check intent and play music or show message
+                    const playRes = await fetch('http://127.0.0.1:5000/play', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text })
+                    });
+                    const playData = await playRes.json();
+                    
+                    if (playData.ok) {
+                        status.textContent = '🎵 Playing music...';
+                    } else {
+                        status.textContent = '❌ Not a music command: ' + (playData.message || 'No action taken');
+                    }
+                } catch (err) {
+                    status.textContent = 'Backend error: ' + (err?.message || err);
                 }
             });
         }
@@ -183,6 +226,52 @@
                 // trigger cache of voices
                 window.speechSynthesis.getVoices();
             };
+        }
+
+        // Autocorrect function for common transcription errors (matches voice_music.py)
+        function autocorrectText(text) {
+            const corrections = {
+                // Common music command corrections
+                'plee': 'play',
+                'plea': 'play',
+                'pray': 'play',
+                'plae': 'play',
+                'ple': 'play',
+                'paly': 'play',
+                'palay': 'play',
+                
+                // Song name corrections
+                'paru': 'paro',
+                'paroo': 'paro',
+                'parow': 'paro',
+                
+                // Other common words
+                'musik': 'music',
+                'musick': 'music',
+                'songs': 'song',
+                'sing': 'song',
+                'sang': 'song',
+                
+                // Intent corrections
+                'sit': 'set',
+                'sat': 'set',
+                'remainder': 'reminder',
+                'remind': 'reminder',
+                'allarm': 'alarm',
+                'alam': 'alarm'
+            };
+            
+            let correctedText = text.toLowerCase();
+            
+            // Apply word-by-word corrections
+            const words = correctedText.split(' ');
+            const correctedWords = words.map(word => {
+                // Remove punctuation for matching
+                const cleanWord = word.replace(/[.,!?;:]/g, '');
+                return corrections[cleanWord] || word;
+            });
+            
+            return correctedWords.join(' ');
         }
 
         speakBtn.addEventListener('click', () => {
