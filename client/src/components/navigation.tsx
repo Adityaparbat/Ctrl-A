@@ -3,8 +3,18 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import AuthForms from "./auth-forms";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Settings, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Link } from "wouter";
 
 export default function Navigation() {
   const [showLogin, setShowLogin] = useState(false);
@@ -93,24 +103,56 @@ export default function Navigation() {
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
             {isAuthenticated && user ? (
-              <>
-                <div className="hidden md:flex items-center space-x-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-foreground" data-testid="user-welcome">
-                    Welcome, {user.username}
-                  </span>
-                </div>
-                <Button 
-                  variant="outline"
-                  onClick={handleLogout}
-                  className="text-foreground hover:text-primary border-border hover:border-primary"
-                  aria-label="Sign out of your account"
-                  data-testid="button-logout"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
-              </>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild data-testid="button-profile">
+                  <Button variant="ghost" className="flex items-center space-x-2 hover:bg-accent">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {user.username.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="hidden md:flex flex-col items-start text-left">
+                      <span className="text-sm font-medium" data-testid="user-welcome">
+                        {user.username}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {user.email}
+                      </span>
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56" data-testid="dropdown-profile">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.username}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild data-testid="menu-dashboard">
+                    <Link href="/dashboard" className="flex items-center cursor-pointer">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem data-testid="menu-settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={handleLogout}
+                    className="text-red-600 focus:text-red-600"
+                    data-testid="menu-logout"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <>
                 <Button 
