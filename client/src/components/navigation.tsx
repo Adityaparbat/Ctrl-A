@@ -1,11 +1,37 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import AuthForms from "./auth-forms";
+import { LogOut, User } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Navigation() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const { toast } = useToast();
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive",
+      });
     }
   };
 
@@ -66,29 +92,63 @@ export default function Navigation() {
           
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
-            <Button 
-              variant="outline"
-              className="text-foreground hover:text-primary border-border hover:border-primary"
-              aria-label="Login to your account"
-              data-testid="button-login"
-            >
-              Login
-            </Button>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button 
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-                aria-label="Sign up for a new account"
-                data-testid="button-signup"
-              >
-                Sign Up
-              </Button>
-            </motion.div>
+            {isAuthenticated && user ? (
+              <>
+                <div className="hidden md:flex items-center space-x-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-foreground" data-testid="user-welcome">
+                    Welcome, {user.username}
+                  </span>
+                </div>
+                <Button 
+                  variant="outline"
+                  onClick={handleLogout}
+                  className="text-foreground hover:text-primary border-border hover:border-primary"
+                  aria-label="Sign out of your account"
+                  data-testid="button-logout"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  variant="outline"
+                  onClick={() => setShowLogin(true)}
+                  className="text-foreground hover:text-primary border-border hover:border-primary"
+                  aria-label="Login to your account"
+                  data-testid="button-login"
+                >
+                  Login
+                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button 
+                    onClick={() => setShowSignup(true)}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    aria-label="Sign up for a new account"
+                    data-testid="button-signup"
+                  >
+                    Sign Up
+                  </Button>
+                </motion.div>
+              </>
+            )}
           </div>
         </div>
       </div>
+      
+      <AuthForms 
+        showLogin={showLogin}
+        showSignup={showSignup}
+        onClose={() => {
+          setShowLogin(false);
+          setShowSignup(false);
+        }}
+      />
     </motion.nav>
   );
 }
