@@ -13,13 +13,43 @@ import {
   Camera, 
   Shield,
   Settings,
-  BarChart3
+  BarChart3,
+  LogOut,
+  LayoutDashboard,
+  ChevronDown
 } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive",
+      });
+    }
+  };
 
   const quickActions = [
     {
@@ -92,15 +122,62 @@ export default function Dashboard() {
             </Link>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <User className="h-5 w-5 text-muted-foreground" />
-                <span className="font-medium" data-testid="text-username">
-                  {user?.username || "User"}
-                </span>
-              </div>
-              <Button variant="ghost" size="sm" data-testid="button-settings">
-                <Settings className="h-4 w-4" />
-              </Button>
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild data-testid="button-profile">
+                    <Button variant="ghost" className="flex items-center space-x-2 hover:bg-accent">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback className="bg-primary text-primary-foreground">
+                          {user.username.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="hidden md:flex flex-col items-start text-left">
+                        <span className="text-sm font-medium" data-testid="user-welcome">
+                          {user.username}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {user.email}
+                        </span>
+                      </div>
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56" data-testid="dropdown-profile">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.username}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild data-testid="menu-dashboard">
+                      <Link href="/dashboard" className="flex items-center cursor-pointer">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem data-testid="menu-settings">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleLogout}
+                      className="text-red-600 focus:text-red-600"
+                      data-testid="menu-logout"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button variant="ghost" size="sm" data-testid="button-settings">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
         </div>
