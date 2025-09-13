@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Play, Info } from "lucide-react";
+import { Link } from "wouter";
 
 export default function HeroSection() {
   return (
@@ -45,9 +46,12 @@ export default function HeroSection() {
                 className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl"
                 aria-label="Try our platform demo"
                 data-testid="button-demo"
+                asChild
               >
-                <Play className="mr-2 h-5 w-5" />
-                Try Demo
+                <Link href="/demo">
+                  <Play className="mr-2 h-5 w-5" />
+                  Try Demo
+                </Link>
               </Button>
             </motion.div>
             

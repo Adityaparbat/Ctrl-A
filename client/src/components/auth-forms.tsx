@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { X, Eye, EyeOff, User, Mail, Lock } from "lucide-react";
+import { useLocation } from "wouter";
 
 interface AuthFormsProps {
   showLogin: boolean;
@@ -28,6 +29,7 @@ export default function AuthForms({ showLogin, showSignup, onClose }: AuthFormsP
   const [signupData, setSignupData] = useState({ username: "", email: "", password: "" });
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [, setLocation] = useLocation();
 
   // Login mutation
   const loginMutation = useMutation({
@@ -43,6 +45,8 @@ export default function AuthForms({ showLogin, showSignup, onClose }: AuthFormsP
       queryClient.setQueryData(["current-user"], response.user);
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
       onClose();
+      // Redirect to dashboard after successful login
+      setLocation("/dashboard");
       // Track login analytics
       apiRequest("POST", "/api/analytics/track", {
         event: "login_frontend",
@@ -72,6 +76,8 @@ export default function AuthForms({ showLogin, showSignup, onClose }: AuthFormsP
       queryClient.setQueryData(["current-user"], response.user);
       queryClient.invalidateQueries({ queryKey: ["current-user"] });
       onClose();
+      // Redirect to dashboard after successful signup
+      setLocation("/dashboard");
       // Track signup analytics
       apiRequest("POST", "/api/analytics/track", {
         event: "signup_frontend",
