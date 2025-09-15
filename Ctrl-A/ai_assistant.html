@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Ctrl-A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-dark: #1a202c;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --bot-color: #667eea;
+            --user-color: #764ba2;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 80px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .bot-info h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .bot-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-select {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .language-select option {
+            color: var(--text-primary);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 80%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--user-color);
+            color: white;
+        }
+
+        .message.bot .message-avatar {
+            background: var(--bot-color);
+            color: white;
+        }
+
+        .message-content {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .message-text {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            color: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 80%;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1.5rem;
+            background: white;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .input-methods {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-method {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-method.active {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .input-method:hover {
+            border-color: var(--primary-color);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-send {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--gradient);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-voice {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--gradient-accent);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-voice:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-voice.recording {
+            background: var(--error-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-camera {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-camera:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: white;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .audio-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+                height: calc(100vh - 60px);
+            }
+
+            .nav {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .message {
+                max-width: 95%;
+            }
+
+            .input-container {
+                flex-direction: column;
+            }
+
+            .input-actions {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .quick-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --border-color: #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Ctrl-A</div>
+            <div class="nav-right">
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">AI Assistant</h1>
+            <p class="page-subtitle">
+                Your intelligent companion powered by OpenAI. Ask questions, get help, and receive personalized assistance.
+            </p>
+        </section>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h3>Ctrl-A Assistant</h3>
+                    <div class="bot-status" id="botStatus">Online - Ready to help</div>
+                </div>
+                <div class="language-selector">
+                    <i class="fas fa-globe"></i>
+                    <select class="language-select" id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Welcome Message -->
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Hello! I'm your AI assistant. I can help you with various tasks including:
+                            <br>• Answering questions
+                            <br>• Providing information about accessibility
+                            <br>• Helping with daily tasks
+                            <br>• Offering support and guidance
+                            <br><br>How can I assist you today?
+                        </div>
+                        <div class="message-time" id="welcomeTime"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="sendQuickMessage('What accessibility features are available?')">
+                        Accessibility Help
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('How can I set a reminder?')">
+                        Set Reminder
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('Tell me about government schemes')">
+                        Government Schemes
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('What are my legal rights?')">
+                        Legal Rights
+                    </button>
+                </div>
+
+                <!-- Input Methods -->
+                <div class="input-methods">
+                    <div class="input-method active" data-method="text">
+                        <i class="fas fa-keyboard"></i>
+                        <span>Text</span>
+                    </div>
+                    <div class="input-method" data-method="voice">
+                        <i class="fas fa-microphone"></i>
+                        <span>Voice</span>
+                    </div>
+                    <div class="input-method" data-method="sign">
+                        <i class="fas fa-hand-paper"></i>
+                        <span>Sign Language</span>
+                    </div>
+                </div>
+
+                <!-- Input Container -->
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        class="input-field" 
+                        placeholder="Type your message here..."
+                        rows="1"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="btn-send" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            Send
+                        </button>
+                        <button class="btn-voice" id="voiceBtn" title="Voice Input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="btn-camera" id="cameraBtn" title="Sign Language">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Audio Player -->
+                <div class="audio-player" id="audioPlayer">
+                    <div class="audio-controls">
+                        <button class="audio-btn" id="playBtn">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div class="audio-info">
+                            <div class="audio-title" id="audioTitle">Audio Response</div>
+                            <div class="audio-desc" id="audioDesc">Click play to hear the response</div>
+                        </div>
+                    </div>
+                    <audio id="audioElement" controls style="display: none;"></audio>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        let currentMethod = 'text';
+        let isRecording = false;
+        let recognition = null;
+        let currentLanguage = 'en';
+        let conversationHistory = [];
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = getLanguageCode(currentLanguage);
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    updateVoiceButton();
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('messageInput').value = transcript;
+                    sendMessage(transcript);
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    updateVoiceButton();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    isRecording = false;
+                    updateVoiceButton();
+                    showError('Speech recognition failed. Please try again.');
+                };
+            } else {
+                console.warn('Speech recognition not supported');
+            }
+        }
+
+        // Get language code for speech recognition
+        function getLanguageCode(lang) {
+            const languageMap = {
+                'en': 'en-US',
+                'hi': 'hi-IN',
+                'es': 'es-ES',
+                'fr': 'fr-FR',
+                'de': 'de-DE',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR',
+                'zh': 'zh-CN'
+            };
+            return languageMap[lang] || 'en-US';
+        }
+
+        // Update voice button state
+        function updateVoiceButton() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+            }
+        }
+
+        // Initialize input methods
+        function initInputMethods() {
+            const methods = document.querySelectorAll('.input-method');
+            methods.forEach(method => {
+                method.addEventListener('click', function() {
+                    methods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMethod = this.dataset.method;
+                    
+                    // Update input placeholder based on method
+                    const input = document.getElementById('messageInput');
+                    switch(currentMethod) {
+                        case 'text':
+                            input.placeholder = 'Type your message here...';
+                            break;
+                        case 'voice':
+                            input.placeholder = 'Click the microphone button to speak';
+                            break;
+                        case 'sign':
+                            input.placeholder = 'Click the camera button to use sign language';
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Send message
+        async function sendMessage(text) {
+            if (!text.trim()) return;
+
+            // Add user message to chat
+            addMessage(text, 'user');
+            
+            // Clear input
+            document.getElementById('messageInput').value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Update bot status
+            updateBotStatus('Thinking...');
+
+            try {
+                // Send to AI assistant
+                const response = await fetch('/api/ai-assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: text,
+                        language: currentLanguage,
+                        conversation_history: conversationHistory
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Hide typing indicator
+                    hideTypingIndicator();
+                    
+                    // Add bot response to chat
+                    addMessage(data.response, 'bot');
+                    
+                    // Update conversation history
+                    conversationHistory.push({ role: 'user', content: text });
+                    conversationHistory.push({ role: 'assistant', content: data.response });
+                    
+                    // Generate audio response
+                    if (data.audio_url) {
+                        playAudio(data.audio_url, 'AI Response');
+                    }
+                    
+                    // Update bot status
+                    updateBotStatus('Online - Ready to help');
+                } else {
+                    throw new Error('AI assistant failed');
+                }
+                
+            } catch (error) {
+                console.error('AI assistant error:', error);
+                hideTypingIndicator();
+                
+                // Generate fallback response
+                const fallbackResponse = generateFallbackResponse(text);
+                addMessage(fallbackResponse, 'bot');
+                
+                // Update conversation history
+                conversationHistory.push({ role: 'user', content: text });
+                conversationHistory.push({ role: 'assistant', content: fallbackResponse });
+                
+                // Generate audio for fallback response
+                generateAudioForText(fallbackResponse);
+                
+                updateBotStatus('Online - Ready to help');
+            }
+        }
+
+        // Generate fallback response
+        function generateFallbackResponse(text) {
+            const messageLower = text.toLowerCase();
+            
+            if (messageLower.includes('help') || messageLower.includes('assist')) {
+                return "I'm here to help! I can assist you with accessibility features, daily tasks, government schemes, legal rights, and more. What would you like to know?";
+            } else if (messageLower.includes('accessibility') || messageLower.includes('accessible')) {
+                return "Accessibility features include voice commands, text-to-speech, sign language recognition, camera navigation, and screen reader support. How can I help make your experience more accessible?";
+            } else if (messageLower.includes('government') || messageLower.includes('scheme')) {
+                return "I can help you find government welfare schemes for disabled individuals. You can search for specific schemes or browse by category. What type of assistance are you looking for?";
+            } else if (messageLower.includes('legal') || messageLower.includes('right')) {
+                return "I can provide information about your legal rights as a disabled person, help with discrimination complaints, and explain accommodations you're entitled to. What legal question do you have?";
+            } else if (messageLower.includes('music') || messageLower.includes('play')) {
+                return "I can help you play music! You can search for specific songs, genres, or ask me to play relaxing music. What would you like to listen to?";
+            } else if (messageLower.includes('reminder') || messageLower.includes('remind')) {
+                return "I can help you set reminders! Just tell me what you want to be reminded about and when. For example, 'remind me to take medication at 3 PM'.";
+            } else if (messageLower.includes('camera') || messageLower.includes('navigation')) {
+                return "I can help with camera navigation! I can detect objects, read text, and provide audio guidance for safe navigation. Would you like to start the camera?";
+            } else if (messageLower.includes('hello') || messageLower.includes('hi')) {
+                return "Hello! I'm your AI assistant. I'm here to help you with various tasks and make your experience more accessible. How can I assist you today?";
+            } else if (messageLower.includes('thank')) {
+                return "You're welcome! I'm always here to help. Is there anything else you'd like to know or do?";
+            } else {
+                return `I understand you're asking about "${text}". I'm here to help with accessibility, daily tasks, government schemes, legal rights, and navigation. Could you be more specific about what you need help with?`;
+            }
+        }
+
+        // Generate audio for text
+        async function generateAudioForText(text) {
+            try {
+                const response = await fetch('/api/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        language: currentLanguage
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const audioUrl = `data:audio/mp3;base64,${data.audio_base64}`;
+                    playAudio(audioUrl, 'AI Response');
+                }
+            } catch (error) {
+                console.error('TTS error:', error);
+            }
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-${sender === 'user' ? 'user' : 'robot'}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${formatMessage(text)}</div>
+                    <div class="message-time">${timeString}</div>
+                    <div class="message-actions">
+                        <button class="action-btn" onclick="copyMessage(this)">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn" onclick="speakMessage('${text.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-volume-up"></i> Speak
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Format message text
+        function formatMessage(text) {
+            // Convert line breaks to HTML
+            return text.replace(/\n/g, '<br>');
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').classList.add('active');
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').classList.remove('active');
+        }
+
+        // Update bot status
+        function updateBotStatus(status) {
+            document.getElementById('botStatus').textContent = status;
+        }
+
+        // Send quick message
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage(message);
+        }
+
+        // Copy message
+        function copyMessage(button) {
+            const messageText = button.closest('.message-content').querySelector('.message-text').textContent;
+            navigator.clipboard.writeText(messageText).then(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Copied';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                }, 2000);
+            });
+        }
+
+        // Speak message
+        function speakMessage(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = getLanguageCode(currentLanguage);
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Play audio
+        function playAudio(audioUrl, title) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioElement = document.getElementById('audioElement');
+            const playBtn = document.getElementById('playBtn');
+            const audioTitle = document.getElementById('audioTitle');
+            const audioDesc = document.getElementById('audioDesc');
+
+            audioElement.src = audioUrl;
+            audioTitle.textContent = 'AI Response';
+            audioDesc.textContent = title;
+            audioPlayer.style.display = 'block';
+
+            playBtn.onclick = function() {
+                if (audioElement.paused) {
+                    audioElement.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    audioElement.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            };
+
+            audioElement.onended = function() {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            };
+        }
+
+        // Show error
+        function showError(message) {
+            addMessage(`Error: ${message}`, 'bot');
+        }
+
+        // Auto-resize textarea
+        function autoResizeTextarea() {
+            const textarea = document.getElementById('messageInput');
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        // Event listeners
+        document.getElementById('sendBtn').addEventListener('click', function() {
+            const message = document.getElementById('messageInput').value.trim();
+            if (message) {
+                sendMessage(message);
+            }
+        });
+
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const message = this.value.trim();
+                if (message) {
+                    sendMessage(message);
+                }
+            }
+        });
+
+        document.getElementById('messageInput').addEventListener('input', autoResizeTextarea);
+
+        document.getElementById('voiceBtn').addEventListener('click', function() {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                if (recognition) {
+                    recognition.lang = getLanguageCode(currentLanguage);
+                    recognition.start();
+                } else {
+                    alert('Speech recognition not supported in this browser.');
+                }
+            }
+        });
+
+        document.getElementById('cameraBtn').addEventListener('click', function() {
+            window.open('http://localhost:5001/', '_blank');
+        });
+
+        window.addEventListener('message', function(event) {
+            try {
+                if (event && event.data && event.data.type === 'sign_result') {
+                    const text = (event.data.text || '').trim();
+                    if (text) {
+                        const input = document.getElementById('messageInput');
+                        input.value = text;
+                        sendMessage(text);
+                    }
+                }
+            } catch (_) {}
+        });
+
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            currentLanguage = this.value;
+            if (recognition) {
+                recognition.lang = getLanguageCode(currentLanguage);
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initInputMethods();
+            initSpeechRecognition();
+            
+            // Set welcome message time
+            document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Listen for sign language commands
+            document.addEventListener('signLanguageCommand', function(event) {
+                const command = event.detail.command;
+                const input = document.getElementById('messageInput');
+                
+                switch(command) {
+                    case 'help':
+                        input.value = 'help me with accessibility';
+                        sendMessage('help me with accessibility');
+                        break;
+                    case 'assistant':
+                        input.value = 'I need assistance';
+                        sendMessage('I need assistance');
+                        break;
+                    case 'clear':
+                        input.value = '';
+                        break;
+                    default:
+                        input.value = command;
+                        sendMessage(command);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

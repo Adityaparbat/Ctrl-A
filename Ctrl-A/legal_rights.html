@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Rights Assistant - Ctrl-A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-dark: #1a202c;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --warning-color: #f6ad55;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .input-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .input-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .input-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-method {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-method.active {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .input-method:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .method-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .method-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Input Area */
+        .input-area {
+            margin-bottom: 2rem;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-search {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-voice {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .btn-voice:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-voice.recording {
+            background: var(--error-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-camera {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .btn-camera:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Quick Questions */
+        .quick-questions {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .question-btn {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .question-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .results-count {
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .legal-response {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .response-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .response-content {
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .response-content h3 {
+            color: var(--primary-color);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .response-content ul {
+            margin: 0.5rem 0 1rem 1.5rem;
+        }
+
+        .response-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        .response-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-response {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-response:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-response.primary {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-response.primary:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Legal Categories */
+        .categories-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .categories-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+            color: white;
+        }
+
+        .category-card:nth-child(1) .category-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .category-card:nth-child(2) .category-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .category-card:nth-child(3) .category-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .category-card:nth-child(4) .category-icon {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .category-card:nth-child(5) .category-icon {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+
+        .category-card:nth-child(6) .category-icon {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: var(--text-primary);
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Loading States */
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-desc {
+            font-size: 1rem;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .audio-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .nav {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .input-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .input-actions {
+                flex-direction: column;
+            }
+
+            .questions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .response-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --border-color: #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Ctrl-A</div>
+            <div class="nav-right">
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Legal Rights Assistant</h1>
+            <p class="page-subtitle">
+                Get AI-powered legal assistance and understand your rights as a disabled individual
+            </p>
+        </section>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <div class="input-header">
+                <div class="input-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <h2 class="input-title">Ask Your Legal Question</h2>
+            </div>
+
+            <!-- Input Methods -->
+            <div class="input-methods">
+                <div class="input-method active" data-method="text">
+                    <div class="method-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="method-title">Text Input</div>
+                    <div class="method-desc">Type your legal question</div>
+                </div>
+                <div class="input-method" data-method="voice">
+                    <div class="method-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <div class="method-title">Voice Input</div>
+                    <div class="method-desc">Speak your question</div>
+                </div>
+                <div class="input-method" data-method="sign">
+                    <div class="method-icon">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="method-title">Sign Language</div>
+                    <div class="method-desc">Use hand gestures</div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <textarea 
+                        id="questionInput" 
+                        class="input-field" 
+                        placeholder="Ask your legal question here (e.g., 'What are my rights as a disabled person?', 'How do I file a discrimination complaint?', 'What accommodations am I entitled to at work?')"
+                        rows="4"
+                    ></textarea>
+                </div>
+                <div class="input-actions">
+                    <button class="btn-action btn-search" id="askBtn">
+                        <i class="fas fa-search"></i>
+                        Ask Question
+                    </button>
+                    <button class="btn-action btn-voice" id="voiceBtn">
+                        <i class="fas fa-microphone"></i>
+                        <span id="voiceText">Start Voice Input</span>
+                    </button>
+                    <button class="btn-action btn-camera" id="cameraBtn">
+                        <i class="fas fa-camera"></i>
+                        Start Sign Language
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Questions -->
+        <section class="quick-questions">
+            <h3 class="quick-title">Common Legal Questions</h3>
+            <div class="questions-grid">
+                <button class="question-btn" onclick="askQuestion('What are my rights as a disabled person?')">
+                    What are my rights as a disabled person?
+                </button>
+                <button class="question-btn" onclick="askQuestion('How do I file a discrimination complaint?')">
+                    How do I file a discrimination complaint?
+                </button>
+                <button class="question-btn" onclick="askQuestion('What accommodations am I entitled to at work?')">
+                    What accommodations am I entitled to at work?
+                </button>
+                <button class="question-btn" onclick="askQuestion('What are my rights in public places?')">
+                    What are my rights in public places?
+                </button>
+                <button class="question-btn" onclick="askQuestion('How do I get legal aid for disability issues?')">
+                    How do I get legal aid for disability issues?
+                </button>
+                <button class="question-btn" onclick="askQuestion('What are my rights regarding accessibility?')">
+                    What are my rights regarding accessibility?
+                </button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="results-header">
+                <h3 class="results-title">Legal Response</h3>
+                <div class="results-count" id="resultsCount">No response yet</div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                <span>Analyzing your legal question...</span>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-gavel"></i>
+                </div>
+                <div class="empty-title">No response yet</div>
+                <div class="empty-desc">Ask a legal question above to get AI-powered assistance</div>
+            </div>
+
+            <!-- Legal Response -->
+            <div class="legal-response" id="legalResponse" style="display: none;">
+                <div class="response-title" id="responseTitle">Legal Response</div>
+                <div class="response-content" id="responseContent">
+                    <!-- Response content will be populated here -->
+                </div>
+                <div class="response-actions">
+                    <button class="btn-response primary" onclick="copyResponse()">
+                        <i class="fas fa-copy"></i>
+                        Copy Response
+                    </button>
+                    <button class="btn-response" onclick="speakResponse()">
+                        <i class="fas fa-volume-up"></i>
+                        Speak Response
+                    </button>
+                    <button class="btn-response" onclick="saveResponse()">
+                        <i class="fas fa-save"></i>
+                        Save Response
+                    </button>
+                    <a href="#" class="btn-response" onclick="getLegalAid()">
+                        <i class="fas fa-phone"></i>
+                        Get Legal Aid
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Legal Categories -->
+        <section class="categories-section">
+            <h3 class="categories-title">Explore Legal Categories</h3>
+            <div class="categories-grid">
+                <div class="category-card" onclick="askQuestion('Tell me about employment rights for disabled people')">
+                    <div class="category-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="category-title">Employment Rights</div>
+                    <div class="category-desc">Workplace accommodations, discrimination, and employment law</div>
+                </div>
+                <div class="category-card" onclick="askQuestion('What are my rights in public places and services?')">
+                    <div class="category-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="category-title">Public Access</div>
+                    <div class="category-desc">Accessibility in public spaces, transportation, and services</div>
+                </div>
+                <div class="category-card" onclick="askQuestion('Tell me about education rights for disabled students')">
+                    <div class="category-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="category-title">Education Rights</div>
+                    <div class="category-desc">Special education, accommodations, and equal access to education</div>
+                </div>
+                <div class="category-card" onclick="askQuestion('What are my healthcare rights as a disabled person?')">
+                    <div class="category-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="category-title">Healthcare Rights</div>
+                    <div class="category-desc">Medical care, insurance, and healthcare accessibility</div>
+                </div>
+                <div class="category-card" onclick="askQuestion('Tell me about housing rights for disabled people')">
+                    <div class="category-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="category-title">Housing Rights</div>
+                    <div class="category-desc">Fair housing, accessibility modifications, and discrimination</div>
+                </div>
+                <div class="category-card" onclick="askQuestion('What are my digital rights and online accessibility rights?')">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="category-title">Digital Rights</div>
+                    <div class="category-desc">Online accessibility, digital discrimination, and internet rights</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio Player -->
+        <div class="audio-player" id="audioPlayer">
+            <div class="audio-controls">
+                <button class="audio-btn" id="playBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="audio-info">
+                    <div class="audio-title" id="audioTitle">Audio Response</div>
+                    <div class="audio-desc" id="audioDesc">Click play to hear the response</div>
+                </div>
+            </div>
+            <audio id="audioElement" controls style="display: none;"></audio>
+        </div>
+    </main>
+    <script>
+        let currentMethod = 'text';
+        let isRecording = false;
+        let recognition = null;
+        let currentResponse = '';
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    updateVoiceButton();
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('questionInput').value = transcript;
+                    askQuestion(transcript);
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    updateVoiceButton();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    isRecording = false;
+                    updateVoiceButton();
+                    alert('Speech recognition failed. Please try again.');
+                };
+            } else {
+                console.warn('Speech recognition not supported');
+            }
+        }
+
+        // Update voice button state
+        function updateVoiceButton() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceText = document.getElementById('voiceText');
+            
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceText.textContent = 'Stop Recording';
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceText.textContent = 'Start Voice Input';
+            }
+        }
+
+        // Initialize input methods
+        function initInputMethods() {
+            const methods = document.querySelectorAll('.input-method');
+            methods.forEach(method => {
+                method.addEventListener('click', function() {
+                    methods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMethod = this.dataset.method;
+                    
+                    // Update input placeholder based on method
+                    const input = document.getElementById('questionInput');
+                    switch(currentMethod) {
+                        case 'text':
+                            input.placeholder = 'Ask your legal question here (e.g., "What are my rights as a disabled person?")';
+                            break;
+                        case 'voice':
+                            input.placeholder = 'Click the microphone button to speak your legal question';
+                            break;
+                        case 'sign':
+                            input.placeholder = 'Click the camera button to use sign language input';
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Ask question function
+        async function askQuestion(question) {
+            if (!question.trim()) return;
+
+            showLoading();
+            hideEmptyState();
+            hideResponse();
+
+            try {
+                // Send to legal rights API
+                const response = await fetch('http://localhost:8003/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `question=${encodeURIComponent(question.trim())}`
+                });
+
+                if (!response.ok) {
+                    throw new Error('Legal API failed');
+                }
+
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const responseElement = doc.querySelector('.response');
+                
+                if (responseElement) {
+                    const responseText = responseElement.textContent;
+                    displayResponse(responseText, question);
+                    generateAudioResponse(responseText);
+                } else {
+                    throw new Error('No response found');
+                }
+                
+            } catch (error) {
+                console.error('Legal API error:', error);
+                // Fallback to mock response
+                const mockResponse = getMockLegalResponse(question);
+                displayResponse(mockResponse, question);
+                generateAudioResponse(mockResponse);
+            }
+        }
+
+        // Get mock legal response
+        function getMockLegalResponse(question) {
+            const questionLower = question.toLowerCase();
+            
+            if (questionLower.includes('rights') && questionLower.includes('disabled')) {
+                return `As a disabled person, you have several important legal rights:
+
+<h3>1. Americans with Disabilities Act (ADA) Rights</h3>
+<ul>
+<li>Right to reasonable accommodations in the workplace</li>
+<li>Right to equal access to public services and facilities</li>
+<li>Right to non-discrimination in employment, education, and public services</li>
+<li>Right to accessible transportation and communication</li>
+</ul>
+
+<h3>2. Employment Rights</h3>
+<ul>
+<li>Right to equal employment opportunities</li>
+<li>Right to reasonable workplace accommodations</li>
+<li>Right to protection from discrimination and harassment</li>
+<li>Right to privacy regarding your disability status</li>
+</ul>
+
+<h3>3. Education Rights</h3>
+<ul>
+<li>Right to free appropriate public education (FAPE)</li>
+<li>Right to reasonable accommodations in educational settings</li>
+<li>Right to accessible learning materials and technology</li>
+<li>Right to participate in extracurricular activities</li>
+</ul>
+
+<h3>4. Public Access Rights</h3>
+<ul>
+<li>Right to accessible public buildings and facilities</li>
+<li>Right to accessible transportation services</li>
+<li>Right to effective communication in public services</li>
+<li>Right to accessible voting and civic participation</li>
+</ul>
+
+If you believe your rights have been violated, you can file a complaint with the appropriate government agency or seek legal assistance.`;
+            } else if (questionLower.includes('discrimination') && questionLower.includes('complaint')) {
+                return `To file a discrimination complaint, follow these steps:
+
+<h3>1. Document the Discrimination</h3>
+<ul>
+<li>Keep detailed records of incidents, including dates, times, and witnesses</li>
+<li>Save any relevant emails, letters, or other communications</li>
+<li>Take photos or videos if applicable</li>
+<li>Note the impact on your work, education, or daily life</li>
+</ul>
+
+<h3>2. Contact the Appropriate Agency</h3>
+<ul>
+<li><strong>Employment:</strong> Equal Employment Opportunity Commission (EEOC)</li>
+<li><strong>Education:</strong> Office for Civil Rights (OCR)</li>
+<li><strong>Public Services:</strong> Department of Justice Civil Rights Division</li>
+<li><strong>Housing:</strong> Department of Housing and Urban Development (HUD)</li>
+</ul>
+
+<h3>3. File Your Complaint</h3>
+<ul>
+<li>Complete the agency's complaint form</li>
+<li>Include all supporting documentation</li>
+<li>Submit within the required time limits (usually 180-300 days)</li>
+<li>Keep copies of all submitted materials</li>
+</ul>
+
+<h3>4. Follow Up</h3>
+<ul>
+<li>Respond promptly to any requests for additional information</li>
+<li>Cooperate with the investigation process</li>
+<li>Consider seeking legal representation if needed</li>
+</ul>`;
+            } else if (questionLower.includes('accommodation') && questionLower.includes('work')) {
+                return `You are entitled to reasonable workplace accommodations under the ADA:
+
+<h3>What Are Reasonable Accommodations?</h3>
+<ul>
+<li>Modifications to your work environment or job duties</li>
+<li>Changes that don't create undue hardship for your employer</li>
+<li>Accommodations that help you perform essential job functions</li>
+<li>Flexible work arrangements when possible</li>
+</ul>
+
+<h3>Common Workplace Accommodations</h3>
+<ul>
+<li>Accessible workstations and equipment</li>
+<li>Assistive technology and software</li>
+<li>Modified work schedules or remote work options</li>
+<li>Job restructuring or reassignment</li>
+<li>Sign language interpreters or other communication aids</li>
+<li>Ergonomic furniture or equipment</li>
+</ul>
+
+<h3>How to Request Accommodations</h3>
+<ul>
+<li>Submit a written request to your employer</li>
+<li>Include medical documentation if required</li>
+<li>Be specific about what accommodations you need</li>
+<li>Work with your employer to find effective solutions</li>
+</ul>
+
+<h3>Your Rights</h3>
+<ul>
+<li>Right to request accommodations at any time</li>
+<li>Right to privacy regarding your disability</li>
+<li>Right to appeal if accommodations are denied</li>
+<li>Right to protection from retaliation</li>
+</ul>`;
+            } else {
+                return `I understand you're asking about legal matters related to disability rights. Here's some general information:
+
+<h3>Key Legal Protections</h3>
+<ul>
+<li>Americans with Disabilities Act (ADA)</li>
+<li>Rehabilitation Act of 1973</li>
+<li>Individuals with Disabilities Education Act (IDEA)</li>
+<li>Fair Housing Act</li>
+</ul>
+
+<h3>Important Rights</h3>
+<ul>
+<li>Right to equal opportunity and non-discrimination</li>
+<li>Right to reasonable accommodations</li>
+<li>Right to accessible public services and facilities</li>
+<li>Right to privacy and confidentiality</li>
+</ul>
+
+<h3>Getting Help</h3>
+<ul>
+<li>Contact disability rights organizations</li>
+<li>Seek legal aid services</li>
+<li>File complaints with appropriate agencies</li>
+<li>Consider hiring a disability rights attorney</li>
+</ul>
+
+For specific legal advice regarding your situation, I recommend consulting with a qualified attorney who specializes in disability law.`;
+            }
+        }
+
+        // Display response
+        function displayResponse(responseText, question) {
+            currentResponse = responseText;
+            
+            document.getElementById('responseTitle').textContent = `Response to: "${question}"`;
+            document.getElementById('responseContent').innerHTML = responseText;
+            document.getElementById('resultsCount').textContent = 'Response generated';
+            
+            hideLoading();
+            showResponse();
+        }
+
+        // Generate audio response
+        async function generateAudioResponse(responseText) {
+            try {
+                const response = await fetch('/api/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: responseText.replace(/<[^>]*>/g, ''), // Remove HTML tags
+                        language: 'en'
+                    })
+                });
+
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    playAudio(audioUrl, 'Legal Response');
+                }
+            } catch (error) {
+                console.error('TTS error:', error);
+            }
+        }
+
+        // Play audio
+        function playAudio(audioUrl, title) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioElement = document.getElementById('audioElement');
+            const playBtn = document.getElementById('playBtn');
+            const audioTitle = document.getElementById('audioTitle');
+            const audioDesc = document.getElementById('audioDesc');
+
+            audioElement.src = audioUrl;
+            audioTitle.textContent = 'Legal Response';
+            audioDesc.textContent = title;
+            audioPlayer.style.display = 'block';
+
+            playBtn.onclick = function() {
+                if (audioElement.paused) {
+                    audioElement.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    audioElement.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            };
+
+            audioElement.onended = function() {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            };
+        }
+
+        // Show/hide states
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('legalResponse').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showResponse() {
+            document.getElementById('legalResponse').style.display = 'block';
+        }
+
+        function hideResponse() {
+            document.getElementById('legalResponse').style.display = 'none';
+        }
+
+        function showEmptyState() {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('legalResponse').style.display = 'none';
+            hideLoading();
+        }
+
+        function hideEmptyState() {
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        // Response actions
+        function copyResponse() {
+            navigator.clipboard.writeText(currentResponse.replace(/<[^>]*>/g, '')).then(() => {
+                alert('Response copied to clipboard!');
+            });
+        }
+
+        function speakResponse() {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(currentResponse.replace(/<[^>]*>/g, ''));
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function saveResponse() {
+            // In a real implementation, this would save to user's account
+            alert('Response saved to your account!');
+        }
+
+        function getLegalAid() {
+            alert('Legal aid contact information will be provided here.');
+        }
+
+        // Event listeners
+        document.getElementById('askBtn').addEventListener('click', function() {
+            const question = document.getElementById('questionInput').value.trim();
+            if (question) {
+                askQuestion(question);
+            }
+        });
+
+        document.getElementById('questionInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const question = this.value.trim();
+                if (question) {
+                    askQuestion(question);
+                }
+            }
+        });
+
+        document.getElementById('voiceBtn').addEventListener('click', function() {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                if (recognition) {
+                    recognition.start();
+                } else {
+                    alert('Speech recognition not supported in this browser.');
+                }
+            }
+        });
+
+        document.getElementById('cameraBtn').addEventListener('click', function() {
+            window.open('http://localhost:5001/', '_blank');
+        });
+
+        window.addEventListener('message', function(event) {
+            try {
+                if (event && event.data && event.data.type === 'sign_result') {
+                    const text = (event.data.text || '').trim();
+                    if (text) {
+                        const input = document.getElementById('questionInput');
+                        input.value = text;
+                        askQuestion(text);
+                    }
+                }
+            } catch (_) {}
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initInputMethods();
+            initSpeechRecognition();
+            
+            // Listen for sign language commands
+            document.addEventListener('signLanguageCommand', function(event) {
+                const command = event.detail.command;
+                const input = document.getElementById('questionInput');
+                
+                switch(command) {
+                    case 'help':
+                        input.value = 'What are my legal rights?';
+                        askQuestion('What are my legal rights?');
+                        break;
+                    case 'legal':
+                        input.value = 'I need legal assistance';
+                        askQuestion('I need legal assistance');
+                        break;
+                    case 'clear':
+                        input.value = '';
+                        break;
+                    default:
+                        input.value = command;
+                        askQuestion(command);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

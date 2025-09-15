@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Button Functionality Test</h1>
+    
+    <div class="test-section">
+        <h2>File Upload Test</h2>
+        <button id="testFileButton">Test File Upload</button>
+        <input type="file" id="testFileInput" accept="image/*" style="display: none;">
+        <p id="fileStatus">No file selected</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Camera Test</h2>
+        <button id="testCameraButton">Test Camera</button>
+        <input type="file" id="testCameraInput" accept="image/*" capture="environment" style="display: none;">
+        <p id="cameraStatus">No photo taken</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>Console Logs</h2>
+        <p>Open browser console (F12) to see debug messages</p>
+    </div>
+
+    <script>
+        console.log('Test page loaded');
+        
+        // Test file upload
+        const testFileButton = document.getElementById('testFileButton');
+        const testFileInput = document.getElementById('testFileInput');
+        const fileStatus = document.getElementById('fileStatus');
+        
+        testFileButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Test file button clicked');
+            testFileInput.click();
+        });
+        
+        testFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('File selected:', file.name, file.type, file.size);
+                fileStatus.textContent = `File selected: ${file.name} (${file.type}, ${file.size} bytes)`;
+            }
+        });
+        
+        // Test camera
+        const testCameraButton = document.getElementById('testCameraButton');
+        const testCameraInput = document.getElementById('testCameraInput');
+        const cameraStatus = document.getElementById('cameraStatus');
+        
+        testCameraButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Test camera button clicked');
+            testCameraInput.click();
+        });
+        
+        testCameraInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('Camera photo taken:', file.name, file.type, file.size);
+                cameraStatus.textContent = `Photo taken: ${file.name} (${file.type}, ${file.size} bytes)`;
+            }
+        });
+        
+        console.log('Event listeners set up');
+    </script>
+</body>
+</html>

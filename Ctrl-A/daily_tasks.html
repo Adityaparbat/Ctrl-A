@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Tasks - Ctrl-A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-dark: #1a202c;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+            --warning-color: #f6ad55;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Music Player */
+        .music-player {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .player-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .player-status {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .control-btn.playing {
+            background: var(--error-color);
+        }
+
+        .progress-container {
+            background: var(--border-color);
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            height: 100%;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .music-search {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .status { font-size: 0.9rem; color: var(--text-secondary); margin-left: 0.5rem; }
+        .status.error { color: var(--error-color); }
+
+        /* Reminders Section */
+        .reminders-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .reminders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .reminders-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .add-reminder-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reminder-form {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-save {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--success-color);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-cancel {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .reminders-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .reminder-item {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reminder-info {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .reminder-time {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-complete {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-edit {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--error-color);
+            color: white;
+        }
+
+        /* Input Methods */
+        .input-methods {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .input-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .input-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .input-method-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .method-tab {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .method-tab.active {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .method-tab:hover {
+            border-color: var(--primary-color);
+        }
+
+        .input-area {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .input-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-send {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-voice {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .btn-voice.recording {
+            background: var(--error-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-camera {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .audio-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .nav {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .input-area {
+                flex-direction: column;
+            }
+
+            .input-actions {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .reminder-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .reminder-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --border-color: #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Ctrl-A</div>
+            <div class="nav-right">
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Daily Tasks</h1>
+            <p class="page-subtitle">
+                Manage your daily tasks with smart reminders, music playback, and voice commands
+            </p>
+        </section>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <!-- Music Player Feature -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Music Player</h3>
+                        <p class="feature-desc">Play music and manage your audio experience</p>
+                    </div>
+                </div>
+
+                <div class="music-player">
+                    <div class="player-header">
+                        <div class="player-title">Now Playing</div>
+                        <div class="player-status" id="playerStatus">No music selected</div>
+                    </div>
+
+                    <div class="player-controls">
+                        <button class="control-btn" id="prevBtn" title="Previous">
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button class="control-btn" id="playBtn" title="Play/Pause">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="control-btn" id="nextBtn" title="Next">
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                    </div>
+
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <div class="time-info">
+                        <span id="currentTime">0:00</span>
+                        <span id="totalTime">0:00</span>
+                    </div>
+
+                    <div class="music-search">
+                        <input 
+                            type="text" 
+                            id="musicSearch" 
+                            class="search-input" 
+                            placeholder="Search for music (e.g., 'relaxing music', 'classical', 'jazz')"
+                        >
+                        <button class="search-btn" id="searchMusicBtn">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                        <span class="status" id="musicStatus"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reminders Feature -->
+            <div class="feature-card">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div>
+                        <h3 class="feature-title">Smart Reminders</h3>
+                        <p class="feature-desc">Set and manage your daily reminders</p>
+                    </div>
+                </div>
+
+                <div class="reminders-section">
+                    <div class="reminders-header">
+                        <h3 class="reminders-title">Your Reminders</h3>
+                        <button class="add-reminder-btn" id="addReminderBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Reminder
+                        </button>
+                    </div>
+
+                    <div class="reminder-form" id="reminderForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Reminder Title</label>
+                                <input type="text" id="reminderTitle" class="form-input" placeholder="Enter reminder title">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Time</label>
+                                <input type="time" id="reminderTime" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="reminderDesc" class="form-input" placeholder="Enter reminder description" rows="3"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-cancel" id="cancelReminderBtn">Cancel</button>
+                            <button class="btn-save" id="saveReminderBtn">Save Reminder</button>
+                        </div>
+                    </div>
+
+                    <div class="reminders-list" id="remindersList">
+                        <!-- Reminders will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Methods -->
+        <section class="input-methods">
+            <div class="input-header">
+                <div class="input-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h2 class="input-title">Voice Commands</h2>
+            </div>
+
+            <div class="input-method-tabs">
+                <div class="method-tab active" data-method="text">
+                    <i class="fas fa-keyboard"></i>
+                    <span>Text Input</span>
+                </div>
+                <div class="method-tab" data-method="voice">
+                    <i class="fas fa-microphone"></i>
+                    <span>Voice Input</span>
+                </div>
+                <div class="method-tab" data-method="sign">
+                    <i class="fas fa-hand-paper"></i>
+                    <span>Sign Language</span>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <textarea 
+                    id="commandInput" 
+                    class="input-field" 
+                    placeholder="Enter your command (e.g., 'play relaxing music', 'set reminder for 3 PM', 'play jazz music')"
+                    rows="3"
+                ></textarea>
+                <div class="input-actions">
+                    <button class="btn-action btn-send" id="sendCommandBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send
+                    </button>
+                    <button class="btn-action btn-voice" id="voiceCommandBtn">
+                        <i class="fas fa-microphone"></i>
+                        <span id="voiceText">Voice</span>
+                    </button>
+                    <button class="btn-action btn-camera" id="cameraCommandBtn">
+                        <i class="fas fa-camera"></i>
+                        Sign
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audio Player -->
+        <div class="audio-player" id="audioPlayer">
+            <div class="audio-controls">
+                <button class="audio-btn" id="audioPlayBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="audio-info">
+                    <div class="audio-title" id="audioTitle">Audio Response</div>
+                    <div class="audio-desc" id="audioDesc">Click play to hear the response</div>
+                </div>
+            </div>
+            <audio id="audioElement" controls style="display: none;"></audio>
+        </div>
+    </main>
+    <script>
+        let currentMethod = 'text';
+        let isRecording = false;
+        let recognition = null;
+        let currentAudio = null;
+        let reminders = [];
+        let isPlaying = false;
+        let currentMusic = null;
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    updateVoiceButton();
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('commandInput').value = transcript;
+                    processCommand(transcript);
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    updateVoiceButton();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    isRecording = false;
+                    updateVoiceButton();
+                    alert('Speech recognition failed. Please try again.');
+                };
+            } else {
+                console.warn('Speech recognition not supported');
+            }
+        }
+
+        // Update voice button state
+        function updateVoiceButton() {
+            const voiceBtn = document.getElementById('voiceCommandBtn');
+            const voiceText = document.getElementById('voiceText');
+            
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceText.textContent = 'Stop';
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceText.textContent = 'Voice';
+            }
+        }
+
+        // Initialize input methods
+        function initInputMethods() {
+            const tabs = document.querySelectorAll('.method-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMethod = this.dataset.method;
+                    
+                    // Update input placeholder based on method
+                    const input = document.getElementById('commandInput');
+                    switch(currentMethod) {
+                        case 'text':
+                            input.placeholder = 'Enter your command (e.g., "play relaxing music", "set reminder for 3 PM")';
+                            break;
+                        case 'voice':
+                            input.placeholder = 'Click the microphone button to speak your command';
+                            break;
+                        case 'sign':
+                            input.placeholder = 'Click the camera button to use sign language input';
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Process command
+        async function processCommand(command) {
+            if (!command.trim()) return;
+
+            const commandLower = command.toLowerCase();
+            
+            try {
+                // Send to music/reminder handler
+                const response = await fetch('/api/daily-tasks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ command: command.trim() })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    handleCommandResponse(data);
+                } else {
+                    throw new Error('Command processing failed');
+                }
+            } catch (error) {
+                console.error('Command processing error:', error);
+                // Fallback to local processing
+                handleCommandLocally(command);
+            }
+        }
+
+        // Handle command locally
+        function handleCommandLocally(command) {
+            const commandLower = command.toLowerCase();
+            
+            if (commandLower.includes('play') && commandLower.includes('music')) {
+                const musicQuery = extractMusicQuery(command);
+                playMusic(musicQuery);
+            } else if (commandLower.includes('reminder') || commandLower.includes('remind')) {
+                const reminderData = extractReminderData(command);
+                if (reminderData) {
+                    addReminder(reminderData.title, reminderData.time, reminderData.description);
+                }
+            } else {
+                showResponse('Command processed: ' + command);
+            }
+        }
+
+        // Extract music query from command
+        function extractMusicQuery(command) {
+            const musicKeywords = ['play', 'music', 'song', 'track'];
+            let query = command;
+            
+            for (const keyword of musicKeywords) {
+                if (query.toLowerCase().includes(keyword)) {
+                    query = query.toLowerCase().replace(keyword, '').trim();
+                    break;
+                }
+            }
+            
+            return query || 'relaxing music';
+        }
+
+        // Extract reminder data from command
+        function extractReminderData(command) {
+            const timeMatch = command.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+            const titleMatch = command.match(/remind me to (.+?)(?:\s+at|\s+for|$)/i);
+            
+            if (timeMatch) {
+                let hours = parseInt(timeMatch[1]);
+                const minutes = timeMatch[2] ? parseInt(timeMatch[2]) : 0;
+                const ampm = timeMatch[3] ? timeMatch[3].toLowerCase() : '';
+                
+                if (ampm === 'pm' && hours !== 12) hours += 12;
+                if (ampm === 'am' && hours === 12) hours = 0;
+                
+                const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                const title = titleMatch ? titleMatch[1] : 'Reminder';
+                
+                return {
+                    title: title,
+                    time: timeString,
+                    description: `Reminder: ${title}`
+                };
+            }
+            
+            return null;
+        }
+
+        // Play music
+        async function playMusic(query) {
+            const statusEl = document.getElementById('musicStatus');
+            statusEl.classList.remove('error');
+            statusEl.textContent = 'Searching...';
+            try {
+                const response = await fetch('/api/play-music', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error || 'Unknown error');
+                const title = data.title || query;
+                const url = data.mp3_url || data.url || null; // prefer mp3 for compatibility
+                const duration = Number(data.duration || 0);
+                updateMusicPlayer(title, url, duration);
+                showResponse(`Now playing: ${title}`);
+                statusEl.textContent = url && url.includes('/api/stream-mp3') ? 'Playing (MP3)' : 'Playing';
+                if (!data.mp3_url) {
+                    statusEl.textContent += ' • Tip: install ffmpeg for best compatibility';
+                }
+                // If we have a URL, attach onerror to try fallback download
+                if (currentAudio instanceof Audio) {
+                    currentAudio.onerror = async function() {
+                        statusEl.classList.add('error');
+                        statusEl.textContent = 'Playback error • trying fallback';
+                        try {
+                            const dres = await fetch('/api/download-music', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ query })
+                            });
+                            const d = await dres.json();
+                            if (d.success) {
+                                statusEl.classList.remove('error');
+                                statusEl.textContent = 'Playing (downloaded)';
+                                updateMusicPlayer(d.title || title, d.url, Number(d.duration || 0));
+                                if (currentAudio instanceof Audio) currentAudio.play().catch(()=>{});
+                            } else {
+                                statusEl.classList.add('error');
+                                statusEl.textContent = 'Playback error (fallback failed)';
+                            }
+                        } catch (_) {
+                            statusEl.classList.add('error');
+                            statusEl.textContent = 'Playback error (fallback failed)';
+                        }
+                    };
+                }
+            } catch (error) {
+                console.error('Music error:', error);
+                statusEl.classList.add('error');
+                statusEl.textContent = 'Failed to fetch music';
+                updateMusicPlayer(query, null, 180);
+            }
+        }
+
+        // Simulate music playback
+        function simulateMusicPlayback() {
+            if (currentAudio) {
+                currentAudio.pause();
+            }
+            
+            // Create a mock audio element for simulation
+            currentAudio = new Audio();
+            currentAudio.duration = 180; // 3 minutes
+            currentAudio.currentTime = 0;
+            
+            // Simulate time updates
+            const timeUpdateInterval = setInterval(() => {
+                if (currentAudio && !currentAudio.paused) {
+                    currentAudio.currentTime += 1;
+                    updateTimeDisplay(currentAudio.currentTime, currentAudio.duration);
+                    updateProgress(currentAudio.currentTime, currentAudio.duration);
+                    
+                    if (currentAudio.currentTime >= currentAudio.duration) {
+                        clearInterval(timeUpdateInterval);
+                        isPlaying = false;
+                        document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i>';
+                    }
+                }
+            }, 1000);
+            
+            // Store interval for cleanup
+            currentAudio._timeUpdateInterval = timeUpdateInterval;
+        }
+
+        // Update music player
+        function updateMusicPlayer(title, url, duration) {
+            document.getElementById('playerStatus').textContent = title;
+            currentMusic = { title, url };
+            if (currentAudio && currentAudio._timeUpdateInterval) clearInterval(currentAudio._timeUpdateInterval);
+            if (url) {
+                const audio = new Audio(url);
+                currentAudio = audio;
+                isPlaying = false;
+                audio.addEventListener('loadedmetadata', function() {
+                    const total = isFinite(audio.duration) ? audio.duration : (duration || 0);
+                    updateTimeDisplay(0, total);
+                });
+                audio.addEventListener('timeupdate', function() {
+                    const total = isFinite(audio.duration) ? audio.duration : (duration || 0);
+                    updateTimeDisplay(audio.currentTime || 0, total);
+                    updateProgress(audio.currentTime || 0, total || 1);
+                });
+                audio.addEventListener('ended', function() {
+                    isPlaying = false;
+                    document.getElementById('playBtn').innerHTML = '<i class="fas fa-play"></i>';
+                });
+            } else {
+                currentAudio = { currentTime: 0, duration: duration || 180, paused: false };
+                isPlaying = false;
+            }
+        }
+
+        // Seek by clicking progress bar
+        (function attachSeek(){
+            const bar = document.getElementById('progressContainer');
+            bar.addEventListener('click', function(e){
+                const rect = bar.getBoundingClientRect();
+                const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+                if (currentAudio instanceof Audio) {
+                    const total = isFinite(currentAudio.duration) ? currentAudio.duration : (currentAudio.duration || 0);
+                    if (total > 0) currentAudio.currentTime = ratio * total;
+                } else if (currentAudio) {
+                    const total = currentAudio.duration || 180;
+                    currentAudio.currentTime = ratio * total;
+                }
+            });
+        })();
+
+        // Update Play/Pause button behavior to control real audio when available
+        document.getElementById('playBtn').addEventListener('click', function() {
+            const btn = this;
+            if (currentAudio instanceof Audio) {
+                if (!isPlaying) {
+                    currentAudio.play().then(()=>{
+                        isPlaying = true;
+                        btn.innerHTML = '<i class="fas fa-pause"></i>';
+                    }).catch(()=>{});
+                } else {
+                    currentAudio.pause();
+                    isPlaying = false;
+                    btn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+                return;
+            }
+            // Simulation fallback
+            if (currentAudio) {
+                if (isPlaying) {
+                    if (currentAudio._timeUpdateInterval) clearInterval(currentAudio._timeUpdateInterval);
+                    btn.innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                } else {
+                    if (currentAudio._timeUpdateInterval) clearInterval(currentAudio._timeUpdateInterval);
+                    const timeUpdateInterval = setInterval(() => {
+                        if (currentAudio && isPlaying) {
+                            currentAudio.currentTime += 1;
+                            updateTimeDisplay(currentAudio.currentTime, currentAudio.duration);
+                            updateProgress(currentAudio.currentTime, currentAudio.duration);
+                            if (currentAudio.currentTime >= currentAudio.duration) {
+                                clearInterval(timeUpdateInterval);
+                                isPlaying = false;
+                                btn.innerHTML = '<i class="fas fa-play"></i>';
+                            }
+                        }
+                    }, 1000);
+                    currentAudio._timeUpdateInterval = timeUpdateInterval;
+                    btn.innerHTML = '<i class="fas fa-pause"></i>';
+                    isPlaying = true;
+                }
+            }
+        });
+
+        // Update time display
+        function updateTimeDisplay(current, total) {
+            const cur = formatTime(current || 0);
+            const tot = formatTime(isFinite(total) && total > 0 ? total : 0);
+            document.getElementById('currentTime').textContent = cur;
+            document.getElementById('totalTime').textContent = tot;
+        }
+
+        // Update progress bar
+        function updateProgress(current, total) {
+            const denom = total > 0 ? total : 1;
+            const percentage = Math.max(0, Math.min(100, (current / denom) * 100));
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+
+        // Format time
+        function formatTime(seconds) {
+            if (!isFinite(seconds) || seconds <= 0) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Add reminder
+        function addReminder(title, time, description) {
+            const reminder = {
+                id: Date.now(),
+                title: title,
+                time: time,
+                description: description,
+                completed: false,
+                scheduled: false
+            };
+            
+            reminders.push(reminder);
+            renderReminders();
+            scheduleReminder(reminder);
+            showResponse(`Reminder added: ${title} at ${time}`);
+        }
+
+        // Schedule reminder
+        function scheduleReminder(reminder) {
+            const [hours, minutes] = reminder.time.split(':').map(Number);
+            const now = new Date();
+            const reminderTime = new Date();
+            reminderTime.setHours(hours, minutes, 0, 0);
+            
+            // If time has passed today, schedule for tomorrow
+            if (reminderTime <= now) {
+                reminderTime.setDate(reminderTime.getDate() + 1);
+            }
+            
+            const timeUntilReminder = reminderTime.getTime() - now.getTime();
+            
+            if (timeUntilReminder > 0) {
+                setTimeout(() => {
+                    showReminderNotification(reminder);
+                }, timeUntilReminder);
+                
+                reminder.scheduled = true;
+                console.log(`Reminder scheduled for ${reminderTime.toLocaleString()}`);
+            }
+        }
+
+        // Show reminder notification
+        function showReminderNotification(reminder) {
+            // Browser notification
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(`Reminder: ${reminder.title}`, {
+                    body: reminder.description,
+                    icon: '/favicon.ico'
+                });
+            }
+            
+            // Visual notification
+            showReminderPopup(reminder);
+            
+            // Audio notification
+            playReminderSound();
+            
+            // Mark as completed
+            reminder.completed = true;
+            renderReminders();
+        }
+
+        // Show reminder popup
+        function showReminderPopup(reminder) {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                z-index: 10000;
+                max-width: 300px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            popup.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <i class="fas fa-bell" style="font-size: 1.5rem;"></i>
+                    <h3 style="margin: 0; font-size: 1.1rem;">Reminder</h3>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong>${reminder.title}</strong>
+                    <p style="margin: 5px 0 0 0; opacity: 0.9;">${reminder.description}</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: rgba(255,255,255,0.2);
+                        border: none;
+                        color: white;
+                        padding: 8px 16px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                    ">Dismiss</button>
+                    <button onclick="snoozeReminder('${reminder.id}'); this.parentElement.parentElement.remove()" style="
+                        background: rgba(255,255,255,0.2);
+                        border: none;
+                        color: white;
+                        padding: 8px 16px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                    ">Snooze 5min</button>
+                </div>
+            `;
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(popup);
+            
+            // Auto remove after 10 seconds
+            setTimeout(() => {
+                if (popup.parentElement) {
+                    popup.remove();
+                }
+            }, 10000);
+        }
+
+        // Play reminder sound
+        function playReminderSound() {
+            try {
+                // Create audio context for beep sound
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch (error) {
+                console.error('Audio notification failed:', error);
+                // Fallback to system beep
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBz2BzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBS13yO/eizEIHWq+8+OWT');
+                    audio.play();
+                } catch (e) {
+                    console.error('Fallback audio failed:', e);
+                }
+            }
+        }
+
+        // Snooze reminder
+        function snoozeReminder(reminderId) {
+            const reminder = reminders.find(r => r.id == reminderId);
+            if (reminder) {
+                // Add 5 minutes to current time
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + 5);
+                const newTime = now.toTimeString().slice(0, 5);
+                
+                reminder.time = newTime;
+                reminder.completed = false;
+                reminder.scheduled = false;
+                
+                scheduleReminder(reminder);
+                renderReminders();
+                showResponse(`Reminder snoozed for 5 minutes`);
+            }
+        }
+
+        // Render reminders
+        function renderReminders() {
+            const list = document.getElementById('remindersList');
+            
+            if (reminders.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 2rem;">No reminders yet. Add one above!</p>';
+                return;
+            }
+            
+            list.innerHTML = reminders.map(reminder => `
+                <div class="reminder-item">
+                    <div class="reminder-info">
+                        <div class="reminder-title">${reminder.title}</div>
+                        <div class="reminder-time">${reminder.time} - ${reminder.description}</div>
+                    </div>
+                    <div class="reminder-actions">
+                        <button class="action-btn btn-complete" onclick="completeReminder(${reminder.id})">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editReminder(${reminder.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="deleteReminder(${reminder.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Complete reminder
+        function completeReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (reminder) {
+                reminder.completed = true;
+                renderReminders();
+                showResponse(`Reminder completed: ${reminder.title}`);
+            }
+        }
+
+        // Edit reminder
+        function editReminder(id) {
+            const reminder = reminders.find(r => r.id === id);
+            if (reminder) {
+                document.getElementById('reminderTitle').value = reminder.title;
+                document.getElementById('reminderTime').value = reminder.time;
+                document.getElementById('reminderDesc').value = reminder.description;
+                document.getElementById('reminderForm').style.display = 'block';
+                // Store the ID for updating
+                document.getElementById('saveReminderBtn').dataset.editId = id;
+            }
+        }
+
+        // Delete reminder
+        function deleteReminder(id) {
+            if (confirm('Are you sure you want to delete this reminder?')) {
+                reminders = reminders.filter(r => r.id !== id);
+                renderReminders();
+                showResponse('Reminder deleted');
+            }
+        }
+
+        // Show response
+        function showResponse(message) {
+            // In a real implementation, this would show a toast or notification
+            console.log('Response:', message);
+        }
+
+        // Play audio
+        function playAudio(audioUrl, title) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioElement = document.getElementById('audioElement');
+            const playBtn = document.getElementById('audioPlayBtn');
+            const audioTitle = document.getElementById('audioTitle');
+            const audioDesc = document.getElementById('audioDesc');
+
+            audioElement.src = audioUrl;
+            audioTitle.textContent = 'Audio Response';
+            audioDesc.textContent = title;
+            audioPlayer.style.display = 'block';
+
+            playBtn.onclick = function() {
+                if (audioElement.paused) {
+                    audioElement.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    audioElement.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            };
+
+            audioElement.onended = function() {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            };
+        }
+
+        // Event listeners
+        document.getElementById('sendCommandBtn').addEventListener('click', function() {
+            const command = document.getElementById('commandInput').value.trim();
+            if (command) {
+                processCommand(command);
+            }
+        });
+
+        document.getElementById('commandInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const command = this.value.trim();
+                if (command) {
+                    processCommand(command);
+                }
+            }
+        });
+
+        document.getElementById('voiceCommandBtn').addEventListener('click', function() {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                if (recognition) {
+                    recognition.start();
+                } else {
+                    alert('Speech recognition not supported in this browser.');
+                }
+            }
+        });
+
+        document.getElementById('cameraCommandBtn').addEventListener('click', function() {
+            window.open('http://localhost:5001/', '_blank');
+        });
+
+        window.addEventListener('message', function(event) {
+            try {
+                if (event && event.data && event.data.type === 'sign_result') {
+                    const text = (event.data.text || '').trim();
+                    if (text) {
+                        const input = document.getElementById('commandInput');
+                        input.value = text;
+                        processCommand(text);
+                    }
+                }
+            } catch (_) {}
+        });
+
+        document.getElementById('addReminderBtn').addEventListener('click', function() {
+            document.getElementById('reminderForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelReminderBtn').addEventListener('click', function() {
+            document.getElementById('reminderForm').style.display = 'none';
+            document.getElementById('reminderForm').reset();
+        });
+
+        document.getElementById('saveReminderBtn').addEventListener('click', function() {
+            const title = document.getElementById('reminderTitle').value.trim();
+            const time = document.getElementById('reminderTime').value;
+            const description = document.getElementById('reminderDesc').value.trim();
+            
+            if (title && time) {
+                const editId = this.dataset.editId;
+                if (editId) {
+                    // Update existing reminder
+                    const reminder = reminders.find(r => r.id == editId);
+                    if (reminder) {
+                        reminder.title = title;
+                        reminder.time = time;
+                        reminder.description = description;
+                    }
+                    delete this.dataset.editId;
+                } else {
+                    // Add new reminder
+                    addReminder(title, time, description);
+                }
+                
+                document.getElementById('reminderForm').style.display = 'none';
+                document.getElementById('reminderForm').reset();
+                renderReminders();
+            }
+        });
+
+        document.getElementById('searchMusicBtn').addEventListener('click', function() {
+            const query = document.getElementById('musicSearch').value.trim();
+            if (query) {
+                playMusic(query);
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initInputMethods();
+            initSpeechRecognition();
+            renderReminders();
+            
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('Notification permission granted');
+                    }
+                });
+            }
+            
+            // Listen for sign language commands
+            document.addEventListener('signLanguageCommand', function(event) {
+                const command = event.detail.command;
+                
+                switch(command) {
+                    case 'help':
+                        showResponse('I can help you with music and reminders. Try saying "play music" or "set reminder".');
+                        break;
+                    case 'music':
+                        const musicInput = document.getElementById('musicSearch');
+                        musicInput.value = 'relaxing music';
+                        playMusic('relaxing music');
+                        break;
+                    case 'reminder':
+                        document.getElementById('reminderForm').style.display = 'block';
+                        showResponse('Reminder form opened. Please fill in the details.');
+                        break;
+                    case 'clear':
+                        showResponse('Cleared. How can I help you?');
+                        break;
+                    default:
+                        showResponse(`I heard: ${command}. How can I help you with music or reminders?`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

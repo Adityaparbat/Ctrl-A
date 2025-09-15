@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Welfare Schemes - Ctrl-A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --bg-dark: #1a202c;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+            --success-color: #38a169;
+            --error-color: #e53e3e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .input-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .input-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .input-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-method {
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-method.active {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .input-method:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .method-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .method-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Input Area */
+        .input-area {
+            margin-bottom: 2rem;
+        }
+
+        .input-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-search {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-voice {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .btn-voice:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-voice.recording {
+            background: var(--error-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-camera {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .btn-camera:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .results-count {
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .schemes-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .scheme-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .scheme-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .scheme-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .scheme-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .scheme-category {
+            background: var(--gradient);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .scheme-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .scheme-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-icon {
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .detail-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .scheme-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-scheme {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: white;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-scheme:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-scheme.primary {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-scheme.primary:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Loading States */
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-desc {
+            font-size: 1rem;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gradient);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .audio-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .nav {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .input-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .input-actions {
+                flex-direction: column;
+            }
+
+            .scheme-details {
+                grid-template-columns: 1fr;
+            }
+
+            .scheme-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #000000;
+                --text-secondary: #333333;
+                --border-color: #000000;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">Ctrl-A</div>
+            <div class="nav-right">
+                <a href="http://127.0.0.1:8001/" class="btn btn-primary" style="margin-right: 1rem;">
+                    <i class="fas fa-cogs"></i>
+                    Admin Panel
+                </a>
+                <a href="/dashboard" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Government Welfare Schemes</h1>
+            <p class="page-subtitle">
+                Discover and apply for government welfare schemes designed specifically for disabled individuals
+            </p>
+        </section>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <div class="input-header">
+                <div class="input-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h2 class="input-title">Search for Schemes</h2>
+            </div>
+
+            <!-- Input Methods -->
+            <div class="input-methods">
+                <div class="input-method active" data-method="text">
+                    <div class="method-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="method-title">Text Input</div>
+                    <div class="method-desc">Type your query</div>
+                </div>
+                <div class="input-method" data-method="voice">
+                    <div class="method-icon">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <div class="method-title">Voice Input</div>
+                    <div class="method-desc">Speak your query</div>
+                </div>
+                <div class="input-method" data-method="sign">
+                    <div class="method-icon">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="method-title">Sign Language</div>
+                    <div class="method-desc">Use hand gestures</div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-container">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="input-field" 
+                        placeholder="Search for welfare schemes (e.g., 'disability pension', 'medical assistance', 'education support')"
+                        autocomplete="off"
+                    >
+                </div>
+                <div class="input-actions">
+                    <button class="btn-action btn-search" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                        Search Schemes
+                    </button>
+                    <button class="btn-action btn-voice" id="voiceBtn">
+                        <i class="fas fa-microphone"></i>
+                        <span id="voiceText">Start Voice Search</span>
+                    </button>
+                    <button class="btn-action btn-camera" id="cameraBtn">
+                        <i class="fas fa-camera"></i>
+                        Start Sign Language
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div class="results-header">
+                <h3 class="results-title">Search Results</h3>
+                <div class="results-count" id="resultsCount">0 schemes found</div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                <span>Searching for schemes...</span>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="empty-title">No schemes found</div>
+                <div class="empty-desc">Try searching with different keywords or browse all available schemes</div>
+            </div>
+
+            <!-- Results Grid -->
+            <div class="schemes-grid" id="schemesGrid">
+                <!-- Schemes will be populated here -->
+            </div>
+        </section>
+
+        <!-- Audio Player -->
+        <div class="audio-player" id="audioPlayer">
+            <div class="audio-controls">
+                <button class="audio-btn" id="playBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="audio-info">
+                    <div class="audio-title" id="audioTitle">Audio Response</div>
+                    <div class="audio-desc" id="audioDesc">Click play to hear the response</div>
+                </div>
+            </div>
+            <audio id="audioElement" controls style="display: none;"></audio>
+        </div>
+    </main>
+    <script>
+        let currentMethod = 'text';
+        let isRecording = false;
+        let recognition = null;
+        let currentAudio = null;
+
+        // Initialize speech recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    updateVoiceButton();
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('searchInput').value = transcript;
+                    searchSchemes(transcript);
+                };
+
+                recognition.onend = function() {
+                    isRecording = false;
+                    updateVoiceButton();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    isRecording = false;
+                    updateVoiceButton();
+                    alert('Speech recognition failed. Please try again.');
+                };
+            } else {
+                console.warn('Speech recognition not supported');
+            }
+        }
+
+        // Update voice button state
+        function updateVoiceButton() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            const voiceText = document.getElementById('voiceText');
+            
+            if (isRecording) {
+                voiceBtn.classList.add('recording');
+                voiceText.textContent = 'Stop Recording';
+            } else {
+                voiceBtn.classList.remove('recording');
+                voiceText.textContent = 'Start Voice Search';
+            }
+        }
+
+        // Initialize input methods
+        function initInputMethods() {
+            const methods = document.querySelectorAll('.input-method');
+            methods.forEach(method => {
+                method.addEventListener('click', function() {
+                    methods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMethod = this.dataset.method;
+                    
+                    // Update input placeholder based on method
+                    const input = document.getElementById('searchInput');
+                    switch(currentMethod) {
+                        case 'text':
+                            input.placeholder = 'Search for welfare schemes (e.g., "disability pension", "medical assistance")';
+                            break;
+                        case 'voice':
+                            input.placeholder = 'Click the microphone button to speak your search query';
+                            break;
+                        case 'sign':
+                            input.placeholder = 'Click the camera button to use sign language input';
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Search schemes function
+        async function searchSchemes(query) {
+            if (!query.trim()) return;
+
+            showLoading();
+            hideEmptyState();
+
+            try {
+                // Try to connect to the government schemes API
+                const response = await fetch('http://127.0.0.1:8000/api/v1/schemes/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        query: query.trim(),
+                        top_k: 10
+                    })
+                });
+
+                let schemes = [];
+                if (response.ok) {
+                    const data = await response.json();
+                    schemes = Array.isArray(data.results) ? data.results : [];
+                }
+
+                // Fallback to GET endpoint if POST failed or returned empty
+                if (!schemes || schemes.length === 0) {
+                    const url = new URL('http://127.0.0.1:8000/api/v1/schemes/search');
+                    url.searchParams.set('query', query.trim());
+                    url.searchParams.set('top_k', '10');
+                    const getResp = await fetch(url.toString());
+                    if (getResp.ok) {
+                        const getData = await getResp.json();
+                        schemes = Array.isArray(getData.results) ? getData.results : [];
+                    }
+                }
+
+                // Normalize API schemes into UI-friendly objects
+                const normalized = (schemes || []).map(normalizeSchemeFromApi);
+                displaySchemes(normalized);
+                generateAudioResponse(normalized, query);
+                
+            } catch (error) {
+                console.error('API error:', error);
+                // Fallback to mock data
+                const mockSchemes = getMockSchemes(query);
+                displaySchemes(mockSchemes);
+                generateAudioResponse(mockSchemes, query);
+            }
+        }
+
+        function normalizeSchemeFromApi(apiObj) {
+            // gov-schemes API returns name_and_desc and metadata fields
+            const nameAndDesc = apiObj.name_and_desc || '';
+            let name = 'Unknown Scheme';
+            let description = 'No description available';
+            if (nameAndDesc.includes(' - ')) {
+                const parts = nameAndDesc.split(' - ');
+                name = parts[0] || name;
+                description = parts.slice(1).join(' - ') || description;
+            } else if (nameAndDesc) {
+                name = nameAndDesc;
+            }
+
+            return {
+                id: apiObj.id || apiObj.scheme_id || undefined,
+                name: name,
+                description: description,
+                state: apiObj.state || 'All States',
+                disability_type: apiObj.disability_type || 'All Disabilities',
+                support_type: apiObj.support_type || 'General Support',
+                apply_link: apiObj.apply_link || '#',
+                eligibility: apiObj.eligibility || 'Please check official website',
+                benefits: apiObj.benefits || 'Various benefits available',
+                contact_info: apiObj.contact_info || 'Contact information not available'
+            };
+        }
+
+        // Get mock schemes for demonstration
+        function getMockSchemes(query) {
+            const allSchemes = [
+                {
+                    id: 1,
+                    title: "Disability Pension Scheme",
+                    category: "Financial Support",
+                    description: "Monthly pension for persons with disabilities to support their basic needs and improve their quality of life.",
+                    eligibility: "40% or more disability",
+                    amount: "₹1000-3000 per month",
+                    application: "Online/Offline",
+                    benefits: ["Monthly pension", "Medical assistance", "Rehabilitation support"]
+                },
+                {
+                    id: 2,
+                    title: "Assistive Devices Scheme",
+                    category: "Medical Support",
+                    description: "Free distribution of assistive devices like wheelchairs, hearing aids, and prosthetics for disabled individuals.",
+                    eligibility: "Any disability type",
+                    amount: "Free of cost",
+                    application: "Through medical centers",
+                    benefits: ["Wheelchairs", "Hearing aids", "Prosthetics", "Braille devices"]
+                },
+                {
+                    id: 3,
+                    title: "Education Support Scheme",
+                    category: "Education",
+                    description: "Financial assistance for education including scholarships, books, and special equipment for disabled students.",
+                    eligibility: "Disabled students",
+                    amount: "₹5000-25000 per year",
+                    application: "Educational institutions",
+                    benefits: ["Scholarships", "Books", "Special equipment", "Transportation"]
+                },
+                {
+                    id: 4,
+                    title: "Employment Support Scheme",
+                    category: "Employment",
+                    description: "Job placement assistance, skill development, and financial support for disabled individuals seeking employment.",
+                    eligibility: "18-45 years with disability",
+                    amount: "Training + Placement",
+                    application: "Employment exchanges",
+                    benefits: ["Skill training", "Job placement", "Startup support", "Mentorship"]
+                },
+                {
+                    id: 5,
+                    title: "Housing Assistance Scheme",
+                    category: "Housing",
+                    description: "Financial assistance for home modifications and accessible housing for disabled individuals.",
+                    eligibility: "Disabled homeowners",
+                    amount: "Up to ₹1,00,000",
+                    application: "Housing department",
+                    benefits: ["Home modifications", "Accessible features", "Ramp construction", "Bathroom adaptations"]
+                }
+            ];
+
+            // Filter schemes based on query
+            const queryLower = query.toLowerCase();
+            return allSchemes.filter(scheme => 
+                scheme.title.toLowerCase().includes(queryLower) ||
+                scheme.description.toLowerCase().includes(queryLower) ||
+                scheme.category.toLowerCase().includes(queryLower) ||
+                scheme.benefits.some(benefit => benefit.toLowerCase().includes(queryLower))
+            );
+        }
+
+        // Display schemes
+        function displaySchemes(schemes) {
+            const grid = document.getElementById('schemesGrid');
+            const count = document.getElementById('resultsCount');
+            
+            count.textContent = `${schemes.length} scheme${schemes.length !== 1 ? 's' : ''} found`;
+            
+            if (schemes.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            // Ensure loading state is hidden and grid is visible
+            hideLoading();
+            hideEmptyState();
+            grid.style.display = 'grid';
+
+            grid.innerHTML = schemes.map((scheme, index) => {
+                // Handle API response format and mock data format
+                const name = scheme.name || (scheme.name_and_desc && (scheme.name_and_desc.split(' - ')[0])) || scheme.title || 'Unknown Scheme';
+                const description = scheme.description || (scheme.name_and_desc && (scheme.name_and_desc.split(' - ').slice(1).join(' - ') || 'No description available')) || 'No description available';
+                const state = scheme.state || 'All States';
+                const disabilityType = scheme.disability_type || scheme.category || 'All Disabilities';
+                const supportType = scheme.support_type || 'General Support';
+                const applyLink = scheme.apply_link || '#';
+                const eligibility = scheme.eligibility || 'Please check official website';
+                const benefits = scheme.benefits || 'Various benefits available';
+                const contactInfo = scheme.contact_info || 'Contact information not available';
+                
+                return `
+                    <div class="scheme-card">
+                        <div class="scheme-header">
+                            <div>
+                                <h4 class="scheme-title">${name}</h4>
+                            </div>
+                            <div class="scheme-category">${disabilityType}</div>
+                        </div>
+                        <div class="scheme-description">${description}</div>
+                        <div class="scheme-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt detail-icon"></i>
+                                <span class="detail-text"><strong>State:</strong> ${state}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-check-circle detail-icon"></i>
+                                <span class="detail-text"><strong>Eligibility:</strong> ${eligibility}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-gift detail-icon"></i>
+                                <span class="detail-text"><strong>Benefits:</strong> ${benefits}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone detail-icon"></i>
+                                <span class="detail-text"><strong>Contact:</strong> ${contactInfo}</span>
+                            </div>
+                        </div>
+                        <div class="scheme-actions">
+                            <a href="${applyLink}" target="_blank" class="btn-scheme primary" onclick="applyScheme('${scheme.id || index}')">
+                                <i class="fas fa-arrow-right"></i>
+                                Apply Now
+                            </a>
+                            <a href="#" class="btn-scheme" onclick="viewDetails('${scheme.id || index}')">
+                                <i class="fas fa-info-circle"></i>
+                                View Details
+                            </a>
+                            <a href="#" class="btn-scheme" onclick="shareScheme('${scheme.id || index}')">
+                                <i class="fas fa-share"></i>
+                                Share
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Generate audio response
+        async function generateAudioResponse(schemes, query) {
+            try {
+                const response = await fetch('/api/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: `Found ${schemes.length} welfare schemes for your search "${query}". ${schemes.map(s => s.title).join(', ')}. Click on any scheme to learn more or apply.`,
+                        language: 'en'
+                    })
+                });
+
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    playAudio(audioUrl, `Found ${schemes.length} schemes for "${query}"`);
+                }
+            } catch (error) {
+                console.error('TTS error:', error);
+            }
+        }
+
+        // Play audio
+        function playAudio(audioUrl, title) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioElement = document.getElementById('audioElement');
+            const playBtn = document.getElementById('playBtn');
+            const audioTitle = document.getElementById('audioTitle');
+            const audioDesc = document.getElementById('audioDesc');
+
+            audioElement.src = audioUrl;
+            audioTitle.textContent = 'Audio Response';
+            audioDesc.textContent = title;
+            audioPlayer.style.display = 'block';
+
+            playBtn.onclick = function() {
+                if (audioElement.paused) {
+                    audioElement.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    audioElement.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            };
+
+            audioElement.onended = function() {
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            };
+        }
+
+        // Show/hide states
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('schemesGrid').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showEmptyState() {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('schemesGrid').style.display = 'none';
+            hideLoading();
+        }
+
+        function hideEmptyState() {
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        // Scheme actions
+        function applyScheme(schemeId) {
+            alert(`Application process for scheme ${schemeId} will be implemented here.`);
+        }
+
+        function viewDetails(schemeId) {
+            alert(`Detailed information for scheme ${schemeId} will be shown here.`);
+        }
+
+        function shareScheme(schemeId) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Welfare Scheme',
+                    text: 'Check out this government welfare scheme for disabled individuals',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback to copying to clipboard
+                navigator.clipboard.writeText(window.location.href);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('Please enter a query');
+                return;
+            }
+            // Visual feedback
+            showLoading();
+            // Kick off search
+            searchSchemes(query);
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    searchSchemes(query);
+                }
+            }
+        });
+
+        document.getElementById('voiceBtn').addEventListener('click', function() {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                if (recognition) {
+                    recognition.start();
+                } else {
+                    alert('Speech recognition not supported in this browser.');
+                }
+            }
+        });
+
+        document.getElementById('cameraBtn').addEventListener('click', function() {
+            // Open the dedicated sign capture app (running on port 5001)
+            window.open('http://localhost:5001/', '_blank');
+        });
+
+        // Receive captured sign text and search
+        window.addEventListener('message', function(event) {
+            try {
+                if (event && event.data && event.data.type === 'sign_result') {
+                    const text = (event.data.text || '').trim();
+                    if (text) {
+                        const input = document.getElementById('searchInput');
+                        input.value = text;
+                        searchSchemes(text);
+                    }
+                }
+            } catch (_) {}
+        });
+
+        // Listen for sign language commands
+        document.addEventListener('signLanguageCommand', function(event) {
+            const command = event.detail.command;
+            const input = document.getElementById('searchInput');
+            
+            switch(command) {
+                case 'help':
+                    input.value = 'disability assistance';
+                    searchSchemes('disability assistance');
+                    break;
+                case 'schemes':
+                    input.value = 'government welfare schemes';
+                    searchSchemes('government welfare schemes');
+                    break;
+                case 'clear':
+                    input.value = '';
+                    break;
+                default:
+                    input.value = command;
+                    searchSchemes(command);
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initInputMethods();
+            initSpeechRecognition();
+            
+            // Check if sign language module is available
+            setTimeout(() => {
+                if (window.signLanguageRecognition) {
+                    console.log('Sign language module is available');
+                } else {
+                    console.warn('Sign language module not available - using fallback');
+                }
+            }, 1000);
+            
+            // Load some default schemes
+            const defaultQuery = 'disability';
+            document.getElementById('searchInput').value = defaultQuery;
+            showLoading();
+            searchSchemes(defaultQuery);
+        });
+    </script>
+</body>
+</html>
