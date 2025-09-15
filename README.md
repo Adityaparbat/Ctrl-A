@@ -1,4 +1,4 @@
-# Ctrl‑A Accessibility Suite (Buildthon)
+# Ctrl‑A Accessibility Suite (Buildthon openai x nxtwave)
 
 A multi‑app accessibility platform that provides:
 - AI Assistant (web) with LLM integration, TTS, and sign‑language hooks
