@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disability Schemes Discovery System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .search-input-group {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: #5a6fd8;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .filter-group select {
+            padding: 10px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .results-count {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .search-time {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .scheme-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .scheme-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .scheme-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .scheme-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: #667eea;
+        }
+
+        .scheme-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .scheme-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Admin Interface Styles */
+        .admin-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: right;
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: #45a049;
+        }
+
+        .admin-btn.logout {
+            background: #f44336;
+        }
+
+        .admin-btn.logout:hover {
+            background: #da190b;
+        }
+
+        .admin-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        #adminWelcome {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Scheme Management Table */
+        .schemes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .schemes-table th,
+        .schemes-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .schemes-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .schemes-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-buttons .btn {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .suggestions {
+            background: #e3f2fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .suggestions h4 {
+            margin-bottom: 10px;
+            color: #1976d2;
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-tag {
+            background: #1976d2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .suggestion-tag:hover {
+            background: #1565c0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .scheme-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" style="position:relative;">
+            <div style="position:absolute; right:20px; top:20px;">
+                <a href="http://localhost:5000/dashboard" style="text-decoration:none; padding:8px 12px; border-radius:8px; background:#667eea; color:#fff; box-shadow:0 4px 10px rgba(0,0,0,.15);">← Back to Dashboard</a>
+            </div>
+            <h1><i class="fas fa-universal-access"></i> Disability Schemes Discovery</h1>
+            <p>Find the right welfare schemes for your needs with AI-powered search</p>
+        </div>
+
+        <!-- Admin Interface -->
+        <div class="admin-header">
+            <button id="adminLoginBtn" class="admin-btn">Admin Login</button>
+            <button id="adminRegisterBtn" class="admin-btn">Admin Register</button>
+            <div id="adminPanel" class="admin-panel" style="display: none;">
+                <span id="adminWelcome"></span>
+                <button id="adminLogoutBtn" class="admin-btn">Logout</button>
+                <button id="manageSchemesBtn" class="admin-btn">Manage Schemes</button>
+            </div>
+        </div>
+
+        <div class="search-container">
+            <form class="search-form" id="searchForm">
+                <div class="search-input-group">
+                    <input 
+                        type="text" 
+                        id="searchQuery" 
+                        class="search-input" 
+                        placeholder="Search schemes (e.g., 'financial aid for hearing impaired in Gujarat')"
+                        required
+                    >
+                    <button type="button" id="voiceBtn" class="search-button" title="Voice Search" style="right:58px">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button type="submit" class="search-button" title="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="results-header">
+                <div class="results-count" id="resultsCount">0 results found</div>
+                <div class="search-time" id="searchTime"></div>
+            </div>
+            <div id="resultsList"></div>
+        </div>
+
+        <div class="suggestions" id="suggestions" style="display: none;">
+            <h4><i class="fas fa-lightbulb"></i> Search Suggestions</h4>
+            <div class="suggestion-tags" id="suggestionTags"></div>
+        </div>
+    </div>
+
+    <script>
+        class SchemeSearchApp {
+            constructor() {
+                this.apiBase = '/api/v1';
+                this.states = [
+                    'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Puducherry','All States'
+                ];
+                this.init();
+            }
+
+            async init() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                document.getElementById('searchForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.performSearch();
+                });
+            }
+
+            // filters removed for simplicity
+
+            async performSearch() {
+                const query = document.getElementById('searchQuery').value.trim();
+                if (!query) return;
+
+                const resultsContainer = document.getElementById('resultsContainer');
+                const resultsList = document.getElementById('resultsList');
+                
+                // Show loading
+                resultsList.innerHTML = `
+                    <div class="loading">
+                        <i class="fas fa-spinner"></i>
+                        <p>Searching for schemes...</p>
+                    </div>
+                `;
+                resultsContainer.style.display = 'block';
+
+                try {
+                    const params = new URLSearchParams({ query, top_k: '10' });
+
+                    const response = await fetch(`${this.apiBase}/schemes/search?${params}`);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        this.displayResults(data, query);
+                    } else {
+                        this.displayError(data.detail || 'Search failed');
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                    this.displayError('Network error. Please try again.');
+                }
+            }
+
+            displayResults(data, query) {
+                const resultsList = document.getElementById('resultsList');
+                const resultsCount = document.getElementById('resultsCount');
+                const searchTime = document.getElementById('searchTime');
+
+                const total = Number(data.total_results || 0);
+                resultsCount.textContent = `${total} results found`;
+                try {
+                    const ms = Number(data.search_time_ms || 0);
+                    searchTime.textContent = `Search completed in ${ms.toFixed(0)}ms`;
+                } catch { searchTime.textContent = ''; }
+
+                if (data.results.length === 0) {
+                    resultsList.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search"></i>
+                            <h3>No schemes available in that region</h3>
+                            <p>Explore schemes for other states or adjust your search terms</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let results = Array.isArray(data.results) ? data.results : [];
+
+                // Try to detect a specific state mentioned in the query
+                const qLower = query.toLowerCase();
+                const detectedState = this.states.find(s => qLower.includes(s.toLowerCase())) || null;
+                const stateMatched = detectedState ? results.filter(r => String(r.state||'').toLowerCase() === detectedState.toLowerCase()) : results;
+
+                try {
+                    // Notice if user asked for a state but no scheme from that state
+                    const notice = (detectedState && stateMatched.length === 0)
+                        ? `<div class="error" style="background:#fff3cd;color:#664d03;border-left-color:#ffecb5"><strong>No schemes available in ${detectedState}.</strong> Showing similar schemes from other states.</div>`
+                        : '';
+
+                    resultsList.innerHTML = notice + (results.map(scheme => {
+                        const text = String(scheme.name_and_desc || '');
+                        const parts = text.split(' - ');
+                        const title = parts[0] || 'Scheme';
+                        const desc = parts.slice(1).join(' - ');
+                        const dType = String(scheme.disability_type || 'Not specified').replace(/_/g,' ').toUpperCase();
+                        const sType = String(scheme.support_type || 'Not specified').replace(/_/g,' ').toUpperCase();
+                        const state = scheme.state || 'Unknown';
+                        const link = (scheme.apply_link && /^https?:\/\//i.test(scheme.apply_link)) ? scheme.apply_link : '';
+                        return `
+                        <div class="scheme-card">
+                            <div class="scheme-title">${title}</div>
+                            <div class="scheme-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${state}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-user-injured"></i>
+                                    <span>${dType}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-hands-helping"></i>
+                                    <span>${sType}</span>
+                                </div>
+                            </div>
+                            <div class="scheme-description">
+                                ${desc || 'No description available'}
+                            </div>
+                            ${scheme.eligibility ? `<div><strong>Eligibility:</strong> ${scheme.eligibility}</div>` : ''}
+                            ${scheme.benefits ? `<div><strong>Benefits:</strong> ${scheme.benefits}</div>` : ''}
+                            ${scheme.validity_period ? `<div><strong>Validity:</strong> ${scheme.validity_period}</div>` : ''}
+                            ${scheme.contact_info ? `<div><strong>Contact:</strong> ${scheme.contact_info}</div>` : ''}
+                            <div class="scheme-actions">
+                                ${link ? `<a href="${link}" target="_blank" class="btn btn-primary">` : `<a class="btn btn-primary" style="pointer-events:none;opacity:.6">`}
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Apply Now
+                                </a>
+                                <button class="btn btn-secondary" onclick="this.parentElement.parentElement.style.display='none'">
+                                    <i class="fas fa-times"></i>
+                                    Dismiss
+                                </button>
+                            </div>
+                        </div>
+                    `}).join(''));
+                } catch (e) {
+                    console.error('Render error', e);
+                    resultsList.innerHTML = results.map(s => `<div class="scheme-card"><div class="scheme-title">${String(s.name_and_desc || 'Scheme')}</div><a class="btn btn-primary" target="_blank" href="${s.apply_link || '#'}">Apply</a></div>`).join('');
+                }
+            }
+
+            displayError(message) {
+                const resultsList = document.getElementById('resultsList');
+                resultsList.innerHTML = `
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ${message}
+                    </div>
+                `;
+            }
+
+            // suggestions removed for simplicity
+        }
+
+        // Voice search using Web Speech API
+        (function initVoice() {
+            const btn = document.getElementById('voiceBtn');
+            if (!btn) return;
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                btn.disabled = true;
+                btn.textContent = 'Voice not supported';
+                return;
+            }
+            const recog = new SpeechRecognition();
+            recog.lang = 'en-IN';
+            recog.interimResults = false;
+            recog.maxAlternatives = 1;
+            btn.addEventListener('click', () => {
+                btn.textContent = 'Listening...';
+                recog.start();
+            });
+            recog.onresult = (e) => {
+                const transcript = e.results[0][0].transcript;
+                document.getElementById('searchQuery').value = transcript;
+                btn.textContent = 'Speak';
+                document.getElementById('searchForm').dispatchEvent(new Event('submit'));
+            };
+            recog.onerror = () => { btn.textContent = 'Speak'; };
+            recog.onend = () => { btn.textContent = 'Speak'; };
+        })();
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SchemeSearchApp();
+            initAdminInterface();
+        });
+    </script>
+
+    <!-- Admin Modals -->
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Login</h2>
+                <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Username:</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('loginModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Register</h2>
+                <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regUsername">Username:</label>
+                    <input type="text" id="regUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password:</label>
+                    <input type="password" id="regConfirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="regRole">Role:</label>
+                    <select id="regRole" required>
+                        <option value="admin">Admin</option>
+                        <option value="moderator">Moderator</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('registerModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scheme Management Modal -->
+    <div id="schemesModal" class="modal">
+        <div class="modal-content" style="max-width: 90%; max-height: 90vh;">
+            <div class="modal-header">
+                <h2>Manage Schemes</h2>
+                <span class="close" onclick="closeModal('schemesModal')">&times;</span>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="showAddSchemeModal()">Add New Scheme</button>
+            </div>
+            <div id="schemesTableContainer">
+                <table class="schemes-table" id="schemesTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>State</th>
+                            <th>Disability Type</th>
+                            <th>Support Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schemesTableBody">
+                        <!-- Schemes will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Scheme Modal -->
+    <div id="schemeFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="schemeFormTitle">Add New Scheme</h2>
+                <span class="close" onclick="closeModal('schemeFormModal')">&times;</span>
+            </div>
+            <form id="schemeForm">
+                <input type="hidden" id="schemeId">
+                <div class="form-group">
+                    <label for="schemeName">Scheme Name:</label>
+                    <input type="text" id="schemeName" required>
+                </div>
+                <div class="form-group">
+                    <label for="schemeDescription">Description:</label>
+                    <textarea id="schemeDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="schemeState">State:</label>
+                    <input type="text" id="schemeState" required>
+                </div>
+                <div class="form-group">
+                    <label for="schemeDisabilityType">Disability Type:</label>
+                    <select id="schemeDisabilityType" required>
+                        <option value="visual_impairment">Visual Impairment</option>
+                        <option value="hearing_impairment">Hearing Impairment</option>
+                        <option value="mobility_impairment">Mobility Impairment</option>
+                        <option value="intellectual_disability">Intellectual Disability</option>
+                        <option value="autism">Autism</option>
+                        <option value="cerebral_palsy">Cerebral Palsy</option>
+                        <option value="multiple_disabilities">Multiple Disabilities</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="schemeSupportType">Support Type:</label>
+                    <select id="schemeSupportType" required>
+                        <option value="financial">Financial</option>
+                        <option value="educational">Educational</option>
+                        <option value="medical">Medical</option>
+                        <option value="employment">Employment</option>
+                        <option value="assistive_devices">Assistive Devices</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="housing">Housing</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="schemeApplyLink">Apply Link:</label>
+                    <input type="url" id="schemeApplyLink" required>
+                </div>
+                <div class="form-group">
+                    <label for="schemeEligibility">Eligibility:</label>
+                    <textarea id="schemeEligibility"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="schemeBenefits">Benefits:</label>
+                    <textarea id="schemeBenefits"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="schemeContactInfo">Contact Info:</label>
+                    <input type="text" id="schemeContactInfo">
+                </div>
+                <div class="form-group">
+                    <label for="schemeValidityPeriod">Validity Period:</label>
+                    <input type="text" id="schemeValidityPeriod">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('schemeFormModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="schemeSubmitBtn">Save Scheme</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Admin Interface JavaScript
+        let adminToken = null;
+        let currentAdmin = null;
+
+        function initAdminInterface() {
+            // Check if admin is already logged in
+            adminToken = localStorage.getItem('adminToken');
+            if (adminToken) {
+                verifyAdminToken();
+            }
+
+            // Event listeners
+            document.getElementById('adminLoginBtn').addEventListener('click', () => showModal('loginModal'));
+            document.getElementById('adminRegisterBtn').addEventListener('click', () => showModal('registerModal'));
+            document.getElementById('adminLogoutBtn').addEventListener('click', logoutAdmin);
+            document.getElementById('manageSchemesBtn').addEventListener('click', () => showModal('schemesModal'));
+            
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            document.getElementById('schemeForm').addEventListener('submit', handleSchemeSubmit);
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/v1/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    adminToken = data.access_token;
+                    currentAdmin = data.admin;
+                    localStorage.setItem('adminToken', adminToken);
+                    updateAdminUI();
+                    closeModal('loginModal');
+                    alert('Login successful!');
+                } else {
+                    alert('Login failed: ' + data.detail);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const role = document.getElementById('regRole').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/admin/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, confirm_password: confirmPassword, role })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Registration successful! Please login.');
+                    closeModal('registerModal');
+                } else {
+                    alert('Registration failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+            }
+        }
+
+        async function verifyAdminToken() {
+            try {
+                const response = await fetch('/api/v1/admin/me', {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentAdmin = data.admin;
+                    updateAdminUI();
+                } else {
+                    localStorage.removeItem('adminToken');
+                    adminToken = null;
+                }
+            } catch (error) {
+                console.error('Token verification failed:', error);
+                localStorage.removeItem('adminToken');
+                adminToken = null;
+            }
+        }
+
+        function updateAdminUI() {
+            if (adminToken && currentAdmin) {
+                document.getElementById('adminLoginBtn').style.display = 'none';
+                document.getElementById('adminRegisterBtn').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'flex';
+                document.getElementById('adminWelcome').textContent = `Welcome, ${currentAdmin.username}`;
+            } else {
+                document.getElementById('adminLoginBtn').style.display = 'inline-block';
+                document.getElementById('adminRegisterBtn').style.display = 'inline-block';
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+        }
+
+        function logoutAdmin() {
+            adminToken = null;
+            currentAdmin = null;
+            localStorage.removeItem('adminToken');
+            updateAdminUI();
+            alert('Logged out successfully!');
+        }
+
+        async function loadSchemes() {
+            try {
+                const response = await fetch('/api/v1/admin/schemes', {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displaySchemes(data.schemes);
+                } else {
+                    alert('Failed to load schemes');
+                }
+            } catch (error) {
+                console.error('Error loading schemes:', error);
+                alert('Failed to load schemes');
+            }
+        }
+
+        function displaySchemes(schemes) {
+            const tbody = document.getElementById('schemesTableBody');
+            tbody.innerHTML = schemes.map(scheme => `
+                <tr>
+                    <td>${scheme.name}</td>
+                    <td>${scheme.state}</td>
+                    <td>${scheme.disability_type.replace('_', ' ')}</td>
+                    <td>${scheme.support_type.replace('_', ' ')}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="editScheme('${scheme.id}')">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteScheme('${scheme.id}')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showAddSchemeModal() {
+            document.getElementById('schemeFormTitle').textContent = 'Add New Scheme';
+            document.getElementById('schemeSubmitBtn').textContent = 'Add Scheme';
+            document.getElementById('schemeForm').reset();
+            document.getElementById('schemeId').value = '';
+            showModal('schemeFormModal');
+        }
+
+        function editScheme(schemeId) {
+            // Find scheme data and populate form
+            // This would need to fetch individual scheme data
+            document.getElementById('schemeFormTitle').textContent = 'Edit Scheme';
+            document.getElementById('schemeSubmitBtn').textContent = 'Update Scheme';
+            document.getElementById('schemeId').value = schemeId;
+            showModal('schemeFormModal');
+        }
+
+        async function deleteScheme(schemeId) {
+            if (!confirm('Are you sure you want to delete this scheme?')) return;
+
+            try {
+                const response = await fetch(`/api/v1/admin/schemes/${schemeId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+
+                if (response.ok) {
+                    alert('Scheme deleted successfully!');
+                    loadSchemes();
+                } else {
+                    alert('Failed to delete scheme');
+                }
+            } catch (error) {
+                console.error('Error deleting scheme:', error);
+                alert('Failed to delete scheme');
+            }
+        }
+
+        async function handleSchemeSubmit(e) {
+            e.preventDefault();
+            const schemeId = document.getElementById('schemeId').value;
+            const isEdit = schemeId !== '';
+
+            const schemeData = {
+                name: document.getElementById('schemeName').value,
+                description: document.getElementById('schemeDescription').value,
+                state: document.getElementById('schemeState').value,
+                disability_type: document.getElementById('schemeDisabilityType').value,
+                support_type: document.getElementById('schemeSupportType').value,
+                apply_link: document.getElementById('schemeApplyLink').value,
+                eligibility: document.getElementById('schemeEligibility').value,
+                benefits: document.getElementById('schemeBenefits').value,
+                contact_info: document.getElementById('schemeContactInfo').value,
+                validity_period: document.getElementById('schemeValidityPeriod').value
+            };
+
+            try {
+                let response;
+                if (isEdit) {
+                    response = await fetch(`/api/v1/admin/schemes/${schemeId}`, {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify(schemeData)
+                    });
+                } else {
+                    response = await fetch('/api/v1/admin/schemes', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminToken}`
+                        },
+                        body: JSON.stringify(schemeData)
+                    });
+                }
+
+                if (response.ok) {
+                    alert(isEdit ? 'Scheme updated successfully!' : 'Scheme added successfully!');
+                    closeModal('schemeFormModal');
+                    loadSchemes();
+                } else {
+                    const data = await response.json();
+                    alert('Failed to save scheme: ' + data.detail);
+                }
+            } catch (error) {
+                console.error('Error saving scheme:', error);
+                alert('Failed to save scheme');
+            }
+        }
+
+        // Load schemes when schemes modal is opened
+        document.getElementById('manageSchemesBtn').addEventListener('click', loadSchemes);
+    </script>
+</body>
+</html>

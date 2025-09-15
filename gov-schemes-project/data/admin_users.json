@@ -1,0 +1,32 @@
+{
+  "users": {
+    "samruddhi": {
+      "id": "IotmJNIpsAb0Lci-PJ75TA",
+      "username": "samruddhi",
+      "email": "kadamsamruddhi115@gmail.com",
+      "role": "admin",
+      "is_active": true,
+      "created_at": "2025-09-13T22:48:09.947036",
+      "password_hash": "218bd7ad799349d4c44861448cda3aff:1b6342fc7256e426ed7222aeb1c43033e6aa644bca88f3e902333219edd54686",
+      "last_login": "2025-09-15T14:24:26.538719"
+    }
+  },
+  "sessions": {
+    "WrW0xBPQUbL8GGi4Qx5h7lllnsWjGRQsbMvxECYgioo": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-13T23:48:29.266172"
+    },
+    "3jgcrKwRiykFqN9CgbSqJfIASxdneZusbygJhptsXhU": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-13T23:50:21.474614"
+    },
+    "Yh8jGl_4YO5ifOdx7rAJXitUuNuzMUyqg5ZX-ycejwc": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-13T23:53:43.421948"
+    },
+    "S9HKxgCdYLNdOGLm99kPJSizlzslPCzifrJ6cwfflD8": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-14T00:03:41.797504"
+    }
+  }
+}

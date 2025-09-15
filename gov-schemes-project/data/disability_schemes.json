@@ -1,0 +1,148 @@
+{
+  "schemes": [
+    {
+      "name": "Karnataka Disability Pension Scheme",
+      "description": "Monthly pension of Rs. 1000 for persons with disabilities in Karnataka. Provides financial assistance to help with daily living expenses and medical needs.",
+      "state": "Karnataka",
+      "disability_type": "multiple_disabilities",
+      "support_type": "financial",
+      "apply_link": "https://karnataka.gov.in/scheme/disability-pension",
+      "eligibility": "Person with 40% or more disability, resident of Karnataka, below poverty line",
+      "benefits": "Rs. 1000 per month, medical assistance, priority in government schemes",
+      "contact_info": "District Social Welfare Officer, Phone: 080-22222222",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "National Scholarship for Students with Disabilities",
+      "description": "Scholarship program for students with disabilities pursuing higher education. Covers tuition fees, books, and other educational expenses.",
+      "state": "All States",
+      "disability_type": "multiple_disabilities",
+      "support_type": "educational",
+      "apply_link": "https://scholarships.gov.in/disability-scholarship",
+      "eligibility": "Students with 40% or more disability, enrolled in recognized institutions, family income below Rs. 2.5 lakhs",
+      "benefits": "Up to Rs. 25,000 per year for undergraduate, Rs. 30,000 for postgraduate",
+      "contact_info": "Ministry of Social Justice and Empowerment, Phone: 011-23456789",
+      "validity_period": "Academic year 2024-25"
+    },
+    {
+      "name": "Assistive Devices Distribution Program",
+      "description": "Free distribution of assistive devices like wheelchairs, hearing aids, and mobility aids for persons with disabilities.",
+      "state": "Maharashtra",
+      "disability_type": "mobility_impairment",
+      "support_type": "assistive_devices",
+      "apply_link": "https://maharashtra.gov.in/assistive-devices",
+      "eligibility": "Person with disability, resident of Maharashtra, income below Rs. 1 lakh per annum",
+      "benefits": "Free wheelchairs, crutches, hearing aids, white canes, and other assistive devices",
+      "contact_info": "Commissioner for Persons with Disabilities, Mumbai, Phone: 022-12345678",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Visual Impairment Education Support",
+      "description": "Special education support for visually impaired students including Braille books, audio materials, and specialized teaching aids.",
+      "state": "Tamil Nadu",
+      "disability_type": "visual_impairment",
+      "support_type": "educational",
+      "apply_link": "https://tamilnadu.gov.in/visual-education-support",
+      "eligibility": "Visually impaired students, enrolled in government or aided schools",
+      "benefits": "Free Braille books, audio textbooks, screen reading software, specialized training",
+      "contact_info": "Director of School Education, Chennai, Phone: 044-23456789",
+      "validity_period": "Academic year 2024-25"
+    },
+    {
+      "name": "Hearing Impaired Employment Scheme",
+      "description": "Employment opportunities and skill development programs specifically designed for hearing impaired individuals in various sectors.",
+      "state": "Gujarat",
+      "disability_type": "hearing_impairment",
+      "support_type": "employment",
+      "apply_link": "https://gujarat.gov.in/hearing-employment",
+      "eligibility": "Hearing impaired individuals aged 18-45, minimum 10th standard education",
+      "benefits": "Job placement assistance, skill training, sign language training, workplace accommodations",
+      "contact_info": "Employment Exchange for Disabled, Ahmedabad, Phone: 079-12345678",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Autism Support and Therapy Center",
+      "description": "Comprehensive support services for children and adults with autism including therapy, counseling, and family support programs.",
+      "state": "Delhi",
+      "disability_type": "autism",
+      "support_type": "medical",
+      "apply_link": "https://delhi.gov.in/autism-support",
+      "eligibility": "Person diagnosed with autism spectrum disorder, resident of Delhi",
+      "benefits": "Free therapy sessions, counseling, family support, early intervention programs",
+      "contact_info": "Autism Support Center, Delhi, Phone: 011-98765432",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Cerebral Palsy Rehabilitation Program",
+      "description": "Specialized rehabilitation services for children and adults with cerebral palsy including physiotherapy, occupational therapy, and speech therapy.",
+      "state": "Kerala",
+      "disability_type": "cerebral_palsy",
+      "support_type": "medical",
+      "apply_link": "https://kerala.gov.in/cerebral-palsy-rehab",
+      "eligibility": "Person diagnosed with cerebral palsy, resident of Kerala",
+      "benefits": "Free rehabilitation services, mobility aids, therapy equipment, family counseling",
+      "contact_info": "Rehabilitation Center, Thiruvananthapuram, Phone: 0471-1234567",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Intellectual Disability Day Care Center",
+      "description": "Day care services for adults with intellectual disabilities providing vocational training, life skills, and social activities.",
+      "state": "West Bengal",
+      "disability_type": "intellectual_disability",
+      "support_type": "educational",
+      "apply_link": "https://westbengal.gov.in/intellectual-daycare",
+      "eligibility": "Adult with intellectual disability, resident of West Bengal, age 18-60",
+      "benefits": "Daily care services, vocational training, life skills development, social activities",
+      "contact_info": "Day Care Center, Kolkata, Phone: 033-12345678",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Transportation Concession for Disabled",
+      "description": "Free or discounted public transportation for persons with disabilities including buses, trains, and metro services.",
+      "state": "All States",
+      "disability_type": "multiple_disabilities",
+      "support_type": "transportation",
+      "apply_link": "https://transport.gov.in/disability-concession",
+      "eligibility": "Person with 40% or more disability, valid disability certificate",
+      "benefits": "Free bus travel, 50% discount on train tickets, priority seating, assistance services",
+      "contact_info": "Transport Department, Phone: 1800-123-4567",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Housing Assistance for Disabled",
+      "description": "Financial assistance and priority allocation for housing schemes for persons with disabilities including accessible home modifications.",
+      "state": "Rajasthan",
+      "disability_type": "mobility_impairment",
+      "support_type": "housing",
+      "apply_link": "https://rajasthan.gov.in/disability-housing",
+      "eligibility": "Person with disability, resident of Rajasthan, income below Rs. 3 lakhs per annum",
+      "benefits": "Up to Rs. 1 lakh for home modifications, priority in housing schemes, accessible design support",
+      "contact_info": "Housing Board, Jaipur, Phone: 0141-1234567",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Financial Aid for Assistive Technology",
+      "description": "Financial assistance for purchasing assistive technology devices like screen readers, voice recognition software, and communication devices.",
+      "state": "Telangana",
+      "disability_type": "visual_impairment",
+      "support_type": "assistive_devices",
+      "apply_link": "https://telangana.gov.in/assistive-technology",
+      "eligibility": "Person with visual impairment, resident of Telangana, income below Rs. 2 lakhs per annum",
+      "benefits": "Up to Rs. 50,000 for assistive technology, training on device usage, technical support",
+      "contact_info": "Technology Support Center, Hyderabad, Phone: 040-12345678",
+      "validity_period": "Ongoing"
+    },
+    {
+      "name": "Employment Skill Development Program",
+      "description": "Comprehensive skill development and job placement program for persons with various disabilities in IT, retail, and service sectors.",
+      "state": "Punjab",
+      "disability_type": "multiple_disabilities",
+      "support_type": "employment",
+      "apply_link": "https://punjab.gov.in/disability-skills",
+      "eligibility": "Person with disability aged 18-50, minimum 8th standard education",
+      "benefits": "Free skill training, job placement assistance, startup support, mentorship programs",
+      "contact_info": "Skill Development Center, Chandigarh, Phone: 0172-1234567",
+      "validity_period": "Ongoing"
+    }
+  ]
+}

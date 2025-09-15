@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Offline Chatbot (Ollama)</title>
+  <style>
+    :root {
+      --primary-color: #161617;
+      --secondary-color: #764ba2;
+      --accent-color:#f093fb;
+      --text-primary: #2d3748;
+      --text-secondary: #718096;
+      --bg-primary: #667eea;
+      --bg-secondary: #f0f8fe;
+      --bg-dark: #1a202c;
+      --border-color:  #57d9f3;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+      --error-color: #e53e3e;
+      --success-color: #38a169;
+    }
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: var(--bg-secondary); color: var(--text-primary); margin: 0; }
+    h2 { margin: 0 0 6px 0; text-align: center; color: var(--primary-color); }
+    .status { text-align:center; font-size: 13px; color: var(--text-secondary); height: 18px; margin-bottom: 10px; }
+    .chat-container { width: 100%; height: 560px; max-width: 1200px; margin: 40px auto; background: var(--bg-primary); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 20px 24px; display: flex; flex-direction: column; }
+    .chat-box { flex: 1; overflow-y: auto; border: 1px solid var(--border-color); padding: 10px; margin-bottom: 10px; background: var(--bg-secondary); color: var(--text-primary); border-radius: 8px; }
+    .user { font-weight: bold; color: var(--primary-color); }
+    .bot { font-weight: bold; color: var(--success-color); }
+    .thinking { color: var(--text-secondary); font-style: italic; }
+    .inputs { background: #fff; border-radius: 10px; padding: 12px; box-shadow: var(--shadow); }
+    .method-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+    .tab { padding: 8px 12px; border: 2px solid var(--border-color); border-radius: 8px; background: white; cursor: pointer; }
+    .tab.active { border-color: var(--primary-color); background: rgba(102,126,234,0.07); }
+    #input-container { display: flex; gap: 8px; align-items: stretch; }
+    #user-input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-size: 14px; resize: vertical; min-height: 40px; }
+    #user-input[disabled] { background: #eef1f6; cursor: not-allowed; }
+    .btn { padding: 10px 14px; border: none; border-radius: 6px; background: var(--gradient); color: #fff; cursor: pointer; font-weight: 600; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .btn-voice { background: var(--gradient-accent); }
+    .btn-camera { background: linear-gradient(135deg,#4facfe,#00f2fe); }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h2>Offline Chatbot powered by GPT-OSS</h2>
+    <div style="text-align:right; margin-bottom:8px">
+      <a href="/dashboard" class="btn" style="text-decoration:none; padding:6px 10px;">← Back to Dashboard</a>
+    </div>
+    <div id="status" class="status"></div>
+    <div id="messages" class="chat-box"></div>
+
+    <div class="inputs">
+      <div class="method-tabs">
+        <div class="tab active" data-method="text">Text</div>
+        <div class="tab" data-method="voice">Voice</div>
+        <div class="tab" data-method="sign">Sign Language</div>
+      </div>
+    <div id="input-container">
+        <textarea id="user-input" placeholder="Type your message here..." rows="2"></textarea>
+        <button class="btn" id="sendBtn">Send</button>
+        <button class="btn btn-voice" id="voiceBtn" title="Voice Input">🎤</button>
+        <button class="btn btn-camera" id="cameraBtn" title="Sign Language">📷</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let busy = false;
+    let currentMethod = 'text';
+    let recognition = null; let isRecording = false;
+
+    function setBusyState(isBusy) {
+      busy = isBusy;
+      const input = document.getElementById('user-input');
+      const btn = document.getElementById('sendBtn');
+      const statusEl = document.getElementById('status');
+      input.disabled = isBusy;
+      btn.disabled = isBusy;
+      statusEl.textContent = isBusy ? 'Thinking…' : '';
+    }
+
+    function cleanForSpeech(text) {
+      try {
+        // Remove emojis and variation selectors
+        return text.replace(/[\u{1F3FB}-\u{1F3FF}\u{1F9B0}-\u{1F9B3}\u{E0020}-\u{E007F}\u{FE0F}\u{200D}]/ug, '')
+                   .replace(/[\p{Extended_Pictographic}\p{Emoji_Presentation}\p{Emoji}]/ug, '');
+      } catch (_) { return text; }
+    }
+
+    function speak(text) {
+      try { if (!('speechSynthesis' in window)) return; } catch (_) { return; }
+      const utter = new SpeechSynthesisUtterance(cleanForSpeech(text));
+      utter.lang = 'en-US';
+      try { window.speechSynthesis.cancel(); } catch(_) {}
+      try { window.speechSynthesis.speak(utter); } catch(_) {}
+    }
+
+    async function sendMessage() {
+      if (busy) return; // prevent parallel prompts
+      const inputField = document.getElementById('user-input');
+      const userMessage = (inputField.value || '').trim();
+      if (!userMessage) return;
+      addMessage('user', userMessage);
+      inputField.value = '';
+      const thinkingId = addMessage('bot', '<span class="thinking">Thinking…</span>', true);
+      setBusyState(true);
+      try {
+        const response = await fetch('http://127.0.0.1:11434/api/generate', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model: 'gpt-oss', prompt: userMessage, stream: false })
+        });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        const botMessage = data.response || '⚠️ No response from model.';
+        replaceMessage(thinkingId, 'bot', botMessage);
+        speak(botMessage);
+      } catch (err) {
+        replaceMessage(thinkingId, 'bot', '⚠️ Error: Could not connect to Ollama server.');
+      } finally { setBusyState(false); }
+    }
+
+    function addMessage(sender, text, returnNode=false) {
+      const messagesDiv = document.getElementById('messages');
+      const div = document.createElement('div');
+      div.className = 'message';
+      div.innerHTML = '<span class="' + sender + '">' + sender + ':</span> ' + text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      if (returnNode) return div;
+    }
+    function replaceMessage(node, sender, text) {
+      if (!node) return addMessage(sender, text);
+      node.innerHTML = '<span class="' + sender + '">' + sender + ':</span> ' + text;
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('user-input').addEventListener('keypress', function(e){ if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+    // Input method tabs
+    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+      this.classList.add('active');
+      currentMethod = this.dataset.method;
+      const input = document.getElementById('user-input');
+      if (currentMethod === 'text') input.placeholder = 'Type your message here...';
+      if (currentMethod === 'voice') input.placeholder = 'Click the mic to speak';
+      if (currentMethod === 'sign') input.placeholder = 'Click the camera to use sign language';
+    }));
+
+    // Voice recognition
+    (function initSpeech(){
+      try {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) return;
+        recognition = new SR();
+        recognition.continuous = false; recognition.interimResults = false; recognition.lang = 'en-US';
+        recognition.onstart = ()=>{ isRecording = true; updateVoiceBtn(); };
+        recognition.onend = ()=>{ isRecording = false; updateVoiceBtn(); };
+        recognition.onerror = ()=>{ isRecording = false; updateVoiceBtn(); };
+        recognition.onresult = (e)=>{
+          const transcript = e.results[0][0].transcript;
+          document.getElementById('user-input').value = transcript;
+          sendMessage();
+        };
+      } catch(_) {}
+    })();
+
+    function updateVoiceBtn(){
+      const btn = document.getElementById('voiceBtn');
+      btn.textContent = isRecording ? '■' : '🎤';
+    }
+
+    document.getElementById('voiceBtn').addEventListener('click', function(){
+      if (!recognition) { alert('Speech recognition not supported in this browser.'); return; }
+      if (isRecording) recognition.stop(); else recognition.start();
+    });
+
+    // Sign language
+    document.getElementById('cameraBtn').addEventListener('click', function(){
+      window.open('http://localhost:5001/', '_blank');
+    });
+    window.addEventListener('message', function(event){
+      try { if (event && event.data && event.data.type === 'sign_result') {
+        const text = (event.data.text || '').trim();
+        if (text) { document.getElementById('user-input').value = text; sendMessage(); }
+      } } catch(_) {}
+    });
+  </script>
+</body>
+</html>

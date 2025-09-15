@@ -1,0 +1,70 @@
+# Python general
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.coverage*
+htmlcov/
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+*/venv/
+*/.venv/
+*/env/
+*/ENV/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Logs and temp
+*.log
+*.tmp
+*.cache/
+
+# Databases and local data
+*.db
+*.sqlite3
+*.sqlite
+calendar/*.ics
+
+# Node / web build outputs (if any)
+node_modules/
+dist/
+build/
+
+# Large ML models / weights
+*.pt
+*.onnx
+*.bin
+
+# Project-specific large artifacts
+Ctrl-A/half1/yolov8n.pt
+Ctrl-A/ctrl_a_users.db
+
+gov-schemes-project/data/chroma_db/**
+gov-schemes-project/data/chroma.sqlite3
+
+# Audio/media generated locally
+*.mp3
+*.wav
+media/
+ctrl_a_media/
+
+# Environment files (if used)
+*.env
+.env.*
+
+# Jupyter
+.ipynb_checkpoints/
