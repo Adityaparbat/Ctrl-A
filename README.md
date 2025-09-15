@@ -22,7 +22,7 @@ This repository contains multiple Python/JS apps that work together under a comm
 
 ## Requirements
 
-- Python 3.11+
+- Python 3.11
 - Node not required (static frontends)
 - FFmpeg (for audio streaming/transcoding)
 - yt-dlp (YouTube audio extraction)
