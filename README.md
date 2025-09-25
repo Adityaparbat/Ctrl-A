@@ -119,6 +119,11 @@ ollama pull gpt-oss
 ```
 If memory is limited, pick a smaller model (e.g., `llama3.2:1b` or similar) and update the model name inside `offline_chatbot/index.html` inline script.
 
+## 5) Sign Language Integration
+```
+cd ctrl-A
+python run_sign_language_server.py
+```
 ## AI Assistant Behavior
 
 - Uses `gpt.py` to call OpenAI or Gemini, with graceful offline fallbacks
