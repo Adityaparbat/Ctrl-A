@@ -124,6 +124,8 @@ class VectorStore:
                         metadata["contact_info"] = str(scheme["contact_info"])
                     if "validity_period" in scheme:
                         metadata["validity_period"] = str(scheme["validity_period"])
+                    if "deadline" in scheme:
+                        metadata["deadline"] = str(scheme["deadline"])
                     
                     ids.append(f"scheme_{i}")
                     documents.append(doc_text)
@@ -236,6 +238,37 @@ class VectorStore:
         except Exception as e:
             logger.error(f"Failed to get all schemes: {e}")
             raise RuntimeError(f"Failed to get all schemes: {e}")
+
+    def get_scheme_by_id(self, scheme_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get a scheme by its ID.
+        
+        Args:
+            scheme_id (str): ID of the scheme
+            
+        Returns:
+            Optional[Dict[str, Any]]: Scheme data or None if not found
+        """
+        if self.collection is None:
+            raise RuntimeError("ChromaDB collection not initialized")
+        
+        try:
+            result = self.collection.get(ids=[scheme_id])
+            
+            if not result["ids"]:
+                return None
+                
+            scheme_data = {
+                "id": scheme_id,
+                "name": result["documents"][0].split(" - ")[0],
+                "description": result["documents"][0].split(" - ", 1)[1] if " - " in result["documents"][0] else "",
+                **result["metadatas"][0]
+            }
+            return scheme_data
+            
+        except Exception as e:
+            logger.error(f"Failed to get scheme {scheme_id}: {e}")
+            return None
     
     def add_scheme(self, scheme_data: Dict[str, Any]) -> str:
         """
@@ -266,7 +299,7 @@ class VectorStore:
             }
             
             # Add optional fields
-            for field in ["eligibility", "benefits", "contact_info", "validity_period"]:
+            for field in ["eligibility", "benefits", "contact_info", "validity_period", "deadline"]:
                 if field in scheme_data and scheme_data[field]:
                     metadata[field] = str(scheme_data[field])
             

@@ -7,6 +7,14 @@ components, eliminating code duplication across different modules.
 
 import os
 import logging
+# Fix for Windows ChromaDB sqlite version issue
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from typing import Optional, Dict, Any
 import chromadb
 from chromadb.utils import embedding_functions

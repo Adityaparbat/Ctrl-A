@@ -1,0 +1,7 @@
+🔍 Inspecting MongoDB Users...
+✅ Found 1 users
+
+User ID: 695dc63b7fd04170c903cdd3
+Email: amparbat2006@gmail.com
+Disability Type: mobility
+Address: 

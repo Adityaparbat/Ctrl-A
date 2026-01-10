@@ -12,7 +12,7 @@ import tempfile
 import uuid
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv('SECRET_KEY', 'your-static-development-secret-key-12345')
 
 # Email validation regex
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
@@ -21,27 +21,18 @@ PHONE_REGEX = re.compile(r'^\+?1?\d{9,15}$')
 # FFmpeg binary resolution (allows overriding via env var)
 FFMPEG_BIN = os.getenv('FFMPEG_BIN') or shutil.which('ffmpeg')
 
-# Directory to store temporary media files
-MEDIA_DIR = os.path.join(tempfile.gettempdir(), 'ctrl_a_media')
-os.makedirs(MEDIA_DIR, exist_ok=True)
-
-# Common headers for upstream media CDNs
-_DEFAULT_UA = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-    "(KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
-)
-_COMMON_UPSTREAM_HEADERS = {
-    'User-Agent': _DEFAULT_UA,
-    'Accept': '*/*',
-    'Accept-Encoding': 'identity;q=1, *;q=0',
-    'Connection': 'keep-alive',
-    'Referer': 'https://www.youtube.com/',
-}
-
 # Paths
 BASE_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, '..'))
 OFFLINE_DIR = os.path.abspath(os.path.join(ROOT_DIR, 'offline_chatbot'))
+
+# Directory to store temporary media files
+MEDIA_DIR = os.path.join(tempfile.gettempdir(), 'ctrl_a_media')
+os.makedirs(MEDIA_DIR, exist_ok=True)
+UPLOAD_FOLDER = os.path.join(ROOT_DIR, 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+from werkzeug.utils import secure_filename
 
 def validate_email(email):
     """Validate email format"""
@@ -118,6 +109,23 @@ def welfare_schemes():
         return redirect('/login')
     
     with open('welfare_schemes.html', 'r', encoding='utf-8') as f:
+        return f.read()
+
+@app.route('/personalized_schemes')
+def personalized_schemes():
+    """Serve personalized schemes page"""
+    # Check if user is logged in
+    session_token = session.get('session_token')
+    if not session_token:
+        return redirect('/login')
+    
+    # Validate session
+    session_data = db.validate_session(session_token)
+    if not session_data['success']:
+        session.clear()
+        return redirect('/login')
+    
+    with open('personalized_schemes.html', 'r', encoding='utf-8') as f:
         return f.read()
 
 @app.route('/ai_assistant')
@@ -371,11 +379,14 @@ def api_signup():
         email = data.get('email', '').strip().lower()
         phone = data.get('phone', '').strip()
         disability_type = data.get('disability_type', '').strip()
+        state = data.get('state', '').strip()
+        age = data.get('age', '')
+        income_range = data.get('income_range', '').strip()
         password = data.get('password', '')
         confirm_password = data.get('confirm_password', '')
         
         # Validation
-        if not all([email, phone, disability_type, password, confirm_password]):
+        if not all([email, phone, disability_type, state, age, income_range, password, confirm_password]):
             return jsonify({"success": False, "error": "All fields are required"})
         
         if not validate_email(email):
@@ -392,7 +403,7 @@ def api_signup():
             return jsonify({"success": False, "error": error_msg})
         
         # Create user
-        result = db.create_user(email, phone, disability_type, password)
+        result = db.create_user(email, phone, disability_type, password, state, age, income_range)
         if not result['success']:
             return jsonify(result)
         
@@ -515,6 +526,161 @@ def api_user_info():
     
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
+
+# -------------------------------
+# SCHEME APPLICATION ENDPOINTS
+# -------------------------------
+
+@app.route('/api/apply', methods=['POST'])
+def api_submit_application():
+    """Submit a scheme application with documents"""
+    try:
+        session_token = session.get('session_token')
+        if not session_token:
+            return jsonify({"success": False, "error": "Not logged in"}), 401
+            
+        session_data = db.validate_session(session_token)
+        if not session_data['success']:
+            return jsonify({"success": False, "error": "Invalid session"}), 401
+            
+        user_id = session_data['user']['id']
+        scheme_id = request.form.get('scheme_id')
+        scheme_title = request.form.get('scheme_title')
+        
+        if not scheme_id or not scheme_title:
+            return jsonify({"success": False, "error": "Missing scheme details"}), 400
+            
+        # Handle file uploads
+        documents = {}
+        required_docs = ['aadhar', 'pan', 'income_certificate']
+        
+        for doc_type in required_docs:
+            file = request.files.get(doc_type)
+            if file and file.filename:
+                filename = secure_filename(f"{user_id}_{scheme_id}_{doc_type}_{int(datetime.utcnow().timestamp())}_{file.filename}")
+                file_path = os.path.join(UPLOAD_FOLDER, filename)
+                file.save(file_path)
+                # In production, serve via nginx or static route. Here assume /uploads is served.
+                documents[doc_type] = f"/uploads/{filename}"
+        
+        result = db.submit_application(user_id, scheme_id, scheme_title, documents)
+        return jsonify(result)
+        
+    except Exception as e:
+        print(f"Application submit error: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/my-applications')
+def api_my_applications():
+    """Get current user's applications"""
+    try:
+        session_token = session.get('session_token')
+        if not session_token:
+             return jsonify({"success": False, "error": "Not logged in"}), 401
+        
+        session_data = db.validate_session(session_token)
+        if not session_data['success']:
+             return jsonify({"success": False, "error": "Invalid session"}), 401
+             
+        user_id = session_data['user']['id']
+        result = db.get_user_applications(user_id)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/notifications')
+def api_notifications():
+    """Get current user's notifications"""
+    try:
+        session_token = session.get('session_token')
+        if not session_token:
+             return jsonify({"success": False, "error": "Not logged in"}), 401
+        
+        session_data = db.validate_session(session_token)
+        if not session_data['success']:
+             return jsonify({"success": False, "error": "Invalid session"}), 401
+             
+        user_id = session_data['user']['id']
+        result = db.get_user_notifications(user_id)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/notifications/read', methods=['POST'])
+def api_read_notification():
+    """Mark notification as read"""
+    try:
+        session_token = session.get('session_token')
+        if not session_token:
+             return jsonify({"success": False, "error": "Not logged in"}), 401
+             
+        data = request.get_json()
+        notification_id = data.get('notification_id')
+        
+        result = db.mark_notification_read(notification_id)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# -------------------------------
+# ADMIN APPLICATION ENDPOINTS
+# -------------------------------
+
+@app.route('/api/admin/login-session', methods=['POST'])
+def api_admin_login_session():
+    """Create admin session for application management"""
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        
+        # Simple hardcoded check for now to match gov-schemes-project
+        if username == 'admin' and password == 'password':
+            session['is_admin'] = True
+            session.permanent = True
+            return jsonify({"success": True})
+        
+        return jsonify({"success": False, "error": "Invalid credentials"}), 401
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/admin/applications')
+def api_admin_applications():
+    """Get all applications for admin"""
+    try:
+        if not session.get('is_admin'):
+            return jsonify({"success": False, "error": "Unauthorized"}), 403
+            
+        status_filter = request.args.get('status')
+        result = db.get_all_applications(status_filter)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/api/admin/approve', methods=['POST'])
+def api_admin_approve():
+    """Approve or reject application"""
+    try:
+        if not session.get('is_admin'):
+            return jsonify({"success": False, "error": "Unauthorized"}), 403
+            
+        data = request.get_json()
+        app_id = data.get('application_id')
+        new_status = data.get('status') # verified / rejected
+        notes = data.get('notes', '')
+        
+        if not app_id or not new_status:
+            return jsonify({"success": False, "error": "Missing params"}), 400
+            
+        result = db.update_application_status(app_id, new_status, notes)
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+# Serve uploaded files
+@app.route('/uploads/<path:filename>')
+def serve_upload(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @app.route('/api/tts', methods=['POST'])
 def api_tts():

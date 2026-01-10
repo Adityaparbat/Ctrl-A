@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Ctrl-A</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-body: #131314;
+            --bg-surface: #1e1f20;
+            --bg-surface-hover: #2d2e2f;
+            --bg-input: #2d2e2f;
+            --text-primary: #e3e3e3;
+            --text-secondary: #c4c7c5;
+            --accent-blue: #8ab4f8;
+            --accent-blue-hover: #aecbfa;
+            --border-color: #444746;
+            --error-color: #f2b8b5;
+            --success-color: #81c995;
+            --focus-ring: #a8c7fa;
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --accent-color: #f093fb;
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f7fafc;
-            --bg-dark: #1a202c;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
-            --error-color: #e53e3e;
-            --success-color: #38a169;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
             color: var(--text-primary);
-            background: var(--bg-secondary);
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -44,49 +43,42 @@
         }
 
         .login-container {
-            background: white;
+            background: var(--bg-surface);
             border-radius: 20px;
             box-shadow: var(--shadow-lg);
             overflow: hidden;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            border: 1px solid var(--border-color);
             position: relative;
         }
 
         .login-header {
-            background: var(--gradient);
             padding: 2rem;
             text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .login-header-content {
-            position: relative;
-            z-index: 2;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-body);
         }
 
         .logo {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-blue);
         }
 
         .login-subtitle {
-            opacity: 0.9;
-            font-weight: 300;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
 
         .login-form {
@@ -94,111 +86,160 @@
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-weight: 500;
             color: var(--text-primary);
+            font-size: 1.1rem;
         }
 
         .form-input {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 1rem;
+            background-color: var(--bg-input);
             border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'Outfit', sans-serif;
             transition: all 0.3s ease;
-            background: var(--bg-primary);
         }
 
         .form-input:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #666;
         }
 
         .form-input.error {
             border-color: var(--error-color);
         }
 
+        /* Password Toggle - Large Hit Area */
         .password-container {
             position: relative;
         }
 
         .password-toggle {
             position: absolute;
-            right: 1rem;
+            right: 0.5rem;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
+            background: transparent;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            border-radius: 50%;
         }
 
-        .password-toggle:hover {
-            color: var(--primary-color);
+        .password-toggle:hover,
+        .password-toggle:focus {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
         }
 
         .form-options {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
+        /* Accessibile Checkbox */
         .checkbox-container {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            cursor: pointer;
         }
 
         .checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color);
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-input);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .checkbox:checked {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .checkbox:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #000;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+
+        .checkbox:focus-visible {
+            outline: 2px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+
+        .checkbox-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
         }
 
         .forgot-link {
-            color: var(--primary-color);
+            color: var(--accent-blue);
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .forgot-link:hover {
-            color: var(--secondary-color);
+            text-decoration: underline;
         }
 
         .btn {
             width: 100%;
-            padding: 0.75rem 1.5rem;
+            padding: 1rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            font-family: 'Outfit', sans-serif;
         }
 
         .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: var(--shadow);
+            background-color: var(--accent-blue);
+            color: #000;
         }
 
         .btn-primary:hover {
+            background-color: var(--accent-blue-hover);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         .btn-primary:disabled {
@@ -207,36 +248,28 @@
             transform: none;
         }
 
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--border-color);
-            margin-top: 1rem;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
         .error-message {
-            background: #fed7d7;
+            background: rgba(242, 184, 181, 0.1);
             color: var(--error-color);
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            border: 1px solid var(--error-color);
             display: none;
+            text-align: center;
         }
 
         .success-message {
-            background: #c6f6d5;
+            background: rgba(129, 201, 149, 0.1);
             color: var(--success-color);
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            border: 1px solid var(--success-color);
             display: none;
+            text-align: center;
         }
 
         .loading {
@@ -247,41 +280,55 @@
         }
 
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 0, 0, 0.3);
+            border-top: 3px solid #000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .back-link {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
-            color: white;
+            top: 1.5rem;
+            left: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
             text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
         }
 
         .back-link:hover {
-            color: rgba(255, 255, 255, 0.8);
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
         }
 
         .signup-link {
             text-align: center;
             margin-top: 1.5rem;
             color: var(--text-secondary);
+            font-size: 1rem;
         }
 
         .signup-link a {
-            color: var(--primary-color);
+            color: var(--accent-blue);
             text-decoration: none;
             font-weight: 500;
         }
@@ -290,7 +337,7 @@
             text-decoration: underline;
         }
 
-        /* Modal for forgot password */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -299,19 +346,19 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
         }
 
         .modal-content {
-            background: white;
+            background: var(--bg-surface);
             margin: 15% auto;
             padding: 2rem;
-            border-radius: 16px;
+            border-radius: 20px;
             width: 90%;
             max-width: 400px;
+            border: 1px solid var(--border-color);
             position: relative;
-            box-shadow: var(--shadow-lg);
         }
 
         .modal-header {
@@ -322,7 +369,7 @@
         }
 
         .modal-title {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             font-weight: 600;
             color: var(--text-primary);
         }
@@ -330,128 +377,66 @@
         .close {
             background: none;
             border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
+            font-size: 1.8rem;
             color: var(--text-secondary);
-            transition: color 0.3s ease;
+            cursor: pointer;
+            transition: color 0.3s;
         }
 
         .close:hover {
             color: var(--text-primary);
         }
 
-        /* Responsive Design */
-        @media (max-width: 480px) {
-            body {
-                padding: 1rem;
-            }
-
-            .login-container {
-                max-width: 100%;
-            }
-
-            .login-header {
-                padding: 1.5rem;
-            }
-
-            .login-form {
-                padding: 1.5rem;
-            }
-
-            .logo {
-                font-size: 1.5rem;
-            }
-        }
-
-        /* Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .focus-visible {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-                --text-primary: #000000;
-                --text-secondary: #333333;
-                --border-color: #000000;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
+        /* High Visibility Focus */
+        :focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 4px;
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
+        <a href="/landing" class="back-link" aria-label="Back to home">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+
         <div class="login-header">
-            <a href="/landing" class="back-link" aria-label="Back to home">
-                <i class="fas fa-arrow-left"></i>
+            <a href="/" class="logo">
+                <i class="fas fa-universal-access"></i> Ctrl-A <span>Schemes</span>
             </a>
-            <div class="login-header-content">
-                <div class="logo">Ctrl-A</div>
-                <p class="login-subtitle">Welcome back! Sign in to continue</p>
-            </div>
+            <p class="login-subtitle">Sign in to access your portal</p>
         </div>
 
         <div class="login-form">
-            <div class="error-message" id="errorMessage"></div>
-            <div class="success-message" id="successMessage"></div>
+            <div class="error-message" id="errorMessage" role="alert"></div>
+            <div class="success-message" id="successMessage" role="alert"></div>
 
-            <form id="loginForm">
+            <form id="loginForm" novalidate>
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        class="form-input" 
-                        placeholder="Enter your email"
-                        required
-                        autocomplete="email"
-                    >
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email"
+                        required autocomplete="email" aria-required="true">
                 </div>
 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
                     <div class="password-container">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-input" 
-                            placeholder="Enter your password"
-                            required
-                            autocomplete="current-password"
-                        >
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <input type="password" id="password" name="password" class="form-input"
+                            placeholder="Enter your password" required autocomplete="current-password"
+                            aria-required="true">
+                        <button type="button" class="password-toggle" onclick="togglePassword()"
+                            aria-label="Toggle password visibility">
                             <i class="fas fa-eye" id="passwordToggleIcon"></i>
                         </button>
                     </div>
                 </div>
 
                 <div class="form-options">
-                    <div class="checkbox-container">
+                    <label class="checkbox-container">
                         <input type="checkbox" id="remember" class="checkbox">
-                        <label for="remember">Remember me</label>
-                    </div>
+                        <span class="checkbox-label">Remember me</span>
+                    </label>
                     <a href="#" class="forgot-link" onclick="openForgotPassword()">Forgot Password?</a>
                 </div>
 
@@ -461,36 +446,29 @@
                         Signing in...
                     </span>
                     <span id="loginText">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Sign In
+                        Sign In <i class="fas fa-arrow-right"></i>
                     </span>
                 </button>
             </form>
 
             <div class="signup-link">
-                Don't have an account? <a href="/signup">Sign up here</a>
+                Don't have an account? <a href="/signup">Create one here</a>
             </div>
         </div>
     </div>
 
     <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="modal">
+    <div id="forgotPasswordModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="forgotPasswordTitle">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Reset Password</h3>
-                <button class="close" onclick="closeForgotPassword()">&times;</button>
+                <h3 class="modal-title" id="forgotPasswordTitle">Reset Password</h3>
+                <button class="close" onclick="closeForgotPassword()" aria-label="Close modal">&times;</button>
             </div>
             <form id="forgotPasswordForm">
                 <div class="form-group">
                     <label for="resetEmail" class="form-label">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="resetEmail" 
-                        name="email" 
-                        class="form-input" 
-                        placeholder="Enter your email"
-                        required
-                    >
+                    <input type="email" id="resetEmail" name="email" class="form-input" placeholder="Enter your email"
+                        required>
                 </div>
                 <button type="submit" class="btn btn-primary" id="resetBtn">
                     <span class="loading" id="resetLoading">
@@ -498,7 +476,6 @@
                         Sending...
                     </span>
                     <span id="resetText">
-                        <i class="fas fa-paper-plane"></i>
                         Send Reset Link
                     </span>
                 </button>
@@ -511,7 +488,7 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const toggleIcon = document.getElementById('passwordToggleIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleIcon.classList.remove('fa-eye');
@@ -525,21 +502,34 @@
 
         // Modal functions
         function openForgotPassword() {
-            document.getElementById('forgotPasswordModal').style.display = 'block';
+            const modal = document.getElementById('forgotPasswordModal');
+            modal.style.display = 'block';
+            // Trap focus in modal
+            const firstInput = document.getElementById('resetEmail');
+            setTimeout(() => firstInput.focus(), 100);
         }
 
         function closeForgotPassword() {
             document.getElementById('forgotPasswordModal').style.display = 'none';
             document.getElementById('forgotPasswordForm').reset();
+            // Return focus to trigger
+            document.querySelector('.forgot-link').focus();
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('forgotPasswordModal');
             if (event.target === modal) {
                 closeForgotPassword();
             }
         }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeForgotPassword();
+            }
+        });
 
         // Show/hide messages
         function showError(message) {
@@ -566,7 +556,7 @@
             const button = document.getElementById(buttonId);
             const loading = document.getElementById(loadingId);
             const text = document.getElementById(textId);
-            
+
             if (isLoading) {
                 button.disabled = true;
                 loading.style.display = 'flex';
@@ -579,20 +569,20 @@
         }
 
         // Login form submission
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             hideMessages();
-            
+
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            
+
             if (!email || !password) {
                 showError('Please fill in all fields');
                 return;
             }
-            
+
             setLoading('loginBtn', 'loading', 'loginText', true);
-            
+
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
@@ -601,9 +591,9 @@
                     },
                     body: JSON.stringify({ email, password })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     showSuccess('Login successful! Redirecting...');
                     setTimeout(() => {
@@ -620,19 +610,19 @@
         });
 
         // Forgot password form submission
-        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             hideMessages();
-            
+
             const email = document.getElementById('resetEmail').value.trim();
-            
+
             if (!email) {
                 showError('Please enter your email address');
                 return;
             }
-            
+
             setLoading('resetBtn', 'resetLoading', 'resetText', true);
-            
+
             try {
                 const response = await fetch('/api/forgot-password', {
                     method: 'POST',
@@ -641,9 +631,9 @@
                     },
                     body: JSON.stringify({ email })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (data.success) {
                     showSuccess(data.message);
                     setTimeout(() => {
@@ -660,7 +650,7 @@
         });
 
         // Form validation
-        document.getElementById('email').addEventListener('blur', function() {
+        document.getElementById('email').addEventListener('blur', function () {
             const email = this.value.trim();
             if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 this.classList.add('error');
@@ -670,9 +660,10 @@
         });
 
         // Auto-focus on email field
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('email').focus();
         });
     </script>
 </body>
+
 </html>

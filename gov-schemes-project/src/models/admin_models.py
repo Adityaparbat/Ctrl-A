@@ -68,6 +68,7 @@ class SchemeCreateRequest(BaseModel):
     benefits: Optional[str] = None
     contact_info: Optional[str] = None
     validity_period: Optional[str] = None
+    deadline: Optional[str] = None
 
 
 class SchemeUpdateRequest(BaseModel):
@@ -82,6 +83,7 @@ class SchemeUpdateRequest(BaseModel):
     benefits: Optional[str] = None
     contact_info: Optional[str] = None
     validity_period: Optional[str] = None
+    deadline: Optional[str] = None
 
 
 class SchemeDeleteRequest(BaseModel):

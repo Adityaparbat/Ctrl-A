@@ -72,7 +72,8 @@ class ChromaDBRetriever:
                         "eligibility": meta.get("eligibility"),
                         "benefits": meta.get("benefits"),
                         "contact_info": meta.get("contact_info"),
-                        "validity_period": meta.get("validity_period")
+                        "validity_period": meta.get("validity_period"),
+                        "deadline": meta.get("deadline")
                     }
                     output.append(scheme_info)
                     

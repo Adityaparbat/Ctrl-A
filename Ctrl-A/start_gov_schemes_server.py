@@ -14,7 +14,7 @@ from pathlib import Path
 def check_server_running():
     """Check if the server is already running."""
     try:
-        response = requests.get("http://localhost:8000/health", timeout=5)
+        response = requests.get("http://localhost:8002/health", timeout=5)
         return response.status_code == 200
     except:
         return False
@@ -44,20 +44,20 @@ def start_server():
             sys.executable, "-m", "uvicorn", 
             "src.main:app", 
             "--host", "0.0.0.0", 
-            "--port", "8000", 
+            "--port", "8002", 
             "--reload"
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        ])
         
         print("⏳ Waiting for server to start...")
         
-        # Wait for server to start (max 30 seconds)
-        for i in range(30):
+        # Wait for server to start (max 120 seconds)
+        for i in range(120):
             time.sleep(1)
             if check_server_running():
                 print("✅ Server started successfully!")
-                print("🌐 Server URL: http://localhost:8000")
-                print("📚 API Documentation: http://localhost:8000/docs")
-                print("🔍 Health Check: http://localhost:8000/health")
+                print("🌐 Server URL: http://localhost:8002")
+                print("📚 API Documentation: http://localhost:8002/docs")
+                print("🔍 Health Check: http://localhost:8002/health")
                 print("\n💡 The server is now running in the background.")
                 print("   You can now use the admin panel to manage schemes.")
                 print("   Press Ctrl+C to stop this script (server will continue running).")
@@ -77,7 +77,7 @@ def start_server():
                 
                 return True
         
-        print("❌ Server failed to start within 30 seconds")
+        print("❌ Server failed to start within 120 seconds")
         process.terminate()
         return False
         
@@ -92,8 +92,8 @@ def main():
     print("=" * 60)
     
     if check_server_running():
-        print("✅ Server is already running at http://localhost:8000")
-        print("🔍 Health Check: http://localhost:8000/health")
+        print("✅ Server is already running at http://localhost:8002")
+        print("🔍 Health Check: http://localhost:8002/health")
         return
     
     if start_server():

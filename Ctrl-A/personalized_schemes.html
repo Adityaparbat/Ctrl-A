@@ -708,61 +708,36 @@
     <main class="main-content">
         <!-- Page Header -->
         <section class="page-header">
-            <h1 class="page-title">Government Welfare Schemes</h1>
+            <h1 class="page-title">Personalized Recommendations</h1>
             <p class="page-subtitle">
-                Discover and apply for government welfare schemes designed specifically for disabled individuals
+                Based on your profile, here are the schemes you are most likely eligible for.
             </p>
         </section>
 
-        <!-- Input Section -->
-        <section class="input-section">
-            <div class="input-header">
-                <div class="input-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <h2 class="input-title">Search for Schemes</h2>
-            </div>
 
-            <!-- Input Area -->
-            <div class="input-area">
-                <div class="input-container">
-                    <input type="text" id="searchInput" class="input-field"
-                        placeholder="Search for welfare schemes (e.g., 'disability pension', 'medical assistance', 'education support')"
-                        autocomplete="off">
-                </div>
-                <div class="input-actions">
-                    <button class="btn-action btn-search" id="searchBtn">
-                        <i class="fas fa-search"></i>
-                        Search Schemes
-                    </button>
-                    <button class="btn-action btn-voice" id="voiceBtn">
-                        <i class="fas fa-microphone"></i>
-                        <span id="voiceText">Start Voice Search</span>
-                    </button>
-                </div>
-            </div>
-        </section>
 
         <!-- Results Section -->
         <section class="results-section">
             <div class="results-header">
-                <h3 class="results-title">Search Results</h3>
-                <div class="results-count" id="resultsCount">0 schemes found</div>
+                <h3 class="results-title">Recommended Schemes</h3>
+                <div class="results-count" id="resultsCount">Finding matches...</div>
             </div>
 
             <!-- Loading State -->
             <div class="loading" id="loadingState">
                 <div class="spinner"></div>
-                <span>Searching for schemes...</span>
+                <span>Finding the best schemes for you...</span>
             </div>
 
             <!-- Empty State -->
-            <div class="empty-state" id="emptyState">
+            <div class="empty-state" id="emptyState" style="display: none;">
                 <div class="empty-icon">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-clipboard-list"></i>
                 </div>
-                <div class="empty-title">No schemes found</div>
-                <div class="empty-desc">Try searching with different keywords or browse all available schemes</div>
+                <div class="empty-title">No specific matches found</div>
+                <div class="empty-desc">We couldn't find schemes matching your exact criteria. Try exploring all
+                    schemes.</div>
+                <a href="/welfare_schemes" class="btn btn-primary" style="margin-top: 1rem;">Explore All Schemes</a>
             </div>
 
             <!-- Results Grid -->
@@ -786,152 +761,102 @@
         </div>
     </main>
     <script>
-        let currentMethod = 'text';
-        let isRecording = false;
-        let recognition = null;
-        let currentAudio = null;
+        let currentUser = null;
 
-        // Initialize speech recognition
-        function initSpeechRecognition() {
-            // Robust check for SpeechRecognition API
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUserInfo();
+        });
 
-            if (SpeechRecognition) {
-                console.log('Speech Recognition API supported');
-                try {
-                    recognition = new SpeechRecognition();
-                } catch (e) {
-                    console.error('Failed to initialize SpeechRecognition:', e);
-                    return;
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/user-info');
+                const data = await response.json();
+
+                if (data.success) {
+                    currentUser = data.user;
+
+                    fetchPersonalizedSchemes();
+                } else {
+                    window.location.href = '/login';
                 }
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-
-                recognition.onstart = function () {
-                    isRecording = true;
-                    updateVoiceButton();
-                };
-
-                recognition.onresult = function (event) {
-                    const transcript = event.results[0][0].transcript;
-                    document.getElementById('searchInput').value = transcript;
-                    searchSchemes(transcript);
-                };
-
-                recognition.onend = function () {
-                    isRecording = false;
-                    updateVoiceButton();
-                };
-
-                recognition.onerror = function (event) {
-                    console.error('Speech recognition error:', event.error);
-                    isRecording = false;
-                    updateVoiceButton();
-                    alert('Speech recognition failed. Please try again.');
-                };
-            } else {
-                console.warn('Speech recognition not supported');
+            } catch (error) {
+                console.error('Error loading user info:', error);
+                window.location.href = '/login';
             }
         }
 
-        // Update voice button state
-        function updateVoiceButton() {
-            const voiceBtn = document.getElementById('voiceBtn');
-            const voiceText = document.getElementById('voiceText');
 
-            if (isRecording) {
-                voiceBtn.classList.add('recording');
-                voiceText.textContent = 'Stop Recording';
-            } else {
-                voiceBtn.classList.remove('recording');
-                voiceText.textContent = 'Start Voice Search';
-            }
-        }
 
-        // Initialize input methods
-        function initInputMethods() {
-            const methods = document.querySelectorAll('.input-method');
-            methods.forEach(method => {
-                method.addEventListener('click', function () {
-                    methods.forEach(m => m.classList.remove('active'));
-                    this.classList.add('active');
-                    currentMethod = this.dataset.method;
-
-                    // Update input placeholder based on method
-                    const input = document.getElementById('searchInput');
-                    switch (currentMethod) {
-                        case 'text':
-                            input.placeholder = 'Search for welfare schemes (e.g., "disability pension", "medical assistance")';
-                            break;
-                        case 'voice':
-                            input.placeholder = 'Click the microphone button to speak your search query';
-                            break;
-                        case 'sign':
-                            input.placeholder = 'Click the camera button to use sign language input';
-                            break;
-                    }
-                });
-            });
-        }
-
-        // Search schemes function
-        async function searchSchemes(query) {
-            if (!query.trim()) return;
+        async function fetchPersonalizedSchemes() {
+            if (!currentUser) return;
 
             showLoading();
-            hideEmptyState();
 
             try {
-                // Try to connect to the government schemes API
-                // Match the server IP/port or use localhost:8002
+                // Use the new personalized endpoint
                 const apiHost = `http://${window.location.hostname}:8002`;
-                const response = await fetch(`${apiHost}/api/v1/schemes/search`, {
+                const response = await fetch(`${apiHost}/api/v1/schemes/personalized`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        query: query.trim(),
-                        top_k: 10
+                        disability_type: currentUser.disability_type,
+                        state: currentUser.state,
+                        age: currentUser.age || null,
+                        gender: currentUser.gender || null,
+                        income_range: currentUser.income_range || null
                     })
                 });
 
-                let schemes = [];
                 if (response.ok) {
                     const data = await response.json();
-                    schemes = Array.isArray(data.results) ? data.results : [];
-                }
+                    let schemes = Array.isArray(data.results) ? data.results : [];
 
-                // Fallback to GET endpoint if POST failed or returned empty
-                if (!schemes || schemes.length === 0) {
-                    const apiHost = `http://${window.location.hostname}:8002`;
-                    const url = new URL(`${apiHost}/api/v1/schemes/search`);
-                    url.searchParams.set('query', query.trim());
-                    url.searchParams.set('top_k', '10');
-                    const getResp = await fetch(url.toString());
-                    if (getResp.ok) {
-                        const getData = await getResp.json();
-                        schemes = Array.isArray(getData.results) ? getData.results : [];
+                    // Normalize
+                    const normalized = schemes.map(normalizeSchemeFromApi);
+                    displaySchemes(normalized);
+
+                    if (normalized.length > 0) {
+                        try {
+                            const text = `We found ${normalized.length} schemes matching your profile.`;
+                            // Optional: play audio or just show text
+                        } catch (e) { }
                     }
+                } else {
+                    console.error('Personalized API failed');
+                    showEmptyState();
                 }
-
-                // Normalize API schemes into UI-friendly objects
-                const normalized = (schemes || []).map(normalizeSchemeFromApi);
-                displaySchemes(normalized);
-                generateAudioResponse(normalized, query);
-
             } catch (error) {
-                console.error('API error:', error);
-                // Fallback to mock data
-                const mockSchemes = getMockSchemes(query);
-                displaySchemes(mockSchemes);
-                generateAudioResponse(mockSchemes, query);
+                console.error('Error fetching personalized schemes:', error);
+                showEmptyState();
             }
         }
 
+        // Show/hide states
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('schemesGrid').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function showEmptyState() {
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('schemesGrid').style.display = 'none';
+            hideLoading();
+        }
+
+        function hideEmptyState() {
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        // Re-use normalization and display logic
         function normalizeSchemeFromApi(apiObj) {
-            // gov-schemes API returns name_and_desc and metadata fields
             const nameAndDesc = apiObj.name_and_desc || '';
             let name = 'Unknown Scheme';
             let description = 'No description available';
@@ -957,74 +882,7 @@
             };
         }
 
-        // Get mock schemes for demonstration
-        function getMockSchemes(query) {
-            const allSchemes = [
-                {
-                    id: 1,
-                    title: "Disability Pension Scheme",
-                    category: "Financial Support",
-                    description: "Monthly pension for persons with disabilities to support their basic needs and improve their quality of life.",
-                    eligibility: "40% or more disability",
-                    amount: "₹1000-3000 per month",
-                    application: "Online/Offline",
-                    benefits: ["Monthly pension", "Medical assistance", "Rehabilitation support"]
-                },
-                {
-                    id: 2,
-                    title: "Assistive Devices Scheme",
-                    category: "Medical Support",
-                    description: "Free distribution of assistive devices like wheelchairs, hearing aids, and prosthetics for disabled individuals.",
-                    eligibility: "Any disability type",
-                    amount: "Free of cost",
-                    application: "Through medical centers",
-                    benefits: ["Wheelchairs", "Hearing aids", "Prosthetics", "Braille devices"]
-                },
-                {
-                    id: 3,
-                    title: "Education Support Scheme",
-                    category: "Education",
-                    description: "Financial assistance for education including scholarships, books, and special equipment for disabled students.",
-                    eligibility: "Disabled students",
-                    amount: "₹5000-25000 per year",
-                    application: "Educational institutions",
-                    benefits: ["Scholarships", "Books", "Special equipment", "Transportation"]
-                },
-                {
-                    id: 4,
-                    title: "Employment Support Scheme",
-                    category: "Employment",
-                    description: "Job placement assistance, skill development, and financial support for disabled individuals seeking employment.",
-                    eligibility: "18-45 years with disability",
-                    amount: "Training + Placement",
-                    application: "Employment exchanges",
-                    benefits: ["Skill training", "Job placement", "Startup support", "Mentorship"]
-                },
-                {
-                    id: 5,
-                    title: "Housing Assistance Scheme",
-                    category: "Housing",
-                    description: "Financial assistance for home modifications and accessible housing for disabled individuals.",
-                    eligibility: "Disabled homeowners",
-                    amount: "Up to ₹1,00,000",
-                    application: "Housing department",
-                    benefits: ["Home modifications", "Accessible features", "Ramp construction", "Bathroom adaptations"]
-                }
-            ];
-
-            // Filter schemes based on query
-            const queryLower = query.toLowerCase();
-            return allSchemes.filter(scheme =>
-                scheme.title.toLowerCase().includes(queryLower) ||
-                scheme.description.toLowerCase().includes(queryLower) ||
-                scheme.category.toLowerCase().includes(queryLower) ||
-                scheme.benefits.some(benefit => benefit.toLowerCase().includes(queryLower))
-            );
-        }
-
-        // Display schemes
         function displaySchemes(schemes) {
-            currentSchemes = schemes; // Store for modal access
             const grid = document.getElementById('schemesGrid');
             const count = document.getElementById('resultsCount');
 
@@ -1035,52 +893,32 @@
                 return;
             }
 
-            // Ensure loading state is hidden and grid is visible
             hideLoading();
             hideEmptyState();
             grid.style.display = 'grid';
 
             grid.innerHTML = schemes.map((scheme, index) => {
-                // Handle API response format and mock data format
-                const name = scheme.name || (scheme.name_and_desc && (scheme.name_and_desc.split(' - ')[0])) || scheme.title || 'Unknown Scheme';
-                const description = scheme.description || (scheme.name_and_desc && (scheme.name_and_desc.split(' - ').slice(1).join(' - ') || 'No description available')) || 'No description available';
-                const state = scheme.state || 'All States';
-                const disabilityType = scheme.disability_type || scheme.category || 'All Disabilities';
-                const supportType = scheme.support_type || 'General Support';
-                const applyLink = scheme.apply_link || '#';
-                const eligibility = scheme.eligibility || 'Please check official website';
-                const benefits = scheme.benefits || 'Various benefits available';
-                const contactInfo = scheme.contact_info || 'Contact information not available';
-
                 return `
                     <div class="scheme-card">
                         <div class="scheme-header">
                             <div>
-                                <h4 class="scheme-title">${name}</h4>
+                                <h4 class="scheme-title">${scheme.name}</h4>
                             </div>
-                            <div class="scheme-category">${disabilityType}</div>
+                            <div class="scheme-category">${scheme.disability_type}</div>
                         </div>
-                        <div class="scheme-description">${description}</div>
+                        <div class="scheme-description">${scheme.description}</div>
                         <div class="scheme-details">
                             <div class="detail-item">
                                 <i class="fas fa-map-marker-alt detail-icon"></i>
-                                <span class="detail-text"><strong>State:</strong> ${state}</span>
+                                <span class="detail-text"><strong>State:</strong> ${scheme.state}</span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-check-circle detail-icon"></i>
-                                <span class="detail-text"><strong>Eligibility:</strong> ${eligibility}</span>
+                                <span class="detail-text"><strong>Eligibility:</strong> ${scheme.eligibility}</span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-gift detail-icon"></i>
-                                <span class="detail-text"><strong>Benefits:</strong> ${benefits}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone detail-icon"></i>
-                                <span class="detail-text"><strong>Contact:</strong> ${contactInfo}</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-calendar-times detail-icon"></i>
-                                <span class="detail-text"><strong>Deadline:</strong> ${scheme.deadline || 'Ongoing'}</span>
+                                <span class="detail-text"><strong>Benefits:</strong> ${scheme.benefits}</span>
                             </div>
                         </div>
                         <div class="scheme-actions">
@@ -1088,229 +926,21 @@
                                 <i class="fas fa-arrow-right"></i>
                                 Apply Now
                             </a>
-                            <a href="#" class="btn-scheme" onclick="viewDetails('${scheme.id || index}')">
+                            <a href="#" class="btn-scheme" onclick="alert('Details view coming soon')">
                                 <i class="fas fa-info-circle"></i>
                                 View Details
-                            </a>
-                            <a href="#" class="btn-scheme" onclick="shareScheme('${scheme.id || index}')">
-                                <i class="fas fa-share"></i>
-                                Share
                             </a>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            // Re-assign for modal usage if needed (requires currentSchemes global)
+            currentSchemes = schemes;
         }
 
-        // Generate audio response using Client-Side Web Speech API
-        function generateAudioResponse(schemes, query) {
-            // Construct text to speak
-            let text = "";
-            if (schemes.length === 0) {
-                text = `Sorry, I couldn't find any schemes matching "${query}". Try searching for something else.`;
-            } else {
-                text = `I found ${schemes.length} schemes for "${query}". `;
+        // currentSchemes is declared in the bottom script block
 
-                // Read details of the top 3 schemes
-                const topCount = Math.min(schemes.length, 3);
-                for (let i = 0; i < topCount; i++) {
-                    const s = schemes[i];
-                    // Clean up description for speech (remove markdown chars if any, keep it short)
-                    const cleanDesc = s.description.replace(/[*_#]/g, '').split('. ')[0];
-                    text += `Result ${i + 1}: ${s.name}. ${cleanDesc}. `;
-                }
-
-                if (schemes.length > 3) {
-                    text += `There are ${schemes.length - 3} more schemes available. Scroll down to see them all.`;
-                }
-            }
-
-            // Update UI
-            const audioPlayer = document.getElementById('audioPlayer');
-            const audioTitle = document.getElementById('audioTitle');
-            const audioDesc = document.getElementById('audioDesc');
-            const playBtn = document.getElementById('playBtn');
-
-            audioTitle.textContent = "Audio Summary";
-            audioDesc.textContent = "Click play to listen to the results";
-            audioPlayer.style.display = 'block';
-
-            // Reset button state
-            window.speechSynthesis.cancel(); // Stop any previous speech
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-
-            // Attach click handler (removing old ones to prevent duplicates)
-            playBtn.onclick = function () {
-                toggleSpeech(text, playBtn);
-            };
-        }
-
-        // Toggle Speech
-        function toggleSpeech(text, btn) {
-            if (window.speechSynthesis.speaking) {
-                // If speaking, stop it
-                window.speechSynthesis.cancel();
-                btn.innerHTML = '<i class="fas fa-play"></i>';
-            } else {
-                // Start speaking
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = 1.0;
-                utterance.pitch = 1.0;
-
-                // Handle end of speech
-                utterance.onend = function () {
-                    btn.innerHTML = '<i class="fas fa-play"></i>';
-                };
-
-                // Handle error
-                utterance.onerror = function (e) {
-                    console.error('Speech synthesis error:', e);
-                    btn.innerHTML = '<i class="fas fa-play"></i>';
-                };
-
-                window.speechSynthesis.speak(utterance);
-                btn.innerHTML = '<i class="fas fa-stop"></i>';
-            }
-        }
-
-        // Show/hide states
-        function showLoading() {
-            document.getElementById('loadingState').style.display = 'flex';
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('schemesGrid').style.display = 'none';
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingState').style.display = 'none';
-        }
-
-        function showEmptyState() {
-            document.getElementById('emptyState').style.display = 'block';
-            document.getElementById('schemesGrid').style.display = 'none';
-            hideLoading();
-        }
-
-        function hideEmptyState() {
-            document.getElementById('emptyState').style.display = 'none';
-        }
-
-        // Scheme actions
-        function applyScheme(schemeId) {
-            alert(`Application process for scheme ${schemeId} will be implemented here.`);
-        }
-
-        function viewDetails(schemeId) {
-            alert(`Detailed information for scheme ${schemeId} will be shown here.`);
-        }
-
-        function shareScheme(schemeId) {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Welfare Scheme',
-                    text: 'Check out this government welfare scheme for disabled individuals',
-                    url: window.location.href
-                });
-            } else {
-                // Fallback to copying to clipboard
-                navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
-            }
-        }
-
-        // Event listeners
-        document.getElementById('searchBtn').addEventListener('click', function () {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) {
-                alert('Please enter a query');
-                return;
-            }
-            // Visual feedback
-            showLoading();
-            // Kick off search
-            searchSchemes(query);
-        });
-
-        document.getElementById('searchInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                if (query) {
-                    searchSchemes(query);
-                }
-            }
-        });
-
-        document.getElementById('voiceBtn').addEventListener('click', function () {
-            if (isRecording) {
-                recognition.stop();
-            } else {
-                if (recognition) {
-                    recognition.start();
-                } else {
-                    alert('Speech recognition not supported in this browser.');
-                }
-            }
-        });
-
-        // Camera button listener removed as element was removed
-
-        // Receive captured sign text and search
-        window.addEventListener('message', function (event) {
-            try {
-                if (event && event.data && event.data.type === 'sign_result') {
-                    const text = (event.data.text || '').trim();
-                    if (text) {
-                        const input = document.getElementById('searchInput');
-                        input.value = text;
-                        searchSchemes(text);
-                    }
-                }
-            } catch (_) { }
-        });
-
-        // Listen for sign language commands
-        document.addEventListener('signLanguageCommand', function (event) {
-            const command = event.detail.command;
-            const input = document.getElementById('searchInput');
-
-            switch (command) {
-                case 'help':
-                    input.value = 'disability assistance';
-                    searchSchemes('disability assistance');
-                    break;
-                case 'schemes':
-                    input.value = 'government welfare schemes';
-                    searchSchemes('government welfare schemes');
-                    break;
-                case 'clear':
-                    input.value = '';
-                    break;
-                default:
-                    input.value = command;
-                    searchSchemes(command);
-            }
-        });
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            initInputMethods();
-            initSpeechRecognition();
-
-            // Check if sign language module is available
-            setTimeout(() => {
-                if (window.signLanguageRecognition) {
-                    console.log('Sign language module is available');
-                } else {
-                    console.warn('Sign language module not available - using fallback');
-                }
-            }, 1000);
-
-            // Load some default schemes
-            const defaultQuery = 'disability';
-            document.getElementById('searchInput').value = defaultQuery;
-            showLoading();
-            searchSchemes(defaultQuery);
-        });
     </script>
     <!-- Apply Modal -->
     <div class="modal-overlay" id="applyModal">

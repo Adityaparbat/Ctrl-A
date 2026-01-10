@@ -10,7 +10,8 @@
       "eligibility": "Person with 40% or more disability, resident of Karnataka, below poverty line",
       "benefits": "Rs. 1000 per month, medical assistance, priority in government schemes",
       "contact_info": "District Social Welfare Officer, Phone: 080-22222222",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "National Scholarship for Students with Disabilities",
@@ -22,7 +23,8 @@
       "eligibility": "Students with 40% or more disability, enrolled in recognized institutions, family income below Rs. 2.5 lakhs",
       "benefits": "Up to Rs. 25,000 per year for undergraduate, Rs. 30,000 for postgraduate",
       "contact_info": "Ministry of Social Justice and Empowerment, Phone: 011-23456789",
-      "validity_period": "Academic year 2024-25"
+      "validity_period": "Academic year 2025-26",
+      "deadline": "2026-05-31"
     },
     {
       "name": "Assistive Devices Distribution Program",
@@ -34,7 +36,8 @@
       "eligibility": "Person with disability, resident of Maharashtra, income below Rs. 1 lakh per annum",
       "benefits": "Free wheelchairs, crutches, hearing aids, white canes, and other assistive devices",
       "contact_info": "Commissioner for Persons with Disabilities, Mumbai, Phone: 022-12345678",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Visual Impairment Education Support",
@@ -46,7 +49,8 @@
       "eligibility": "Visually impaired students, enrolled in government or aided schools",
       "benefits": "Free Braille books, audio textbooks, screen reading software, specialized training",
       "contact_info": "Director of School Education, Chennai, Phone: 044-23456789",
-      "validity_period": "Academic year 2024-25"
+      "validity_period": "Academic year 2025-26",
+      "deadline": "2026-06-30"
     },
     {
       "name": "Hearing Impaired Employment Scheme",
@@ -58,7 +62,8 @@
       "eligibility": "Hearing impaired individuals aged 18-45, minimum 10th standard education",
       "benefits": "Job placement assistance, skill training, sign language training, workplace accommodations",
       "contact_info": "Employment Exchange for Disabled, Ahmedabad, Phone: 079-12345678",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2028-12-31"
     },
     {
       "name": "Autism Support and Therapy Center",
@@ -70,7 +75,8 @@
       "eligibility": "Person diagnosed with autism spectrum disorder, resident of Delhi",
       "benefits": "Free therapy sessions, counseling, family support, early intervention programs",
       "contact_info": "Autism Support Center, Delhi, Phone: 011-98765432",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Cerebral Palsy Rehabilitation Program",
@@ -82,7 +88,8 @@
       "eligibility": "Person diagnosed with cerebral palsy, resident of Kerala",
       "benefits": "Free rehabilitation services, mobility aids, therapy equipment, family counseling",
       "contact_info": "Rehabilitation Center, Thiruvananthapuram, Phone: 0471-1234567",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Intellectual Disability Day Care Center",
@@ -94,7 +101,8 @@
       "eligibility": "Adult with intellectual disability, resident of West Bengal, age 18-60",
       "benefits": "Daily care services, vocational training, life skills development, social activities",
       "contact_info": "Day Care Center, Kolkata, Phone: 033-12345678",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Transportation Concession for Disabled",
@@ -106,7 +114,8 @@
       "eligibility": "Person with 40% or more disability, valid disability certificate",
       "benefits": "Free bus travel, 50% discount on train tickets, priority seating, assistance services",
       "contact_info": "Transport Department, Phone: 1800-123-4567",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Housing Assistance for Disabled",
@@ -118,7 +127,8 @@
       "eligibility": "Person with disability, resident of Rajasthan, income below Rs. 3 lakhs per annum",
       "benefits": "Up to Rs. 1 lakh for home modifications, priority in housing schemes, accessible design support",
       "contact_info": "Housing Board, Jaipur, Phone: 0141-1234567",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     },
     {
       "name": "Financial Aid for Assistive Technology",
@@ -130,7 +140,8 @@
       "eligibility": "Person with visual impairment, resident of Telangana, income below Rs. 2 lakhs per annum",
       "benefits": "Up to Rs. 50,000 for assistive technology, training on device usage, technical support",
       "contact_info": "Technology Support Center, Hyderabad, Phone: 040-12345678",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2029-12-31"
     },
     {
       "name": "Employment Skill Development Program",
@@ -142,7 +153,8 @@
       "eligibility": "Person with disability aged 18-50, minimum 8th standard education",
       "benefits": "Free skill training, job placement assistance, startup support, mentorship programs",
       "contact_info": "Skill Development Center, Chandigarh, Phone: 0172-1234567",
-      "validity_period": "Ongoing"
+      "validity_period": "Ongoing",
+      "deadline": "2030-12-31"
     }
   ]
 }

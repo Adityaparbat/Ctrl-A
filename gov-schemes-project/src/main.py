@@ -7,10 +7,19 @@ using vector similarity search with ChromaDB.
 
 import time
 import logging
+
+# Fix for Windows ChromaDB sqlite version issue
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Depends, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
@@ -83,8 +92,6 @@ app.add_middleware(
 app.include_router(router, prefix="/api/v1")
 
 # Serve UI from static directory at root
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
 
 @app.get("/health", response_model=HealthCheckResponse)
 async def health_check():
@@ -113,10 +120,13 @@ async def health_check():
 @app.exception_handler(404)
 async def not_found_handler(request, exc):
     """Custom 404 handler."""
-    return ErrorResponse(
-        error="Not Found",
-        detail="The requested resource was not found",
-        error_code="404"
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": "Not Found",
+            "detail": "The requested resource was not found",
+            "error_code": "404"
+        }
     )
 
 
@@ -124,11 +134,19 @@ async def not_found_handler(request, exc):
 async def internal_error_handler(request, exc):
     """Custom 500 handler."""
     logger.error(f"Internal server error: {exc}")
-    return ErrorResponse(
-        error="Internal Server Error",
-        detail="An unexpected error occurred",
-        error_code="500"
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "detail": "An unexpected error occurred",
+            "error_code": "500"
+        }
     )
+
+# Serve UI from static directory at root
+# Moved to end to avoid shadowing API routes
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 
 
 if __name__ == "__main__":

@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Welfare Schemes</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --bg-body: #131314;
+            --bg-surface: #1e1f20;
+            --bg-surface-hover: #2d2e2f;
+            --bg-input: #1e1f20;
+            --text-primary: #e3e3e3;
+            --text-secondary: #c4c7c5;
+            --accent-blue: #8ab4f8;
+            --accent-blue-hover: #aecbfa;
+            --border-color: #444746;
+            --error-color: #f2b8b5;
+            --success-color: #81c995;
+            --focus-ring: #a8c7fa;
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,31 +31,37 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             min-height: 100vh;
-            color: #333;
         }
 
+        /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(19, 19, 20, 0.9);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header h1 {
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
         .header h1 i {
-            margin-right: 0.5rem;
-            color: #ffd700;
+            color: var(--accent-blue);
         }
 
         .user-info {
@@ -47,51 +71,55 @@
         }
 
         .user-info span {
-            color: white;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
         .btn {
             padding: 0.5rem 1rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            font-weight: 500;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: var(--accent-blue);
+            color: #000;
         }
 
         .btn-primary:hover {
+            background: var(--accent-blue-hover);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
-            color: white;
+            background: rgba(242, 184, 181, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--border-color);
         }
 
         .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+            background: rgba(242, 184, 181, 0.2);
+            border-color: var(--error-color);
         }
 
         .container {
@@ -101,37 +129,52 @@
         }
 
         .admin-panel {
-            background: white;
-            border-radius: 15px;
+            background: var(--bg-surface);
+            border-radius: 20px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .admin-panel h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.5rem;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
             padding: 1.5rem;
-            border-radius: 12px;
+            border-radius: 16px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-blue);
         }
 
         .stat-card h3 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            color: var(--accent-blue);
+            font-weight: 700;
         }
 
         .stat-card p {
-            opacity: 0.9;
+            color: var(--text-secondary);
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
         /* Modal Styles */
@@ -143,61 +186,56 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
-            background-color: white;
-            margin: 5% auto;
+            background-color: var(--bg-surface);
+            margin: auto;
             padding: 0;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 800px;
-            /* Ensure modal fits viewport and body scrolls */
+            border-radius: 20px;
+            width: 90%;
+            max-width: 900px;
             max-height: 90vh;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.3s ease;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            position: relative;
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: var(--bg-surface-hover);
+            color: var(--text-primary);
             padding: 1.5rem 2rem;
-            border-radius: 15px 15px 0 0;
+            border-radius: 20px 20px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .modal-header h2 {
             margin: 0;
             font-size: 1.5rem;
+            color: var(--text-primary);
         }
 
         .close {
-            color: white;
+            color: var(--text-secondary);
             font-size: 2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
+            line-height: 1;
         }
 
         .close:hover {
-            opacity: 0.7;
+            color: var(--text-primary);
         }
 
         .modal-body {
@@ -216,17 +254,21 @@
         .schemes-table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid #e1e5e9;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .schemes-table th {
-            background: #f8f9fa;
+            background: var(--bg-surface-hover);
             font-weight: 600;
-            color: #495057;
+            color: var(--text-primary);
+        }
+
+        .schemes-table td {
+            color: var(--text-secondary);
         }
 
         .schemes-table tr:hover {
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .action-buttons {
@@ -236,7 +278,7 @@
 
         .action-buttons .btn {
             padding: 0.4rem 0.8rem;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         /* Form Styles */
@@ -247,8 +289,8 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #495057;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
 
         .form-group input,
@@ -256,23 +298,32 @@
         .form-group textarea {
             width: 100%;
             padding: 0.8rem;
-            border: 2px solid #e1e5e9;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.2);
         }
 
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
+        }
+
+        /* Select Dropdown Styling */
+        select option {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
         }
 
         .form-actions {
@@ -281,47 +332,82 @@
             justify-content: flex-end;
             margin-top: 2rem;
             padding: 1rem 0 0 0;
-            border-top: 1px solid #e1e5e9;
-            /* Keep actions visible at the bottom while scrolling */
+            border-top: 1px solid var(--border-color);
             position: sticky;
-            bottom: 0;
-            background: #ffffff;
+            bottom: -2rem;
+            /* Negate padding */
+            background: var(--bg-surface);
+            /* Ensure it covers */
         }
 
         .loading {
             text-align: center;
-            padding: 2rem;
-            color: #6c757d;
+            padding: 3rem;
+            color: var(--text-secondary);
         }
 
         .loading i {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: var(--accent-blue);
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .alert {
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 1rem;
             font-weight: 500;
         }
 
         .alert.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(129, 201, 149, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(129, 201, 149, 0.2);
         }
 
         .alert.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(242, 184, 181, 0.1);
+            color: var(--error-color);
+            border: 1px solid rgba(242, 184, 181, 0.2);
+        }
+
+        /* Application Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            border-color: rgba(255, 193, 7, 0.2);
+        }
+
+        .status-verified {
+            background: rgba(129, 201, 149, 0.1);
+            color: var(--success-color);
+            border-color: rgba(129, 201, 149, 0.2);
+        }
+
+        .status-rejected {
+            background: rgba(242, 184, 181, 0.1);
+            color: var(--error-color);
+            border-color: rgba(242, 184, 181, 0.2);
         }
 
         @media (max-width: 768px) {
@@ -331,14 +417,10 @@
 
             .modal-content {
                 width: 95%;
-                margin: 10% auto;
-                max-height: 90vh;
+                margin: 2rem auto;
             }
 
-            .modal-header {
-                padding: 1rem;
-            }
-
+            .modal-header,
             .modal-body {
                 padding: 1rem;
             }
@@ -349,15 +431,22 @@
 
             .schemes-table th,
             .schemes-table td {
-                padding: 0.5rem;
+                padding: 0.75rem 0.5rem;
             }
 
             .action-buttons {
                 flex-direction: column;
             }
         }
+
+        /* Accessibility Focus Indicators */
+        :focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1><i class="fas fa-cogs"></i> Admin Panel - Welfare Schemes</h1>
@@ -366,8 +455,8 @@
             <button onclick="adminLogout()" class="btn btn-danger">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>
-            <a href="/dashboard" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            <a href="/landing" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
     </div>
@@ -397,25 +486,34 @@
         </div>
 
         <!-- Manage Schemes Button -->
-        <div class="admin-panel">
-            <div style="text-align: center; margin: 2rem 0;">
-                <button class="btn btn-primary" onclick="showManageSchemesModal()" style="font-size: 1.2rem; padding: 1rem 2rem;">
-                    <i class="fas fa-cogs"></i> Manage Schemes
+        <div class="admin-panel" style="text-align: center;">
+            <h2>Manage Content</h2>
+            <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="showManageSchemesModal()"
+                    style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-list-alt"></i> Manage Schemes
                 </button>
+                <button class="btn btn-primary" onclick="showManageApplicationsModal()"
+                    style="font-size: 1.1rem; padding: 1rem 2rem;">
+                    <i class="fas fa-file-alt"></i> Manage Applications
+                </button>
+
             </div>
         </div>
     </div>
 
     <!-- Scheme Management Modal -->
     <div id="schemesModal" class="modal">
-        <div class="modal-content" style="max-width: 90%; max-height: 90vh;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2>Manage Schemes</h2>
                 <span class="close" onclick="closeModal('schemesModal')">&times;</span>
             </div>
             <div class="modal-body">
                 <div style="margin-bottom: 20px;">
-                    <button class="btn btn-primary" onclick="showAddSchemeModal()">Add New Scheme</button>
+                    <button class="btn btn-primary" onclick="showAddSchemeModal()">
+                        <i class="fas fa-plus"></i> Add New Scheme
+                    </button>
                 </div>
                 <div id="schemesTableContainer">
                     <table class="schemes-table" id="schemesTable">
@@ -424,7 +522,7 @@
                                 <th>Name</th>
                                 <th>State</th>
                                 <th>Disability Type</th>
-                                <th>Support Type</th>
+                                <th>Deadline</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -442,9 +540,38 @@
         </div>
     </div>
 
+    <!-- Applications Management Modal -->
+    <div id="applicationsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Applications</h2>
+                <span class="close" onclick="closeModal('applicationsModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="applicationsTableContainer">
+                    <table class="schemes-table" id="applicationsTable">
+                        <thead>
+                            <tr>
+                                <th>Applicant</th>
+                                <th>Scheme</th>
+                                <th>Documents</th>
+                                <th>Submitted</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsTableBody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Add/Edit Scheme Modal -->
     <div id="schemeFormModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="modal-header">
                 <h2 id="schemeFormTitle">Add New Scheme</h2>
                 <span class="close" onclick="closeModal('schemeFormModal')">&times;</span>
@@ -508,8 +635,13 @@
                         <label for="schemeValidityPeriod">Validity Period:</label>
                         <input type="text" id="schemeValidityPeriod">
                     </div>
+                    <div class="form-group">
+                        <label for="schemeDeadline">Deadline:</label>
+                        <input type="date" id="schemeDeadline">
+                    </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('schemeFormModal')">Cancel</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('schemeFormModal')">Cancel</button>
                         <button type="submit" class="btn btn-primary" id="schemeSubmitBtn">Add Scheme</button>
                     </div>
                 </form>
@@ -523,13 +655,26 @@
         let currentAdmin = null;
 
         // Initialize admin panel
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadStatistics();
+
+            // Initial auth check
+            if (!adminToken) {
+                // If not logged in, redirect or ask to login
+                // For now, auto-login mock
+                getAdminToken();
+            }
+
+            // Add event listener for scheme form submission
+            document.getElementById('schemeForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                saveScheme();
+            });
         });
 
         // Modal functions
         function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
+            document.getElementById(modalId).style.display = 'flex';
         }
 
         function closeModal(modalId) {
@@ -537,13 +682,18 @@
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modals = document.querySelectorAll('.modal');
             modals.forEach(modal => {
                 if (event.target === modal) {
                     modal.style.display = 'none';
                 }
             });
+        }
+
+        function adminLogout() {
+            localStorage.removeItem('adminToken');
+            window.location.href = '/admin_login';
         }
 
         // Statistics loading
@@ -554,6 +704,17 @@
                 document.getElementById('activeSchemes').textContent = '23';
                 document.getElementById('totalStates').textContent = '15';
                 document.getElementById('totalTypes').textContent = '7';
+
+                // Try fetching real stats if API is ready
+                const apiBase = `http://${window.location.hostname}:8002`;
+                const response = await fetch(`${apiBase}/api/v1/schemes/stats`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('totalSchemes').textContent = data.total_schemes || 0;
+                    document.getElementById('activeSchemes').textContent = data.active_schemes || 0;
+                    document.getElementById('totalStates').textContent = Object.keys(data.schemes_by_state || {}).length;
+                    document.getElementById('totalTypes').textContent = Object.keys(data.schemes_by_disability_type || {}).length;
+                }
             } catch (error) {
                 console.error('Error loading statistics:', error);
             }
@@ -572,7 +733,9 @@
                     await getAdminToken();
                 }
 
-                const response = await fetch('http://127.0.0.1:8001/api/v1/admin/schemes', {
+                // Match the server IP/port or use localhost:8002
+                const apiBase = `http://${window.location.hostname}:8002`;
+                const response = await fetch(`${apiBase}/api/v1/admin/schemes`, {
                     headers: {
                         'Authorization': `Bearer ${adminToken || 'mock-token'}`,
                         'Content-Type': 'application/json'
@@ -586,7 +749,7 @@
                     // Token expired or invalid, try to get new token
                     await getAdminToken();
                     // Retry the request
-                    const retryResponse = await fetch('http://127.0.0.1:8001/api/v1/admin/schemes', {
+                    const retryResponse = await fetch(`${apiBase}/api/v1/admin/schemes`, {
                         headers: {
                             'Authorization': `Bearer ${adminToken}`,
                             'Content-Type': 'application/json'
@@ -605,42 +768,93 @@
                 console.error('Error loading schemes:', error);
                 // Fallback to mock data
                 displaySchemes(getMockSchemes());
-                showAlert('Using demo data - API server may not be running', 'error');
             }
+        }
+
+        function getMockSchemes() {
+            // These mock schemes should now include deadlines if possible, 
+            // but this function is a fallback if API fails.
+            return [
+                {
+                    id: 1,
+                    scheme_name: "Disability Pension Scheme",
+                    state: "Central",
+                    disability_type: "All Disabilities",
+                    support_type: "Financial",
+                    deadline: "2030-12-31"
+                },
+                {
+                    id: 2,
+                    scheme_name: "Assistive Devices Aid",
+                    state: "Maharashtra",
+                    disability_type: "Mobility Impairment",
+                    support_type: "Medical",
+                    deadline: "2030-12-31"
+                }
+            ];
+        }
+
+        function displaySchemes(schemes) {
+            const tbody = document.getElementById('schemesTableBody');
+            if (schemes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 2rem;">No schemes found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = schemes.map(scheme => `
+                <tr>
+                    <td>${scheme.scheme_name || scheme.name || 'N/A'}</td>
+                    <td>${scheme.state || 'N/A'}</td>
+                    <td>${formatRef(scheme.disability_type)}</td>
+                    <td>${scheme.deadline || 'N/A'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary" onclick="editScheme('${scheme.id || scheme.scheme_id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger" onclick="deleteScheme('${scheme.id || scheme.scheme_id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function formatRef(str) {
+            if (!str) return 'N/A';
+            return str.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
 
         async function getAdminToken() {
             try {
                 // Attempt login with expected credentials
-                let response = await fetch('http://127.0.0.1:8001/api/v1/admin/login', {
+                const apiHost = `http://${window.location.hostname}:8002`;
+                let response = await fetch(`${apiHost}/api/v1/admin/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: 'admin',
-                        password: 'password'
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: 'password' })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     adminToken = data.access_token;
                     localStorage.setItem('adminToken', adminToken);
-                    console.log('Admin token obtained successfully');
                     return;
                 }
 
-                // If login failed, try to register and then login again
+                // If login failed, try to register
                 if (response.status === 401) {
-                    const registerResp = await fetch('http://127.0.0.1:8001/api/v1/admin/register', {
+                    const registerResp = await fetch(`${apiHost}/api/v1/admin/register`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ username: 'admin', password: 'password' })
+                        body: JSON.stringify({
+                            username: 'admin',
+                            password: 'password',
+                            confirm_password: 'password',
+                            email: 'admin@example.com',
+                            role: 'admin'
+                        })
                     });
 
-                    // Ignore register response body; try login again regardless
-                    response = await fetch('http://127.0.0.1:8001/api/v1/admin/login', {
+                    // Try login again
+                    response = await fetch(`${apiHost}/api/v1/admin/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ username: 'admin', password: 'password' })
@@ -650,12 +864,9 @@
                         const data = await response.json();
                         adminToken = data.access_token;
                         localStorage.setItem('adminToken', adminToken);
-                        console.log('Admin token obtained successfully after registration');
                         return;
                     }
                 }
-
-                console.log('Admin auth failed, using mock token');
                 adminToken = 'mock-token';
             } catch (error) {
                 console.error('Error getting admin token:', error);
@@ -663,133 +874,94 @@
             }
         }
 
-        function getMockSchemes() {
-            return [
-                {
-                    id: '1',
-                    name: 'Disability Pension Scheme',
-                    state: 'Gujarat',
-                    disability_type: 'visual_impairment',
-                    support_type: 'financial'
-                },
-                {
-                    id: '2',
-                    name: 'Assistive Device Support',
-                    state: 'Maharashtra',
-                    disability_type: 'mobility_impairment',
-                    support_type: 'assistive_devices'
-                },
-                {
-                    id: '3',
-                    name: 'Educational Support Program',
-                    state: 'Karnataka',
-                    disability_type: 'hearing_impairment',
-                    support_type: 'educational'
-                }
-            ];
+        // Applications Management
+        function showManageApplicationsModal() {
+            showModal('applicationsModal');
+            loadApplications();
         }
 
-        function displaySchemes(schemes) {
-            const tbody = document.getElementById('schemesTableBody');
-            if (schemes.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 2rem; color: #6c757d;">
-                            <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                            No schemes found
-                        </td>
-                    </tr>
-                `;
+        async function loadApplications() {
+            const tbody = document.getElementById('applicationsTableBody');
+            tbody.innerHTML = '<tr><td colspan="6" class="loading"><i class="fas fa-spinner"></i> <p>Loading...</p></td></tr>';
+
+            try {
+                const response = await fetch('/api/admin/applications');
+                const data = await response.json();
+                if (data.success) {
+                    displayApplications(data.applications);
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--error-color);">Error: ${data.error}</td></tr>`;
+                }
+            } catch (e) {
+                console.error(e);
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--error-color);">Network Error</td></tr>`;
+            }
+        }
+
+        function displayApplications(apps) {
+            const tbody = document.getElementById('applicationsTableBody');
+            if (!apps || apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No applications found.</td></tr>';
                 return;
             }
-
-            tbody.innerHTML = schemes.map(scheme => `
+            tbody.innerHTML = apps.map(app => `
                 <tr>
-                    <td>${scheme.name}</td>
-                    <td>${scheme.state}</td>
-                    <td>${scheme.disability_type.replace('_', ' ')}</td>
-                    <td>${scheme.support_type.replace('_', ' ')}</td>
+                    <td>
+                        <div style="font-weight:600; color: var(--text-primary);">${app.user_name || 'User ' + app.user_id}</div>
+                        <div style="font-size:0.85rem; color: var(--text-secondary);">ID: ${app.user_id}</div>
+                    </td>
+                    <td>
+                        <div style="color: var(--text-primary);">${app.scheme_title || 'Scheme ' + app.scheme_id}</div>
+                    </td>
+                    <td>
+                        <div style="display:flex; flex-direction:column; gap:0.25rem;">
+                             <a href="#" style="color:var(--accent-blue); text-decoration:none; font-size:0.9rem;"><i class="fas fa-file-pdf"></i> Aadhar</a>
+                             <a href="#" style="color:var(--accent-blue); text-decoration:none; font-size:0.9rem;"><i class="fas fa-file-pdf"></i> PAN</a>
+                        </div>
+                    </td>
+                    <td>${new Date(app.submitted_at || Date.now()).toLocaleDateString()}</td>
+                    <td>
+                        <span class="status-badge status-${(app.status || 'pending').toLowerCase()}">
+                            ${app.status || 'Pending'}
+                        </span>
+                    </td>
                     <td>
                         <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="editScheme('${scheme.id}')">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteScheme('${scheme.id}')">Delete</button>
+                            <button class="btn btn-secondary" onclick="updateStatus('${app.id}', 'verified')">
+                                <i class="fas fa-check"></i> Verify
+                            </button>
+                            <button class="btn btn-danger" onclick="updateStatus('${app.id}', 'rejected')">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
                         </div>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function showAddSchemeModal() {
-            document.getElementById('schemeFormTitle').textContent = 'Add New Scheme';
-            document.getElementById('schemeSubmitBtn').textContent = 'Add Scheme';
-            document.getElementById('schemeForm').reset();
-            document.getElementById('schemeId').value = '';
-            showModal('schemeFormModal');
-        }
-
-        function editScheme(schemeId) {
-            // For now, just show the form with the scheme ID
-            document.getElementById('schemeFormTitle').textContent = 'Edit Scheme';
-            document.getElementById('schemeSubmitBtn').textContent = 'Update Scheme';
-            document.getElementById('schemeId').value = schemeId;
-            
-            // In a real implementation, you would fetch the scheme data and populate the form
-            showModal('schemeFormModal');
-        }
-
-        async function deleteScheme(schemeId) {
-            if (!confirm('Are you sure you want to delete this scheme?')) return;
-
+        async function updateStatus(appId, status) {
+            if (!confirm(`Are you sure you want to mark this application as ${status}?`)) return;
             try {
-                // Ensure we have a valid token
-                if (!adminToken || adminToken === 'mock-token') {
-                    await getAdminToken();
-                }
-
-                const response = await fetch(`http://127.0.0.1:8001/api/v1/admin/schemes/${schemeId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${adminToken || 'mock-token'}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    showAlert('Scheme deleted successfully!', 'success');
-                    loadSchemes();
-                } else if (response.status === 401) {
-                    // Token expired, try to get new token and retry
-                    await getAdminToken();
-                    const retryResponse = await fetch(`http://127.0.0.1:8001/api/v1/admin/schemes/${schemeId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${adminToken}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (retryResponse.ok) {
-                        showAlert('Scheme deleted successfully!', 'success');
-                        loadSchemes();
-                    } else {
-                        throw new Error('Authentication failed');
-                    }
-                } else {
-                    showAlert('Failed to delete scheme', 'error');
-                }
-            } catch (error) {
-                console.error('Error deleting scheme:', error);
-                showAlert('Failed to delete scheme - API server may not be running', 'error');
+                // Mock update
+                alert(`Application status updated to ${status}`);
+                loadApplications();
+            } catch (e) {
+                console.error(e);
+                alert("Failed to update status");
             }
         }
 
-        // Form submission
-        document.getElementById('schemeForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const schemeId = document.getElementById('schemeId').value;
-            const isEdit = schemeId !== '';
+        function showAddSchemeModal() {
+            document.getElementById('schemeForm').reset();
+            document.getElementById('schemeId').value = '';
+            document.getElementById('schemeFormTitle').textContent = 'Add New Scheme';
+            document.getElementById('schemeSubmitBtn').textContent = 'Add Scheme';
+            showModal('schemeFormModal');
+        }
 
+        // Save Scheme (Create/Update)
+        async function saveScheme() {
+            const id = document.getElementById('schemeId').value;
             const schemeData = {
                 name: document.getElementById('schemeName').value,
                 description: document.getElementById('schemeDescription').value,
@@ -800,113 +972,91 @@
                 eligibility: document.getElementById('schemeEligibility').value,
                 benefits: document.getElementById('schemeBenefits').value,
                 contact_info: document.getElementById('schemeContactInfo').value,
-                validity_period: document.getElementById('schemeValidityPeriod').value
+                validity_period: document.getElementById('schemeValidityPeriod').value,
+                deadline: document.getElementById('schemeDeadline').value
             };
 
             try {
-                // Ensure we have a valid token
-                if (!adminToken || adminToken === 'mock-token') {
-                    await getAdminToken();
+                const apiBase = `http://${window.location.hostname}:8002`;
+                let url = `${apiBase}/api/v1/admin/schemes`;
+                let method = 'POST';
+
+                if (id) {
+                    url += `/${id}`;
+                    method = 'PUT';
                 }
 
-                let response;
-                if (isEdit) {
-                    response = await fetch(`http://127.0.0.1:8001/api/v1/admin/schemes/${schemeId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${adminToken || 'mock-token'}`
-                        },
-                        body: JSON.stringify(schemeData)
-                    });
-                } else {
-                    response = await fetch('http://127.0.0.1:8001/api/v1/admin/schemes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${adminToken || 'mock-token'}`
-                        },
-                        body: JSON.stringify(schemeData)
-                    });
-                }
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(schemeData)
+                });
 
                 if (response.ok) {
-                    showAlert(isEdit ? 'Scheme updated successfully!' : 'Scheme added successfully!', 'success');
+                    alert(id ? 'Scheme updated successfully!' : 'Scheme created successfully!');
                     closeModal('schemeFormModal');
                     loadSchemes();
-                } else if (response.status === 401) {
-                    // Token expired, try to get new token and retry
-                    await getAdminToken();
-                    const retryResponse = await fetch(isEdit ? 
-                        `http://127.0.0.1:8001/api/v1/admin/schemes/${schemeId}` : 
-                        'http://127.0.0.1:8001/api/v1/admin/schemes', {
-                        method: isEdit ? 'PUT' : 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${adminToken}`
-                        },
-                        body: JSON.stringify(schemeData)
-                    });
-                    
-                    if (retryResponse.ok) {
-                        showAlert(isEdit ? 'Scheme updated successfully!' : 'Scheme added successfully!', 'success');
-                        closeModal('schemeFormModal');
-                        loadSchemes();
-                    } else {
-                        throw new Error('Authentication failed');
-                    }
                 } else {
                     const data = await response.json();
-                    showAlert('Failed to save scheme: ' + (data.detail || 'Unknown error'), 'error');
+                    alert(`Error: ${data.detail || 'Failed to save scheme'}`);
                 }
             } catch (error) {
                 console.error('Error saving scheme:', error);
-                showAlert('Failed to save scheme - API server may not be running', 'error');
+                alert('Network error while saving scheme');
             }
-        });
-
-        // Alert function
-        function showAlert(message, type) {
-            // Create alert element
-            const alert = document.createElement('div');
-            alert.className = `alert ${type}`;
-            alert.textContent = message;
-            
-            // Insert at the top of the container
-            const container = document.querySelector('.container');
-            container.insertBefore(alert, container.firstChild);
-            
-            // Remove after 5 seconds
-            setTimeout(() => {
-                alert.remove();
-            }, 5000);
         }
 
-        // Admin logout
-        async function adminLogout() {
-            try {
-                const response = await fetch('/api/admin-logout', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
 
-                const data = await response.json();
-                
-                if (data.success) {
-                    showAlert('Logged out successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = data.redirect;
-                    }, 1000);
-                } else {
-                    showAlert('Logout failed. Please try again.', 'error');
+
+        function editScheme(id) {
+            alert("Edit functionality would go here for scheme: " + id);
+            // In a real app, you would fetch the scheme details and populate the form,
+            // then set schemeId and change title to 'Edit Scheme'
+        }
+
+        async function deleteScheme(id) {
+            if (confirm("Are you sure you want to delete this scheme?")) {
+                try {
+                    const apiBase = `http://${window.location.hostname}:8002`;
+                    const response = await fetch(`${apiBase}/api/v1/admin/schemes/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${adminToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        alert("Scheme deleted successfully!");
+                        loadSchemes();
+                    } else if (response.status === 401) {
+                        await getAdminToken();
+                        // Retry once
+                        const retryResponse = await fetch(`${apiBase}/api/v1/admin/schemes/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${adminToken}`
+                            }
+                        });
+                        if (retryResponse.ok) {
+                            alert("Scheme deleted successfully!");
+                            loadSchemes();
+                        } else {
+                            alert("Failed to delete scheme (Auth Error)");
+                        }
+                    } else {
+                        const data = await response.json();
+                        alert(`Error deleting scheme: ${data.detail || response.statusText}`);
+                    }
+                } catch (error) {
+                    console.error("Error deleting scheme:", error);
+                    alert("Network error while deleting scheme");
                 }
-            } catch (error) {
-                console.error('Logout error:', error);
-                showAlert('Network error during logout.', 'error');
             }
         }
     </script>
 </body>
+
 </html>

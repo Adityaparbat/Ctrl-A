@@ -8,7 +8,17 @@
       "is_active": true,
       "created_at": "2025-09-13T22:48:09.947036",
       "password_hash": "218bd7ad799349d4c44861448cda3aff:1b6342fc7256e426ed7222aeb1c43033e6aa644bca88f3e902333219edd54686",
-      "last_login": "2025-09-15T14:24:26.538719"
+      "last_login": "2025-09-15T21:26:28.621184"
+    },
+    "admin": {
+      "id": "jDvh9QzRlt0EKOZzdgpXcw",
+      "username": "admin",
+      "email": "admin@example.com",
+      "role": "admin",
+      "is_active": true,
+      "created_at": "2026-01-07T07:34:09.742575",
+      "password_hash": "65545fec622f066b6a95337c6e100752:592f8364af04578667f4b2a7877ca61d954bc69e460a70fd99422428b0e81313",
+      "last_login": "2026-01-10T23:04:37.528991"
     }
   },
   "sessions": {
@@ -27,6 +37,122 @@
     "S9HKxgCdYLNdOGLm99kPJSizlzslPCzifrJ6cwfflD8": {
       "username": "samruddhi",
       "expires_at": "2025-09-14T00:03:41.797504"
+    },
+    "gBfCi5pM1YXXboc7CP5GEGBen4PEicts1qsmDWqiaUw": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.072704"
+    },
+    "bJ-27wMhUSa_N1-vU4LDrN9oW4eJ9F63ompCkgaSi7Y": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.097671"
+    },
+    "UXzojtrR1cm_16D6Kif0Uf6aE69xHU0JX1_fUHGClNo": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.107294"
+    },
+    "e4atbxbYKbP7I1FVefbFhXjyh_WWsapJBPbnOaQAHRs": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.114956"
+    },
+    "99Z_x4jXwsPhqEiJQNuFfNOXOwGRAUR1DCiSxoKwIuM": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.126703"
+    },
+    "rL2DW38S3zUlWQVASkwuPm_s1somto-Erc2fcvpAky0": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.136566"
+    },
+    "JV67iUcZ1LMIKbP52wS000PeuxNwRMMilJ_ly-5bH7k": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:25:16.143587"
+    },
+    "r1hPdVPuUz35nkr_0dnaK9JZphrTsag6QMQrXKJK06s": {
+      "username": "samruddhi",
+      "expires_at": "2025-09-15T22:26:28.621184"
+    },
+    "SBqpRKPcCSETeAfUliVO08DqQvc5U9RQpH4OEzomYds": {
+      "username": "admin",
+      "expires_at": "2026-01-10T10:56:42.460013"
+    },
+    "N9nLhLasGRT7WCyS8yhZzZ9zeQTpfX0BytYVWCKU6_M": {
+      "username": "admin",
+      "expires_at": "2026-01-10T11:28:59.566162"
+    },
+    "NEbApEXLXiYlbqRvvHDWbyQJrIO24JjWrBj6AHdgM4E": {
+      "username": "admin",
+      "expires_at": "2026-01-10T11:56:41.909855"
+    },
+    "BcYYi1LF9ocKP8yNCBdfpfS5HQOkJnYzTbsLmHr5jvs": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:04:32.632791"
+    },
+    "rnLYARDXaDY5hI1tjoROE8C4bUFMTJCw_z0fKsrVQBc": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:20:28.122053"
+    },
+    "GexoI0EJ3bWYa9xfU2NocKFxayXqhsE_tXZHRgQdCLA": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:23:31.039017"
+    },
+    "zXjV2UHhVTHzs11lisXoUy7ivYoJzEf6-tRxxZcSZ0I": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:27:26.148509"
+    },
+    "qxDXyn64lQ_CB1Hks6lMAJUvtox1CtBLSw6w5iYh9fQ": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:41:47.646552"
+    },
+    "D7Ya-z2C8ZREHMEVLUAUHfV62vBADsn2gvXxI1675lo": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:45:10.242202"
+    },
+    "Uef53nRzGAi9STCTzr6wbOZnYk_pDYVu_XgJzkqBlIs": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:45:15.122285"
+    },
+    "qzTyKNxJL2oxdHiqVAzTWhP8c545lxOnQNqBaBa3x00": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:50:30.054682"
+    },
+    "GpN_qEDu8twmGt8LOG4uVx8NhwGlm9-J5M-IKPWpiZE": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:50:42.441324"
+    },
+    "MVXuUR5zPCLWDpuNy2JzfEmNbU5k1snaFLApObUxQVk": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:53:00.993857"
+    },
+    "iC3PAylR8q1wUJ70_yroSKPJT4arEaKhH7QYtqgF2hk": {
+      "username": "admin",
+      "expires_at": "2026-01-10T12:55:24.001706"
+    },
+    "0KzoLgnx4EI6mRSL1nabilsfibpw-kOQoCNsSk9LvBM": {
+      "username": "admin",
+      "expires_at": "2026-01-10T13:09:14.455774"
+    },
+    "WGsO69DWkP2fZVEVwITOWtgAq_ihWbbtgLEcQ0JIsVc": {
+      "username": "admin",
+      "expires_at": "2026-01-10T13:11:41.197216"
+    },
+    "qcpbg3F9EmM7ekuf97AimwvPOVz6RVt1gmsYhKZbDpU": {
+      "username": "admin",
+      "expires_at": "2026-01-10T13:36:58.722395"
+    },
+    "yiMlKM8GI9X22wU3nukH4OJa-WACrEaSULH4BAOHrDg": {
+      "username": "admin",
+      "expires_at": "2026-01-10T13:42:48.912912"
+    },
+    "VbBw0U1cPrx-qkoBEQYLREynCDX7Ul75dzdMRYKfDBI": {
+      "username": "admin",
+      "expires_at": "2026-01-10T13:52:08.783298"
+    },
+    "kr0Zp-83WadrQpD0vsBJ6mv9vccOCO209U961hYGrzU": {
+      "username": "admin",
+      "expires_at": "2026-01-10T23:32:20.769668"
+    },
+    "sb2_Y1pQ4nL2aqTMJzuqI5bJxi7zfNbOB-LEKgXfee0": {
+      "username": "admin",
+      "expires_at": "2026-01-11T00:04:37.528991"
     }
   }
 }

@@ -46,6 +46,7 @@ class SchemeBase(BaseModel):
     benefits: Optional[str] = Field(None, max_length=1000, description="Benefits provided")
     contact_info: Optional[str] = Field(None, max_length=500, description="Contact information")
     validity_period: Optional[str] = Field(None, max_length=200, description="Validity period of the scheme")
+    deadline: Optional[str] = Field(None, description="Deadline date in YYYY-MM-DD format")
     
     @validator('apply_link')
     def validate_apply_link(cls, v):
@@ -72,6 +73,7 @@ class SchemeUpdate(BaseModel):
     benefits: Optional[str] = Field(None, max_length=1000)
     contact_info: Optional[str] = Field(None, max_length=500)
     validity_period: Optional[str] = Field(None, max_length=200)
+    deadline: Optional[str] = Field(None)
 
 
 class SchemeResponse(SchemeBase):
@@ -147,6 +149,7 @@ class BulkUploadResponse(BaseModel):
 class StatsResponse(BaseModel):
     """Model for statistics response."""
     total_schemes: int = Field(..., description="Total number of schemes")
+    active_schemes: int = Field(..., description="Number of active schemes (not expired)")
     schemes_by_state: Dict[str, int] = Field(..., description="Number of schemes per state")
     schemes_by_disability_type: Dict[str, int] = Field(..., description="Number of schemes per disability type")
     schemes_by_support_type: Dict[str, int] = Field(..., description="Number of schemes per support type")

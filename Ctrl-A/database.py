@@ -1,61 +1,41 @@
-import sqlite3
+import pymongo
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 import hashlib
 import secrets
 from datetime import datetime, timedelta
 import os
+import certifi
 
 class DatabaseManager:
-    def __init__(self, db_path="ctrl_a_users.db"):
-        self.db_path = db_path
-        self.init_database()
-    
-    def init_database(self):
-        """Initialize the database with required tables"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+    def __init__(self):
+        # Connection string
+        self.uri = "mongodb+srv://aditya2006:adi2006@cluster0.xdbxki9.mongodb.net/gov_access?retryWrites=true&w=majority&appName=Cluster0"
+        try:
+            # Fix for SSL: TLSV1_ALERT_INTERNAL_ERROR
+            self.client = MongoClient(self.uri, tlsCAFile=certifi.where())
+            # Send a ping to confirm a successful connection
+            self.client.admin.command('ping')
+            print("Pinged your deployment. You successfully connected to MongoDB!")
+        except Exception as e:
+            print(f"MongoDB Connection Error: {e}")
+
+        self.db = self.client['ctrl_a_db']
         
-        # Users table
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE NOT NULL,
-                phone TEXT NOT NULL,
-                disability_type TEXT NOT NULL,
-                password_hash TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                last_login TIMESTAMP,
-                is_active BOOLEAN DEFAULT 1
-            )
-        ''')
+        # Collections
+        self.users = self.db['users']
+        self.sessions = self.db['sessions']
+        self.password_reset_tokens = self.db['password_reset_tokens']
+        self.applications = self.db['applications']
+        self.notifications = self.db['notifications']
         
-        # Sessions table
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS sessions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                session_token TEXT UNIQUE NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                expires_at TIMESTAMP NOT NULL,
-                is_active BOOLEAN DEFAULT 1,
-                FOREIGN KEY (user_id) REFERENCES users (id)
-            )
-        ''')
-        
-        # Password reset tokens table
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS password_reset_tokens (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                token TEXT UNIQUE NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                expires_at TIMESTAMP NOT NULL,
-                is_used BOOLEAN DEFAULT 0,
-                FOREIGN KEY (user_id) REFERENCES users (id)
-            )
-        ''')
-        
-        conn.commit()
-        conn.close()
+        # Create indexes (idempotent)
+        try:
+            self.users.create_index("email", unique=True)
+            self.sessions.create_index("session_token", unique=True)
+            self.password_reset_tokens.create_index("token", unique=True)
+        except Exception as e:
+            print(f"Index creation warning: {e}")
     
     def hash_password(self, password):
         """Hash password using SHA-256 with salt"""
@@ -66,221 +46,345 @@ class DatabaseManager:
     def verify_password(self, password, stored_hash):
         """Verify password against stored hash"""
         try:
+            if not stored_hash: return False
             salt, password_hash = stored_hash.split(':')
             return hashlib.sha256((password + salt).encode()).hexdigest() == password_hash
         except:
             return False
     
-    def create_user(self, email, phone, disability_type, password):
+    def create_user(self, email, phone, disability_type, password, state="", age="", income_range=""):
         """Create a new user"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            password_hash = self.hash_password(password)
-            cursor.execute('''
-                INSERT INTO users (email, phone, disability_type, password_hash)
-                VALUES (?, ?, ?, ?)
-            ''', (email, phone, disability_type, password_hash))
+            # Check if email exists
+            if self.users.find_one({"email": email}):
+                return {"success": False, "error": "Email already exists"}
             
-            user_id = cursor.lastrowid
-            conn.commit()
-            return {"success": True, "user_id": user_id}
-        except sqlite3.IntegrityError:
-            return {"success": False, "error": "Email already exists"}
+            password_hash = self.hash_password(password)
+            
+            user_doc = {
+                "email": email,
+                "phone": phone,
+                "disability_type": disability_type,
+                "state": state,
+                "age": age,
+                "income_range": income_range,
+                "password_hash": password_hash,
+                "created_at": datetime.utcnow(),
+                "last_login": None,
+                "is_active": True,
+                # New fields for profile
+                "full_name": email.split('@')[0], # Default name from email
+                "address": "",
+                "profile_image_url": ""
+            }
+            
+            result = self.users.insert_one(user_doc)
+            return {"success": True, "user_id": str(result.inserted_id)}
+            
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
     
     def authenticate_user(self, email, password):
         """Authenticate user login"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            cursor.execute('''
-                SELECT id, email, phone, disability_type, password_hash, is_active
-                FROM users WHERE email = ?
-            ''', (email,))
-            
-            user = cursor.fetchone()
+            user = self.users.find_one({"email": email})
             if not user:
                 return {"success": False, "error": "User not found"}
             
-            user_id, email, phone, disability_type, password_hash, is_active = user
-            
-            if not is_active:
+            if not user.get("is_active", True):
                 return {"success": False, "error": "Account is deactivated"}
             
-            if not self.verify_password(password, password_hash):
+            if not self.verify_password(password, user.get("password_hash")):
                 return {"success": False, "error": "Invalid password"}
             
             # Update last login
-            cursor.execute('''
-                UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?
-            ''', (user_id,))
+            self.users.update_one(
+                {"_id": user["_id"]},
+                {"$set": {"last_login": datetime.utcnow()}}
+            )
             
-            conn.commit()
             return {
                 "success": True, 
                 "user": {
-                    "id": user_id,
-                    "email": email,
-                    "phone": phone,
-                    "disability_type": disability_type
+                    "id": str(user["_id"]),
+                    "email": user["email"],
+                    "phone": user.get("phone", ""),
+                    "disability_type": user.get("disability_type", ""),
+                    "state": user.get("state", ""),
+                    "age": user.get("age", ""),
+                    "income_range": user.get("income_range", "")
                 }
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
     
     def create_session(self, user_id):
         """Create a new session for user"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
+            # Check if user exists first
+            user = self.users.find_one({"_id": ObjectId(user_id)})
+            if not user:
+                 return {"success": False, "error": "User does not exist"}
+
             # Deactivate old sessions
-            cursor.execute('''
-                UPDATE sessions SET is_active = 0 WHERE user_id = ?
-            ''', (user_id,))
+            self.sessions.update_many(
+                {"user_id": str(user_id)},
+                {"$set": {"is_active": False}}
+            )
             
-            # Create new session
             session_token = secrets.token_urlsafe(32)
-            expires_at = datetime.now() + timedelta(days=7)  # 7 days session
+            expires_at = datetime.utcnow() + timedelta(days=7)
             
-            cursor.execute('''
-                INSERT INTO sessions (user_id, session_token, expires_at)
-                VALUES (?, ?, ?)
-            ''', (user_id, session_token, expires_at))
+            session_doc = {
+                "user_id": str(user_id),
+                "session_token": session_token,
+                "created_at": datetime.utcnow(),
+                "expires_at": expires_at,
+                "is_active": True
+            }
             
-            conn.commit()
+            self.sessions.insert_one(session_doc)
             return {"success": True, "session_token": session_token}
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
     
     def validate_session(self, session_token):
         """Validate session token and return user info"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            cursor.execute('''
-                SELECT s.user_id, s.expires_at, u.email, u.phone, u.disability_type
-                FROM sessions s
-                JOIN users u ON s.user_id = u.id
-                WHERE s.session_token = ? AND s.is_active = 1 AND s.expires_at > CURRENT_TIMESTAMP
-            ''', (session_token,))
+            session = self.sessions.find_one({
+                "session_token": session_token,
+                "is_active": True,
+                "expires_at": {"$gt": datetime.utcnow()}
+            })
             
-            session = cursor.fetchone()
             if not session:
                 return {"success": False, "error": "Invalid or expired session"}
             
-            user_id, expires_at, email, phone, disability_type = session
+            user = self.users.find_one({"_id": ObjectId(session["user_id"])})
+            if not user:
+                return {"success": False, "error": "User not found"}
+            
             return {
                 "success": True,
                 "user": {
-                    "id": user_id,
-                    "email": email,
-                    "phone": phone,
-                    "disability_type": disability_type
+                    "id": str(user["_id"]),
+                    "email": user["email"],
+                    "phone": user.get("phone", ""),
+                    "disability_type": user.get("disability_type", ""),
+                    "state": user.get("state", ""),
+                    "age": user.get("age", ""),
+                    "income_range": user.get("income_range", ""),
+                    "full_name": user.get("full_name", user["email"].split('@')[0])
                 }
             }
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
     
     def logout_user(self, session_token):
         """Logout user by deactivating session"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            cursor.execute('''
-                UPDATE sessions SET is_active = 0 WHERE session_token = ?
-            ''', (session_token,))
-            conn.commit()
+            self.sessions.update_one(
+                {"session_token": session_token},
+                {"$set": {"is_active": False}}
+            )
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
-    
+
     def create_password_reset_token(self, email):
         """Create password reset token"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            # Get user
-            cursor.execute('SELECT id FROM users WHERE email = ?', (email,))
-            user = cursor.fetchone()
+            user = self.users.find_one({"email": email})
             if not user:
                 return {"success": False, "error": "User not found"}
             
-            user_id = user[0]
-            
             # Deactivate old tokens
-            cursor.execute('''
-                UPDATE password_reset_tokens SET is_used = 1 WHERE user_id = ?
-            ''', (user_id,))
+            self.password_reset_tokens.update_many(
+                {"user_id": str(user["_id"])},
+                {"$set": {"is_used": True}}
+            )
             
-            # Create new token
             token = secrets.token_urlsafe(32)
-            expires_at = datetime.now() + timedelta(hours=1)  # 1 hour expiry
+            expires_at = datetime.utcnow() + timedelta(hours=1)
             
-            cursor.execute('''
-                INSERT INTO password_reset_tokens (user_id, token, expires_at)
-                VALUES (?, ?, ?)
-            ''', (user_id, token, expires_at))
+            token_doc = {
+                "user_id": str(user["_id"]),
+                "token": token,
+                "created_at": datetime.utcnow(),
+                "expires_at": expires_at,
+                "is_used": False
+            }
             
-            conn.commit()
+            self.password_reset_tokens.insert_one(token_doc)
             return {"success": True, "token": token}
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
     
     def reset_password(self, token, new_password):
         """Reset password using token"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
         try:
-            # Validate token
-            cursor.execute('''
-                SELECT user_id FROM password_reset_tokens 
-                WHERE token = ? AND is_used = 0 AND expires_at > CURRENT_TIMESTAMP
-            ''', (token,))
+            token_doc = self.password_reset_tokens.find_one({
+                "token": token,
+                "is_used": False,
+                "expires_at": {"$gt": datetime.utcnow()}
+            })
             
-            token_data = cursor.fetchone()
-            if not token_data:
+            if not token_doc:
                 return {"success": False, "error": "Invalid or expired token"}
             
-            user_id = token_data[0]
-            
-            # Update password
             password_hash = self.hash_password(new_password)
-            cursor.execute('''
-                UPDATE users SET password_hash = ? WHERE id = ?
-            ''', (password_hash, user_id))
+            user_id = token_doc["user_id"]
+            
+            self.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$set": {"password_hash": password_hash}}
+            )
             
             # Mark token as used
-            cursor.execute('''
-                UPDATE password_reset_tokens SET is_used = 1 WHERE token = ?
-            ''', (token,))
+            self.password_reset_tokens.update_one(
+                {"_id": token_doc["_id"]},
+                {"$set": {"is_used": True}}
+            )
             
-            conn.commit()
             return {"success": True}
         except Exception as e:
             return {"success": False, "error": str(e)}
-        finally:
-            conn.close()
+
+    # -------------------------------------------------------------
+    # NEW METHODS FOR APPLICATIONS & NOTIFICATIONS
+    # -------------------------------------------------------------
+
+    def submit_application(self, user_id, scheme_id, scheme_title, documents):
+        """
+        Submit a new application for a scheme.
+        documents should be a dict/list of file URLs or paths.
+        """
+        try:
+            application_doc = {
+                "user_id": str(user_id),
+                "scheme_id": str(scheme_id),
+                "scheme_title": scheme_title,
+                "status": "pending",  # pending, verified, rejected
+                "documents": documents, # e.g. {"aadhar": "url", ...}
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            result = self.applications.insert_one(application_doc)
+            
+            # Add a notification for the user
+            self.create_notification(
+                user_id, 
+                f"Application submitted for '{scheme_title}'. Status: Pending approval."
+            )
+            
+            return {"success": True, "application_id": str(result.inserted_id)}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+            
+    def get_user_applications(self, user_id):
+        """Get all applications for a specific user"""
+        try:
+            cursor = self.applications.find({"user_id": str(user_id)}).sort("created_at", -1)
+            apps = []
+            for doc in cursor:
+                doc["id"] = str(doc["_id"])
+                del doc["_id"]
+                apps.append(doc)
+            return {"success": True, "applications": apps}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+            
+    def get_all_applications(self, status_filter=None):
+        """Get all applications (for admin)"""
+        try:
+            query = {}
+            if status_filter:
+                query["status"] = status_filter
+            else:
+                 query["status"] = "pending" # Default to pending applications for admin dashboard usually
+                
+            # If no filter provided, or we strictly want all:
+            if status_filter == "all":
+                query = {}
+
+            cursor = self.applications.find(query).sort("created_at", -1)
+            apps = []
+            for doc in cursor:
+                doc["id"] = str(doc["_id"])
+                del doc["_id"]
+                # Fetch user email for context
+                user = self.users.find_one({"_id": ObjectId(doc["user_id"])})
+                doc["user_email"] = user["email"] if user else "Unknown User"
+                apps.append(doc)
+            return {"success": True, "applications": apps}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def update_application_status(self, application_id, new_status, admin_notes=""):
+        """Update application status (verified/rejected)"""
+        try:
+            # Get current app to notify user
+            app = self.applications.find_one({"_id": ObjectId(application_id)})
+            if not app:
+                return {"success": False, "error": "Application not found"}
+            
+            self.applications.update_one(
+                {"_id": ObjectId(application_id)},
+                {"$set": {
+                    "status": new_status, 
+                    "admin_notes": admin_notes,
+                    "updated_at": datetime.utcnow()
+                }}
+            )
+            
+            # Notify user
+            note_msg = f" Note: {admin_notes}" if admin_notes else ""
+            self.create_notification(
+                app["user_id"],
+                f"Your application for '{app.get('scheme_title', 'Unknown Scheme')}' is now {new_status.upper()}.{note_msg}"
+            )
+            
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def create_notification(self, user_id, message):
+        """Create a notification for a user"""
+        try:
+            notif = {
+                "user_id": str(user_id),
+                "message": message,
+                "is_read": False,
+                "created_at": datetime.utcnow()
+            }
+            self.notifications.insert_one(notif)
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+            
+    def get_user_notifications(self, user_id):
+        """Get notifications for a user"""
+        try:
+            cursor = self.notifications.find({"user_id": str(user_id)}).sort("created_at", -1)
+            notifs = []
+            for doc in cursor:
+                doc["id"] = str(doc["_id"])
+                del doc["_id"]
+                notifs.append(doc)
+            return {"success": True, "notifications": notifs}
+        except Exception as e:
+             return {"success": False, "error": str(e)}
+
+    def mark_notification_read(self, notification_id):
+        try:
+            self.notifications.update_one(
+                {"_id": ObjectId(notification_id)},
+                {"$set": {"is_read": True}}
+            )
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
 # Initialize database
 db = DatabaseManager()
