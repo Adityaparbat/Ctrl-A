@@ -1,8 +1,9 @@
 services:
-  # 1. Frontend Service (Flask)
+  # 1. Frontend Service (Flask - Light)
   - type: web
     name: ctrl-a-frontend
     runtime: python
+    plan: free
     rootDir: Ctrl-A
     buildCommand: pip install -r requirements-frontend.txt
     startCommand: python run_server.py
@@ -20,10 +21,11 @@ services:
           name: chatbot-api
           property: hostport
 
-  # 2. Scheme API (FastAPI + ChromaDB)
+  # 2. Scheme API (FastAPI + ChromaDB - Heavy)
   - type: web
     name: scheme-api
     runtime: python
+    plan: free
     rootDir: gov-schemes-project
     buildCommand: pip install -r requirements.txt && pip install pysqlite3-binary
     startCommand: uvicorn src.main:app --host 0.0.0.0 --port $PORT
@@ -31,10 +33,11 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
 
-  # 3. Chatbot API (FastAPI)
+  # 3. Chatbot API (FastAPI - Heavy)
   - type: web
     name: chatbot-api
     runtime: python
+    plan: free
     rootDir: explore_schemes/disability-scheme-chatbot
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
