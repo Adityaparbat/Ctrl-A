@@ -1,16 +1,19 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.1.2+cpu
+
+torch==2.0.1+cpu
+numpy<2.0
 
 # Web Framework
-fastapi>=0.104.1
-uvicorn[standard]>=0.24.0
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
 
 # Neo4j Graph Database Driver
 neo4j>=5.14.1
 
-# Semantic Embeddings for GraphRAG
-sentence-transformers>=2.2.2
-numpy>=1.26.3
+# Semantic Embeddings
+sentence-transformers==2.2.2
+transformers==4.35.2
+tokenizers==0.14.1
 scikit-learn>=1.4.0
 
 # Data Validation
