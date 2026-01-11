@@ -1382,5 +1382,23 @@ def offline_static(path):
     except Exception:
         return "Not found", 404
 
+@app.route('/explore_chatbot')
+def explore_chatbot():
+    """Serve the chatbot interface"""
+    # Check if user is logged in (optional, but good for consistent UX)
+    session_token = session.get('session_token')
+    if not session_token:
+        return redirect('/login')
+
+    # Path relative to Ctrl-A directory
+    chatbot_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
+                               'explore_schemes', 'disability-scheme-chatbot', 'chatbot.html')
+    
+    if not os.path.exists(chatbot_path):
+        return f"Error loading chatbot: {chatbot_path} not found", 404
+        
+    with open(chatbot_path, 'r', encoding='utf-8') as f:
+        return f.read()
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
