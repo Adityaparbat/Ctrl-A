@@ -13,12 +13,12 @@ services:
         fromService:
           type: web
           name: scheme-api
-          property: url
+          property: hostport
       - key: CHATBOT_API_URL
         fromService:
           type: web
           name: chatbot-api
-          property: url
+          property: hostport
 
   # 2. Scheme API (FastAPI + ChromaDB)
   - type: web
