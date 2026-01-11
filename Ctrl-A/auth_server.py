@@ -12,8 +12,9 @@ import tempfile
 import uuid
 
 # -- PROXY CONFIG FOR RENDER --
-SCHEME_API_BASE = "http://localhost:8002"
-CHATBOT_API_BASE = "http://localhost:8003"
+# Default to localhost for development, overriden by env vars in production
+SCHEME_API_BASE = os.getenv("SCHEME_API_URL", "http://localhost:8002")
+CHATBOT_API_BASE = os.getenv("CHATBOT_API_URL", "http://localhost:8003")
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-static-development-secret-key-12345')
