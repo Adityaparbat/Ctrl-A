@@ -1,3 +1,9 @@
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+
 # Ctrl-A (Frontend/Auth)
 Flask==2.3.3
 Werkzeug==2.3.7
