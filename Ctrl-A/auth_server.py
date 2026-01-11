@@ -13,8 +13,12 @@ import uuid
 
 # -- PROXY CONFIG FOR RENDER --
 # Default to localhost for development, overriden by env vars in production
-SCHEME_API_BASE = os.getenv("SCHEME_API_URL", "http://localhost:8002")
-CHATBOT_API_BASE = os.getenv("CHATBOT_API_URL", "http://localhost:8003")
+# Handle Render Blueprint 'hostport' which lacks protocol
+_scheme_host = os.getenv("SCHEME_API_URL", "localhost:8002")
+SCHEME_API_BASE = f"http://{_scheme_host}" if not _scheme_host.startswith("http") else _scheme_host
+
+_chatbot_host = os.getenv("CHATBOT_API_URL", "localhost:8003")
+CHATBOT_API_BASE = f"http://{_chatbot_host}" if not _chatbot_host.startswith("http") else _chatbot_host
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-static-development-secret-key-12345')

@@ -1,10 +1,11 @@
 services:
-  # 1. Frontend Service (Lightweight, Flask)
+  # 1. Frontend Service (Flask)
   - type: web
     name: ctrl-a-frontend
     runtime: python
+    rootDir: Ctrl-A
     buildCommand: pip install -r requirements-frontend.txt
-    startCommand: python Ctrl-A/run_server.py
+    startCommand: python run_server.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -19,7 +20,7 @@ services:
           name: chatbot-api
           property: url
 
-  # 2. Scheme API (Heavy, FastAPI + ChromaDB)
+  # 2. Scheme API (FastAPI + ChromaDB)
   - type: web
     name: scheme-api
     runtime: python
@@ -30,7 +31,7 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.0
 
-  # 3. Chatbot API (Heavy, Neo4j + Torch)
+  # 3. Chatbot API (FastAPI)
   - type: web
     name: chatbot-api
     runtime: python
