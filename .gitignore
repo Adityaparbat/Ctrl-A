@@ -53,8 +53,8 @@ build/
 Ctrl-A/half1/yolov8n.pt
 Ctrl-A/ctrl_a_users.db
 
-gov-schemes-project/data/chroma_db/**
-gov-schemes-project/data/chroma.sqlite3
+# gov-schemes-project/data/chroma_db/**
+# gov-schemes-project/data/chroma.sqlite3
 
 # Audio/media generated locally
 *.mp3
