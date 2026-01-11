@@ -6,3 +6,9 @@ itsdangerous==2.1.2
 click==8.1.7
 blinker==1.6.3
 gTTS==2.4.0
+pymongo>=4.0.0
+python-dotenv>=1.0.0
+requests>=2.28.0
+email-validator
+flask-cors
+httpx>=0.25.1
