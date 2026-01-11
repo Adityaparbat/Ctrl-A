@@ -684,7 +684,9 @@
       try {
         // Use PROXY endpoint for Render compatibility
         // const apiHost = `http://${window.location.hostname}:8003`;
-        const response = await fetch(`/proxy/chatbot/chat`, {
+        // Direct API call to bypass proxy
+        const CHATBOT_API = "https://chatbot-api-5ln7.onrender.com"; // Real URL
+        const response = await fetch(`${CHATBOT_API}/chat`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ question: text })
