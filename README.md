@@ -63,8 +63,14 @@ Ctrl-A is a comprehensive, accessibility-focused platform designed to connect pe
 
 You need to run two servers: the Auth Server (Ctrl-A) and the Scheme API (gov-schemes-project).
 
-**Option 1: Quick Start (Windows)**
-Run the two automated startup scripts in separate terminals:
+**Option 1: One-Click Startup (Recommended)**
+Run the master script to launch all 3 servers in separate windows:
+```bash
+python start_all.py
+```
+
+**Option 2: Manual Start**
+If you prefer running them individually:
 
 1.  **Start Frontend/Auth Server**:
     ```bash
@@ -76,6 +82,11 @@ Run the two automated startup scripts in separate terminals:
     ```bash
     cd Ctrl-A
     python start_gov_schemes_server.py
+    ```
+
+3.  **Start Chatbot Server**:
+    ```bash
+    python start_chatbot.py
     ```
 
 **Option 2: Manual Start**

@@ -128,6 +128,27 @@ def personalized_schemes():
     with open('personalized_schemes.html', 'r', encoding='utf-8') as f:
         return f.read()
 
+@app.route('/explore_chatbot')
+def explore_chatbot():
+    """Serve the new chatbot page"""
+    # Check if user is logged in
+    session_token = session.get('session_token')
+    if not session_token:
+        return redirect('/login')
+    
+    # Validate session
+    session_data = db.validate_session(session_token)
+    if not session_data['success']:
+        session.clear()
+        return redirect('/login')
+        
+    try:
+        chatbot_path = os.path.join(ROOT_DIR, 'explore_schemes', 'disability-scheme-chatbot', 'chatbot.html')
+        with open(chatbot_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    except Exception as e:
+        return f"Error loading chatbot: {e}", 500
+
 @app.route('/ai_assistant')
 def ai_assistant():
     """Serve AI assistant page"""

@@ -26,3 +26,9 @@ numpy
 tqdm>=4.60.0
 loguru
 regex>=2023.12.0
+
+# Chatbot AI (Disability-Scheme-Chatbot)
+neo4j>=5.14.1
+google-generativeai
+scikit-learn>=1.4.0
+httpx>=0.25.1
