@@ -884,9 +884,9 @@
 
             try {
                 // Try to connect to the government schemes API
-                // Match the server IP/port or use localhost:8002
-                const apiHost = `http://${window.location.hostname}:8002`;
-                const response = await fetch(`${apiHost}/api/v1/schemes/search`, {
+                // Direct API call to bypass proxy/localhost issues
+                const SCHEME_API = "https://scheme-api-5yeq.onrender.com";
+                const response = await fetch(`${SCHEME_API}/api/v1/schemes/search`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

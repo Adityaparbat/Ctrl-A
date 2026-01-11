@@ -794,9 +794,9 @@
             showLoading();
 
             try {
-                // Use PROXY endpoint for Render compatibility
-                // const apiHost = `http://${window.location.hostname}:8002`;
-                const response = await fetch(`/proxy/scheme_api/api/v1/schemes/personalized`, {
+                // Direct API call to bypass proxy
+                const SCHEME_API = "https://scheme-api-5yeq.onrender.com";
+                const response = await fetch(`${SCHEME_API}/api/v1/schemes/personalized`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
