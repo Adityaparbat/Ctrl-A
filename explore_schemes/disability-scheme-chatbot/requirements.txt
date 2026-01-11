@@ -1,0 +1,28 @@
+# Python Dependencies for Government Scheme Chatbot
+# Graph RAG Architecture with Neo4j and Vector Similarity Search
+
+# Web Framework
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+
+# Neo4j Graph Database Driver (with vector index support)
+neo4j>=5.14.1
+
+# Semantic Embeddings for GraphRAG
+sentence-transformers>=2.2.2
+torch>=2.0.0
+numpy>=1.26.3
+scikit-learn>=1.4.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# HTTP Client (for CORS and API requests)
+httpx>=0.25.1
+
+# Additional utilities
+python-multipart==0.0.6
+google-generativeai
+
+# Logging (built-in, but explicit for clarity)
+# logging - included in standard library

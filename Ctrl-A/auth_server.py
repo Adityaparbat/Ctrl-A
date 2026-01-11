@@ -11,6 +11,59 @@ import subprocess
 import tempfile
 import uuid
 
+# -- PROXY CONFIG FOR RENDER --
+SCHEME_API_BASE = "http://localhost:8002"
+CHATBOT_API_BASE = "http://localhost:8003"
+
+@app.route('/proxy/scheme_api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def proxy_scheme_api(path):
+    """Forward requests to the internal Scheme API (Port 8002)"""
+    url = f"{SCHEME_API_BASE}/{path}"
+    # Forward query parameters
+    if request.query_string:
+        url = f"{url}?{request.query_string.decode('utf-8')}"
+    
+    try:
+        resp = requests.request(
+            method=request.method,
+            url=url,
+            headers={k: v for k, v in request.headers if k.lower() != 'host'},
+            data=request.get_data(),
+            cookies=request.cookies,
+            allow_redirects=False
+        )
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in resp.raw.headers.items()
+                   if name.lower() not in excluded_headers]
+        return Response(resp.content, resp.status_code, headers)
+    except Exception as e:
+        print(f"Proxy Error (Scheme API): {e}")
+        return jsonify({"error": "Service Unavailable", "details": str(e)}), 503
+
+@app.route('/proxy/chatbot/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def proxy_chatbot(path):
+    """Forward requests to the internal Chatbot API (Port 8003)"""
+    url = f"{CHATBOT_API_BASE}/{path}"
+    if request.query_string:
+        url = f"{url}?{request.query_string.decode('utf-8')}"
+    
+    try:
+        resp = requests.request(
+            method=request.method,
+            url=url,
+            headers={k: v for k, v in request.headers if k.lower() != 'host'},
+            data=request.get_data(),
+            cookies=request.cookies,
+            allow_redirects=False
+        )
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in resp.raw.headers.items()
+                   if name.lower() not in excluded_headers]
+        return Response(resp.content, resp.status_code, headers)
+    except Exception as e:
+        print(f"Proxy Error (Chatbot): {e}")
+        return jsonify({"error": "Service Unavailable", "details": str(e)}), 503
+
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'your-static-development-secret-key-12345')
 

@@ -1,0 +1,354 @@
+{
+  "disability_types": [
+    {
+      "id": "disability_visual",
+      "name": "Visual Impairment",
+      "description_text": "Complete or partial loss of vision, including blindness and low vision",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "disability_hearing",
+      "name": "Hearing Impairment",
+      "description_text": "Complete or partial loss of hearing, including deafness",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "disability_locomotor",
+      "name": "Locomotor Disability",
+      "description_text": "Disability of bones, joints, or muscles leading to movement restriction",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "disability_intellectual",
+      "name": "Intellectual Disability",
+      "description_text": "Significantly impaired intellectual functioning and adaptive behavior",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "disability_multiple",
+      "name": "Multiple Disabilities",
+      "description_text": "Combination of two or more disabilities",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "benefits": [
+    {
+      "id": "benefit_pension",
+      "name": "Disability Pension",
+      "description_text": "Monthly pension for persons with disabilities",
+      "amount": "₹3000 per month",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "benefit_scholarship",
+      "name": "Scholarship",
+      "description_text": "Educational scholarship for students with disabilities",
+      "amount": "₹5000 to ₹25000 per year",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "benefit_assistive_device",
+      "name": "Assistive Device",
+      "description_text": "Financial assistance for purchase of assistive devices and appliances",
+      "amount": "Up to ₹25000",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "benefit_training",
+      "name": "Skill Development Training",
+      "description_text": "Training program assistance for skill development",
+      "amount": "Up to ₹10000",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "benefit_insurance",
+      "name": "Health Insurance",
+      "description_text": "Health insurance coverage for persons with disabilities",
+      "amount": "Up to ₹1.0 Lakh cover",
+      "source": "https://thenationaltrust.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "benefit_travel_concession",
+      "name": "Travel Concession",
+      "description_text": "Concession in train and bus fares",
+      "amount": "50% to 75% discount",
+      "source": "https://indianrailways.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "eligibility": [
+    {
+      "id": "eligibility_basic",
+      "name": "Basic Eligibility",
+      "description_text": "Person with 40% or more disability, age 18 or above",
+      "age_min": 18,
+      "age_max": null,
+      "income_max": 30000,
+      "disability_percent_min": 40,
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "eligibility_bpl",
+      "name": "Below Poverty Line Eligibility",
+      "description_text": "Person with 40% or more disability, below poverty line",
+      "age_min": 18,
+      "age_max": null,
+      "income_max": 15000,
+      "disability_percent_min": 40,
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "eligibility_student",
+      "name": "Student Eligibility",
+      "description_text": "Student with disability studying in recognized institution",
+      "age_min": 5,
+      "age_max": 40,
+      "income_max": null,
+      "disability_percent_min": 40,
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "eligibility_niramaya",
+      "name": "Niramaya Eligibility",
+      "description_text": "Persons with Autism, Cerebral Palsy, MR and Multiple Disabilities",
+      "age_min": 0,
+      "age_max": null,
+      "income_max": null,
+      "disability_percent_min": 40,
+      "source": "https://thenationaltrust.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "eligibility_udid",
+      "name": "UDID Eligibility",
+      "description_text": "Any person with specified disability under RPwD Act 2016",
+      "age_min": 0,
+      "age_max": null,
+      "income_max": null,
+      "disability_percent_min": 40,
+      "source": "https://udid.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc_disability_cert",
+      "name": "Disability Certificate",
+      "description_text": "Issued by authorized medical board certifying disability percentage",
+      "document_type": "Certificate",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "doc_aadhaar",
+      "name": "Aadhaar Card",
+      "description_text": "Government issued identity proof with unique identification number",
+      "document_type": "Identity",
+      "source": "https://uidai.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "doc_income_cert",
+      "name": "Income Certificate",
+      "description_text": "Proof of family income issued by revenue department",
+      "document_type": "Certificate",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "doc_medical_report",
+      "name": "Medical Report",
+      "description_text": "Detailed medical assessment report from authorized doctor",
+      "document_type": "Medical",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "doc_photo",
+      "name": "Passport Size Photograph",
+      "description_text": "Recent passport size photograph",
+      "document_type": "Photo",
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "application_processes": [
+    {
+      "id": "process_online",
+      "name": "Online Application Process",
+      "description_text": "Application through government portal",
+      "steps": [
+        "Visit the official portal",
+        "Register with Aadhaar",
+        "Fill application form",
+        "Upload documents",
+        "Submit and track status"
+      ],
+      "source": "https://udid.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "process_offline",
+      "name": "Offline Application Process",
+      "description_text": "Application through local office",
+      "steps": [
+        "Visit District Social Welfare Office",
+        "Collect form",
+        "Submit with documents",
+        "Collect receipt"
+      ],
+      "source": "https://disabilityaffairs.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "process_railway",
+      "name": "Railway Concession Process",
+      "description_text": "Application for railway concession card",
+      "steps": [
+        "Get concession certificate from Government Doctor",
+        "Visit DRM office",
+        "Detailed verification",
+        "Issue of Photo ID card"
+      ],
+      "source": "https://indianrailways.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "government_bodies": [
+    {
+      "id": "gov_dept_empowerment",
+      "name": "Department of Empowerment of Persons with Disabilities",
+      "contact": "011-23462201"
+    },
+    {
+      "id": "gov_national_trust",
+      "name": "The National Trust",
+      "contact": "011-26168326"
+    },
+    {
+      "id": "gov_railways",
+      "name": "Indian Railways",
+      "contact": "139"
+    }
+  ],
+  "portals": [
+    {
+      "id": "portal_udid",
+      "name": "UDID Portal",
+      "url": "https://udid.gov.in"
+    },
+    {
+      "id": "portal_national_trust",
+      "name": "National Trust Portal",
+      "url": "https://thenationaltrust.gov.in"
+    },
+    {
+      "id": "portal_railway",
+      "name": "Indian Railways Website",
+      "url": "https://indianrailways.gov.in"
+    }
+  ],
+  "helplines": [
+    {
+      "id": "helpline_national",
+      "name": "Disability Helpline",
+      "number": "1800-11-8224"
+    },
+    {
+      "id": "helpline_railway",
+      "name": "Railway Helpline",
+      "number": "139"
+    }
+  ],
+  "schemes": [
+    {
+      "id": "scheme_igndps",
+      "name": "Indira Gandhi National Disability Pension Scheme (IGNDPS)",
+      "description_text": "Monthly pension of ₹3000 for persons with 40% or more disability belonging to BPL households.",
+      "source": "https://disabilityaffairs.gov.in/content/page/igndps.php",
+      "last_updated": "2024-01-01",
+      "application_deadline": "Open throughout the year"
+    },
+    {
+      "id": "scheme_adip",
+      "name": "ADIP Scheme (Aids and Appliances)",
+      "description_text": "Financial assistance up to ₹25000 for purchase/fitting of aids and appliances like wheelchairs, hearing aids.",
+      "source": "https://disabilityaffairs.gov.in/content/page/adip-scheme.php",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "scheme_scholarship_pre",
+      "name": "Pre-Matric Scholarship",
+      "description_text": "Scholarship for disabled students in classes 9 and 10.",
+      "source": "https://disabilityaffairs.gov.in/content/page/scholarships.php",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "scheme_scholarship_post",
+      "name": "Post-Matric Scholarship",
+      "description_text": "Scholarship for disabled students in higher education.",
+      "source": "https://disabilityaffairs.gov.in/content/page/scholarships.php",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "scheme_deendayal",
+      "name": "Deendayal Disabled Rehabilitation Scheme (DDRS)",
+      "description_text": "Grant-in-aid to NGOs for rehabilitation services.",
+      "source": "https://disabilityaffairs.gov.in/content/page/ddrs.php",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "scheme_udid",
+      "name": "Unique Disability ID (UDID) Card",
+      "description_text": "A single identification card for persons with disabilities valid across India. It eliminates the need for maintaining multiple documents.",
+      "source": "https://udid.gov.in",
+      "last_updated": "2024-01-01",
+      "application_deadline": "Open throughout the year"
+    },
+    {
+      "id": "scheme_niramaya",
+      "name": "Niramaya Health Insurance",
+      "description_text": "Health insurance scheme providing cover up to ₹1.0 Lakh for persons with Autism, Cerebral Palsy, Mental Retardation and Multiple Disabilities.",
+      "source": "https://thenationaltrust.gov.in",
+      "last_updated": "2024-01-01"
+    },
+    {
+      "id": "scheme_railway_concession",
+      "name": "Railway Fare Concession",
+      "description_text": "Concession in railway fares for persons with disabilities (Orthopaedic, Visual, Hearing, Mental Retardation). Discount ranges from 50% to 75%.",
+      "source": "https://indianrailways.gov.in",
+      "last_updated": "2024-01-01"
+    }
+  ],
+  "relationships": [
+    { "from": "scheme_igndps", "type": "HAS_BENEFIT", "to": "benefit_pension" },
+    { "from": "scheme_igndps", "type": "HAS_ELIGIBILITY", "to": "eligibility_bpl" },
+    { "from": "scheme_adip", "type": "HAS_BENEFIT", "to": "benefit_assistive_device" },
+    { "from": "scheme_scholarship_pre", "type": "HAS_BENEFIT", "to": "benefit_scholarship" },
+    { "from": "scheme_scholarship_post", "type": "HAS_BENEFIT", "to": "benefit_scholarship" },
+    { "from": "scheme_niramaya", "type": "HAS_BENEFIT", "to": "benefit_insurance" },
+    { "from": "scheme_niramaya", "type": "HAS_ELIGIBILITY", "to": "eligibility_niramaya" },
+    { "from": "scheme_niramaya", "type": "RUN_BY", "to": "gov_national_trust" },
+    { "from": "scheme_niramaya", "type": "APPLY_VIA", "to": "portal_national_trust" },
+    { "from": "scheme_udid", "type": "APPLY_VIA", "to": "portal_udid" },
+    { "from": "scheme_udid", "type": "HAS_ELIGIBILITY", "to": "eligibility_udid" },
+    { "from": "scheme_udid", "type": "HAS_HELPLINE", "to": "helpline_udid" },
+    { "from": "scheme_railway_concession", "type": "HAS_BENEFIT", "to": "benefit_travel_concession" },
+    { "from": "scheme_railway_concession", "type": "APPLY_THROUGH", "to": "process_railway" },
+    { "from": "scheme_railway_concession", "type": "RUN_BY", "to": "gov_railways" },
+    { "from": "scheme_railway_concession", "type": "HAS_HELPLINE", "to": "helpline_railway" }
+  ]
+}

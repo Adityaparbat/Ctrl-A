@@ -705,9 +705,9 @@
                 document.getElementById('totalStates').textContent = '15';
                 document.getElementById('totalTypes').textContent = '7';
 
-                // Try fetching real stats if API is ready
-                const apiBase = `http://${window.location.hostname}:8002`;
-                const response = await fetch(`${apiBase}/api/v1/schemes/stats`);
+                // Try fetching real stats via proxy to internal API
+                // const apiBase = `http://${window.location.hostname}:8002`; // Direct access fails on Render
+                const response = await fetch(`/proxy/scheme_api/api/v1/schemes/stats`);
                 if (response.ok) {
                     const data = await response.json();
                     document.getElementById('totalSchemes').textContent = data.total_schemes || 0;
@@ -733,9 +733,9 @@
                     await getAdminToken();
                 }
 
-                // Match the server IP/port or use localhost:8002
-                const apiBase = `http://${window.location.hostname}:8002`;
-                const response = await fetch(`${apiBase}/api/v1/admin/schemes`, {
+                // Match the server IP/port or use PROXY
+                // const apiBase = `http://${window.location.hostname}:8002`;
+                const response = await fetch(`/proxy/scheme_api/api/v1/admin/schemes`, {
                     headers: {
                         'Authorization': `Bearer ${adminToken || 'mock-token'}`,
                         'Content-Type': 'application/json'
@@ -824,9 +824,9 @@
 
         async function getAdminToken() {
             try {
-                // Attempt login with expected credentials
-                const apiHost = `http://${window.location.hostname}:8002`;
-                let response = await fetch(`${apiHost}/api/v1/admin/login`, {
+                // Attempt login with expected credentials via PROXY
+                // const apiHost = `http://${window.location.hostname}:8002`;
+                let response = await fetch(`/proxy/scheme_api/api/v1/admin/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: 'admin', password: 'password' })
@@ -994,8 +994,8 @@
             };
 
             try {
-                const apiBase = `http://${window.location.hostname}:8002`;
-                let url = `${apiBase}/api/v1/admin/schemes`;
+                // const apiBase = `http://${window.location.hostname}:8002`;
+                let url = `/proxy/scheme_api/api/v1/admin/schemes`;
                 let method = 'POST';
 
                 if (id) {
@@ -1037,8 +1037,8 @@
         async function deleteScheme(id) {
             if (confirm("Are you sure you want to delete this scheme?")) {
                 try {
-                    const apiBase = `http://${window.location.hostname}:8002`;
-                    const response = await fetch(`${apiBase}/api/v1/admin/schemes/${id}`, {
+                    // const apiBase = `http://${window.location.hostname}:8002`;
+                    const response = await fetch(`/proxy/scheme_api/api/v1/admin/schemes/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${adminToken}`
