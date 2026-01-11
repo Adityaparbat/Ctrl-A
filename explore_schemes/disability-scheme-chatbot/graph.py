@@ -8,12 +8,13 @@ Relationships: FOR, PROVIDES, REQUIRES, ELIGIBLE_IF
 """
 
 from neo4j import GraphDatabase
+import os
 
 # Neo4j connection configuration (stable on Windows)
 # Use the same URI as shown in Neo4j Desktop for your local instance
-NEO4J_URI = "neo4j://127.0.0.1:7687"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "Kashish@2510"   # Update with your Neo4j password
+NEO4J_URI = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "Kashish@2510")
 
 # Initialize Neo4j driver
 driver = GraphDatabase.driver(

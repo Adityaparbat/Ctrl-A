@@ -16,6 +16,7 @@ from neo4j import GraphDatabase
 from neo4j.exceptions import ServiceUnavailable
 from typing import List, Dict, Any, Optional
 import logging
+import os
 from embeddings import encode_text, compute_cosine_similarity
 from domain_guardrail import is_domain_related, get_rejection_message
 
@@ -24,10 +25,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Neo4j connection configuration
-NEO4J_URI = "neo4j://127.0.0.1:7687"
-NEO4J_USER = "neo4j"
-NEO4J_PASSWORD = "Kashish@2510"  # Update with your Neo4j password
-NEO4J_DATABASE = "neo4j"
+NEO4J_URI = os.getenv("NEO4J_URI", "neo4j://127.0.0.1:7687")
+NEO4J_USER = os.getenv("NEO4J_USERNAME", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "Kashish@2510")
+NEO4J_DATABASE = os.getenv("NEO4J_DATABASE", "neo4j")
 
 # Vector similarity search parameters
 VECTOR_SEARCH_TOP_K = 10  # Number of top similar nodes to retrieve
