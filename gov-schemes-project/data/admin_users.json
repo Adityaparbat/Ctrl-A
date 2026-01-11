@@ -18,7 +18,7 @@
       "is_active": true,
       "created_at": "2026-01-07T07:34:09.742575",
       "password_hash": "65545fec622f066b6a95337c6e100752:592f8364af04578667f4b2a7877ca61d954bc69e460a70fd99422428b0e81313",
-      "last_login": "2026-01-10T23:04:37.528991"
+      "last_login": "2026-01-11T10:23:28.471410"
     }
   },
   "sessions": {
@@ -153,6 +153,10 @@
     "sb2_Y1pQ4nL2aqTMJzuqI5bJxi7zfNbOB-LEKgXfee0": {
       "username": "admin",
       "expires_at": "2026-01-11T00:04:37.528991"
+    },
+    "0wCJTqVuCBtDDEIrCEo675-8_MOLAgFTIwpmgp0weO0": {
+      "username": "admin",
+      "expires_at": "2026-01-11T11:23:28.469855"
     }
   }
 }

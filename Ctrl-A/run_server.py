@@ -10,17 +10,16 @@ from auth_server import app
 
 if __name__ == '__main__':
     print("🚀 Starting Ctrl-A Authentication Server...")
-    print("📍 Server will be available at: http://localhost:5000")
-    print("🏠 Landing page: http://localhost:5000/landing")
-    print("🔐 Login page: http://localhost:5000/login")
-    print("📝 Signup page: http://localhost:5000/signup")
-    print("📊 Dashboard: http://localhost:5000/dashboard")
+    print("🌐 Server will be publicly available on Render")
     print("\n" + "="*50)
-    print("Press Ctrl+C to stop the server")
-    print("="*50 + "\n")
-    
+
     try:
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        port = int(os.environ.get("PORT", 5000))  # Render injects PORT
+        app.run(
+            debug=False,               # MUST be False on Render
+            host='0.0.0.0',            # REQUIRED
+            port=port                  # REQUIRED
+        )
     except KeyboardInterrupt:
         print("\n👋 Server stopped. Goodbye!")
         sys.exit(0)
