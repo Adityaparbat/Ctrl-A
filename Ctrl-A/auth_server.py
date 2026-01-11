@@ -196,7 +196,20 @@ def explore_chatbot():
         return redirect('/login')
         
     try:
-        chatbot_path = os.path.join(ROOT_DIR, 'explore_schemes', 'disability-scheme-chatbot', 'chatbot.html')
+        # Debugging path
+        chatbot_rel_path = os.path.join('explore_schemes', 'disability-scheme-chatbot', 'chatbot.html')
+        chatbot_path = os.path.join(ROOT_DIR, chatbot_rel_path)
+        
+        if not os.path.exists(chatbot_path):
+            # List directories to debug
+            debug_info = f"File not found: {chatbot_path}<br>"
+            debug_info += f"ROOT_DIR: {ROOT_DIR}<br>"
+            debug_info += f"Contents of ROOT_DIR: {os.listdir(ROOT_DIR)}<br>"
+            explore_path = os.path.join(ROOT_DIR, 'explore_schemes')
+            if os.path.exists(explore_path):
+                 debug_info += f"Contents of explore_schemes: {os.listdir(explore_path)}<br>"
+            return debug_info, 404
+
         with open(chatbot_path, 'r', encoding='utf-8') as f:
             return f.read()
     except Exception as e:
@@ -1381,24 +1394,6 @@ def offline_static(path):
         return send_from_directory(OFFLINE_DIR, path)
     except Exception:
         return "Not found", 404
-
-@app.route('/explore_chatbot')
-def explore_chatbot():
-    """Serve the chatbot interface"""
-    # Check if user is logged in (optional, but good for consistent UX)
-    session_token = session.get('session_token')
-    if not session_token:
-        return redirect('/login')
-
-    # Path relative to Ctrl-A directory
-    chatbot_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 
-                               'explore_schemes', 'disability-scheme-chatbot', 'chatbot.html')
-    
-    if not os.path.exists(chatbot_path):
-        return f"Error loading chatbot: {chatbot_path} not found", 404
-        
-    with open(chatbot_path, 'r', encoding='utf-8') as f:
-        return f.read()
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -33,3 +33,4 @@ neo4j>=5.14.1
 google-generativeai
 scikit-learn>=1.4.0
 httpx>=0.25.1
+flask-cors
