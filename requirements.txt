@@ -26,6 +26,7 @@ numpy
 tqdm>=4.60.0
 loguru
 regex>=2023.12.0
+email-validator
 
 # Chatbot AI (Disability-Scheme-Chatbot)
 neo4j>=5.14.1
